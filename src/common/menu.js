@@ -68,6 +68,9 @@ const menuData = [{
     name: '高级详情页',
     path: 'advanced',
     authority: 'admin',
+  }, {
+    name: '个人定制',
+    path: 'custom',
   }],
 }, {
   name: '结果页',
