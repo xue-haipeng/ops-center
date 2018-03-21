@@ -132,6 +132,10 @@ class BasicLayout extends React.PureComponent {
     });
   }
   handleMenuClick = ({ key }) => {
+    if (key === 'userCenter') {
+      this.props.dispatch(routerRedux.push('/profile/user'));
+      return;
+    }
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
       return;

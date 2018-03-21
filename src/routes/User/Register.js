@@ -31,7 +31,8 @@ export default class Register extends Component {
     confirmDirty: false,
     visible: false,
     help: '',
-    prefix: '86',
+    mailsuffix: '@jd.com',
+    mobilePrefix: '+86',
   };
 
   componentWillReceiveProps(nextProps) {
@@ -131,9 +132,15 @@ export default class Register extends Component {
     }
   };
 
-  changePrefix = (value) => {
+  changeMailSuffix = (value) => {
     this.setState({
-      prefix: value,
+      mailsuffix: value,
+    });
+  }
+
+  changeMobilePrefix = (value) => {
+    this.setState({
+      mobilePrefix: value,
     });
   };
 
@@ -157,24 +164,35 @@ export default class Register extends Component {
   render() {
     const { form, submitting } = this.props;
     const { getFieldDecorator } = form;
-    const { count, prefix } = this.state;
+    const { count, mailsuffix, mobilePrefix } = this.state;
     return (
       <div className={styles.main}>
         <h3>注册</h3>
         <Form onSubmit={this.handleSubmit}>
           <FormItem>
-            {getFieldDecorator('mail', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入邮箱地址！',
-                },
-                {
-                  type: 'email',
-                  message: '邮箱地址格式错误！',
-                },
-              ],
-            })(<Input size="large" placeholder="邮箱" />)}
+            <InputGroup compact>
+              {getFieldDecorator('mail', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入邮箱地址！',
+                  },
+                  {
+                    type: 'email',
+                    message: '邮箱地址格式错误！',
+                  },
+                ],
+              })(<Input size="large" style={{ width: '70%' }} placeholder="邮箱" />)}
+              <Select
+                size="large"
+                value={mailsuffix}
+                onChange={this.changeMailSuffix}
+                style={{ width: '30%' }}
+              >
+                <Option value="@jd.com">@jd.com</Option>
+                <Option value="@qq.com">@qq.com</Option>
+              </Select>
+            </InputGroup>
           </FormItem>
           <FormItem help={this.state.help}>
             <Popover
@@ -223,8 +241,8 @@ export default class Register extends Component {
             <InputGroup compact>
               <Select
                 size="large"
-                value={prefix}
-                onChange={this.changePrefix}
+                value={mobilePrefix}
+                onChange={this.changeMobilePrefix}
                 style={{ width: '20%' }}
               >
                 <Option value="86">+86</Option>

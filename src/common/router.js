@@ -136,6 +136,12 @@ export const getRouterData = (app) => {
     '/profile/custom': {
       component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/CustomProfile')),
     },
+    '/profile/user': {
+      component: dynamicWrapper(app, [], () => import('../routes/Profile/UserCenter')),
+    },
+    '/profile/ws': {
+      component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/WebSocket')),
+    },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },
