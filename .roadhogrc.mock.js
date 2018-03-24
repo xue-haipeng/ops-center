@@ -26,6 +26,9 @@ const proxy = {
       avatar: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
       userid: '00000001',
       notifyCount: 12,
+      mobile: 13651127519,
+      mail: 'xuehaipeng@jd.com',
+      team: '设计师小组',
     },
   },
   // GET POST 可省略
