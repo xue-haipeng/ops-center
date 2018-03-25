@@ -112,9 +112,8 @@ class BasicLayout extends React.PureComponent {
     } else {
       const { routerData } = this.props;
       // get the first authorized route path in routerData
-      const authorizedPath = Object.keys(routerData).find(item =>
+      return Object.keys(routerData).find(item =>
         check(routerData[item].authority, item) && item !== '/');
-      return authorizedPath;
     }
     return redirect;
   }

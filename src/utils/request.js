@@ -1,7 +1,13 @@
-import fetch from 'dva/fetch';
+import axios from 'axios';
+import NProgress from 'nprogress';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
+
+// 设置全局参数，如响应超市时间，请求前缀等。
+// axios.defaults.timeout = 5000
+// axios.defaults.baseURL = '/api/v1';
+// axios.defaults.withCredentials = true;
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -35,11 +41,32 @@ function checkStatus(response) {
   throw error;
 }
 
+// 添加一个请求拦截器，用于设置请求过渡状态
+axios.interceptors.request.use((config) => {
+  // 请求开始，蓝色过渡滚动条开始出现
+  NProgress.start();
+  return config;
+}, (error) => {
+  return Promise.reject(error);
+});
+
+// 添加一个返回拦截器
+axios.interceptors.response.use((response) => {
+  // 请求结束，蓝色过渡滚动条消失
+  NProgress.done();
+  return response;
+}, (error) => {
+  // 请求结束，蓝色过渡滚动条消失
+  // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
+  NProgress.done();
+  return Promise.reject(error);
+});
+
 /**
  * Requests a URL, returning a promise.
  *
  * @param  {string} url       The URL we want to request
- * @param  {object} [options] The options we want to pass to "fetch"
+ * @param  {object} [options] The options we want to pass to axios
  * @return {object}           An object containing either "data" or "err"
  */
 export default function request(url, options) {
@@ -65,14 +92,9 @@ export default function request(url, options) {
     }
   }
 
-  return fetch(url, newOptions)
+  return axios(url, newOptions)
     .then(checkStatus)
-    .then((response) => {
-      if (newOptions.method === 'DELETE' || response.status === 204) {
-        return response.text();
-      }
-      return response.json();
-    })
+    .then(res => res.data)
     .catch((e) => {
       const { dispatch } = store;
       const status = e.name;
