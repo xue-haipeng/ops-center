@@ -47,21 +47,21 @@ export default class UserCenter extends Component {
     autoCompleteResult: [],
   }
   showModal = () => {
-    this.setState({
+    this.setState(prevState => ({
       visible: true,
-    });
+    }));
   }
   handleOk = (e) => {
     console.log(e);
-    this.setState({
+    this.setState(prevState => ({
       visible: false,
-    });
+    }));
   }
   handleCancel = (e) => {
     console.log(e);
-    this.setState({
+    this.setState(prevState => ({
       visible: false,
-    });
+    }));
   }
 
   handleSubmit = (e) => {

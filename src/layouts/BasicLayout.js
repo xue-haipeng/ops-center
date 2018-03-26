@@ -14,7 +14,6 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
-// import logo from '../assets/logo.svg';
 import logo from '../assets/gears.svg'
 
 const { Content, Header, Footer } = Layout;
@@ -38,6 +37,25 @@ const getRedirect = (item) => {
   }
 };
 getMenuData().forEach(getRedirect);
+
+/**
+ * 获取面包屑映射
+ * @param {Object} menuData 菜单配置
+ * @param {Object} routerData 路由配置
+ */
+const getBreadcrumbNameMap = (menuData, routerData) => {
+  const result = {};
+  const childResult = {};
+  for (const i of menuData) {
+    if (!routerData[i.path]) {
+      result[i.path] = i;
+    }
+    if (i.children) {
+      Object.assign(childResult, getBreadcrumbNameMap(i.children, routerData));
+    }
+  }
+  return Object.assign({}, routerData, result, childResult);
+};
 
 const query = {
   'screen-xs': {
@@ -77,7 +95,7 @@ class BasicLayout extends React.PureComponent {
     const { location, routerData } = this.props;
     return {
       location,
-      breadcrumbNameMap: routerData,
+      breadcrumbNameMap: getBreadcrumbNameMap(getMenuData(), routerData),
     };
   }
   componentDidMount() {
@@ -93,7 +111,7 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = 'Ops Center';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - Ops Center`;
     }

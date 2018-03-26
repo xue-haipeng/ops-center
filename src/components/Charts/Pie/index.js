@@ -28,14 +28,14 @@ export default class Pie extends Component {
     if (this.props.data !== nextProps.data) {
       // because of charts data create when rendered
       // so there is a trick for get rendered time
-      this.setState(
-        {
-          legendData: [...this.state.legendData],
-        },
+      this.setState(prevState => (
+          {
+            legendData: [...prevState.legendData],
+          }
+        ),
         () => {
           this.getLengendData();
-        }
-      );
+        });
     }
   }
 
@@ -76,17 +76,20 @@ export default class Pie extends Component {
       window.removeEventListener('resize', this.resize);
       return;
     }
-    if (this.root.parentNode.clientWidth <= 380) {
-      if (!this.state.legendBlock) {
-        this.setState({
-          legendBlock: true,
-        });
+    this.setState((prevState) => {
+      if (this.root.parentNode.clientWidth <= 380) {
+        if (!prevState.legendBlock) {
+          return {
+            legendBlock: true,
+          };
+        }
+      } else if (prevState.legendBlock) {
+        return {
+          legendBlock: false,
+        };
       }
-    } else if (this.state.legendBlock) {
-      this.setState({
-        legendBlock: false,
-      });
-    }
+      return prevState;
+    });
   }
 
   handleRoot = (n) => {
@@ -97,17 +100,14 @@ export default class Pie extends Component {
     const newItem = item;
     newItem.checked = !newItem.checked;
 
-    const { legendData } = this.state;
-    legendData[i] = newItem;
-
-    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.x);
-
-    if (this.chart) {
-      this.chart.filter('x', val => filteredLegendData.indexOf(val) > -1);
-    }
-
-    this.setState({
-      legendData,
+    this.setState((prevState) => {
+      return {
+        legendData: Object.assign(prevState.legendData[i], newItem),
+      };
+    }, () => {
+      if (this.chart) {
+        this.chart.filter('x', val => this.state.legendData.filter(l => l.checked).map(l => l.x).indexOf(val) > -1);
+      }
     });
   };
 
@@ -221,7 +221,9 @@ export default class Pie extends Component {
               <div className={styles.total}>
                 {subTitle && <h4 className="pie-sub-title">{subTitle}</h4>}
                 {/* eslint-disable-next-line */}
-                {total && <div className="pie-stat" dangerouslySetInnerHTML={{ __html: total }} />}
+                {total && (
+                  <div className="pie-stat">{typeof total === 'function' ? total() : total}</div>
+                )}
               </div>
             )}
           </div>
@@ -240,12 +242,7 @@ export default class Pie extends Component {
                 <span className={styles.percent}>
                   {`${(isNaN(item.percent) ? 0 : item.percent * 100).toFixed(2)}%`}
                 </span>
-                <span
-                  className={styles.value}
-                  dangerouslySetInnerHTML={{
-                    __html: valueFormat ? valueFormat(item.y) : item.y,
-                  }}
-                />
+                <span className={styles.value}>{valueFormat ? valueFormat(item.y) : item.y}</span>
               </li>
             ))}
           </ul>

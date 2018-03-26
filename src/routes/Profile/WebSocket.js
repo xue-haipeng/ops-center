@@ -17,9 +17,9 @@ export default class UserCenter extends Component {
     this.clientRef.sendMessage('/topic/process', msg);
   }
   updateCount = (msg) => {
-    this.setState({
-      count: msg
-    })
+    this.setState(prevState => ({
+      count: msg,
+    }));
   }
 
   render() {
