@@ -73,17 +73,16 @@ export default function request(url, options) {
   const defaultOptions = {
     credentials: 'include',
   };
-  const newOptions = { ...defaultOptions, ...options };
+  const newOptions = { ...defaultOptions, ...options, url };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
-    if (!(newOptions.body instanceof FormData)) {
+    if (!(newOptions.data instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
-      newOptions.body = JSON.stringify(newOptions.body);
+      newOptions.data = newOptions.body;
     } else {
-      // newOptions.body is FormData
       newOptions.headers = {
         Accept: 'application/json',
         'Content-Type': 'multipart/form-data',
@@ -92,7 +91,7 @@ export default function request(url, options) {
     }
   }
 
-  return axios(url, newOptions)
+  return axios.request(newOptions)
     .then(checkStatus)
     .then(res => res.data)
     .catch((e) => {

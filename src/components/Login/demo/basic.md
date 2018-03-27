@@ -7,7 +7,7 @@ title:
 
 Support login with account and mobile number.
 
-````jsx
+```jsx
 import Login from 'ant-design-pro/lib/Login';
 import { Alert, Checkbox } from 'antd';
 
@@ -82,7 +82,7 @@ class LoginDemo extends React.Component {
 }
 
 ReactDOM.render(<LoginDemo />, mountNode);
-````
+```
 
 <style>
 #scaffold-src-components-Login-demo-basic .icon {

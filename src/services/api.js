@@ -16,7 +16,7 @@ export async function queryRule(params) {
 export async function removeRule(params) {
   return request('/api/rule', {
     method: 'POST',
-    body: {
+    data: {
       ...params,
       method: 'delete',
     },
@@ -26,7 +26,7 @@ export async function removeRule(params) {
 export async function addRule(params) {
   return request('/api/rule', {
     method: 'POST',
-    body: {
+    data: {
       ...params,
       method: 'post',
     },
@@ -36,7 +36,7 @@ export async function addRule(params) {
 export async function fakeSubmitForm(params) {
   return request('/api/forms', {
     method: 'POST',
-    body: params,
+    data: params,
   });
 }
 
@@ -70,7 +70,7 @@ export async function fakeAccountLogin(params) {
 export async function fakeRegister(params) {
   return request('/api/register', {
     method: 'POST',
-    body: params,
+    data: params,
   });
 }
 
