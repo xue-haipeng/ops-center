@@ -142,6 +142,9 @@ export const getRouterData = (app) => {
     '/profile/ws': {
       component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/WebSocket')),
     },
+    '/wxorder/order': {
+      component: dynamicWrapper(app, ['wxorder'], () => import('../routes/WxOrder/OrderList')),
+    },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },

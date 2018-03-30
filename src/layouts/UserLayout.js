@@ -21,7 +21,7 @@ const links = [{
   href: '',
 }];
 
-const copyright = <Fragment>Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品</Fragment>;
+const copyright = <Fragment><Icon type="copyright" /> 2018  云计算业务部  平台应用组</Fragment>;
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {

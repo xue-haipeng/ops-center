@@ -35,7 +35,7 @@ const basicGoods = [
 
 const basicProgress = [
   {
-    key: '1',
+    id: '1',
     time: '2017-10-01 14:10',
     rate: '联系客户',
     status: 'processing',
@@ -43,7 +43,7 @@ const basicProgress = [
     cost: '5mins',
   },
   {
-    key: '2',
+    id: '2',
     time: '2017-10-01 14:05',
     rate: '取货员出发',
     status: 'success',
@@ -51,7 +51,7 @@ const basicProgress = [
     cost: '1h',
   },
   {
-    key: '3',
+    id: '3',
     time: '2017-10-01 13:05',
     rate: '取货员接单',
     status: 'success',
@@ -59,7 +59,7 @@ const basicProgress = [
     cost: '5mins',
   },
   {
-    key: '4',
+    id: '4',
     time: '2017-10-01 13:00',
     rate: '申请审批通过',
     status: 'success',
@@ -67,7 +67,7 @@ const basicProgress = [
     cost: '1h',
   },
   {
-    key: '5',
+    id: '5',
     time: '2017-10-01 12:00',
     rate: '发起退货申请',
     status: 'success',
@@ -78,7 +78,7 @@ const basicProgress = [
 
 const advancedOperation1 = [
   {
-    key: 'op1',
+    id: 'op1',
     type: '订购关系生效',
     name: '曲丽丽',
     status: 'agree',
@@ -86,7 +86,7 @@ const advancedOperation1 = [
     memo: '-',
   },
   {
-    key: 'op2',
+    id: 'op2',
     type: '财务复审',
     name: '付小小',
     status: 'reject',
@@ -94,7 +94,7 @@ const advancedOperation1 = [
     memo: '不通过原因',
   },
   {
-    key: 'op3',
+    id: 'op3',
     type: '部门初审',
     name: '周毛毛',
     status: 'agree',
@@ -102,7 +102,7 @@ const advancedOperation1 = [
     memo: '-',
   },
   {
-    key: 'op4',
+    id: 'op4',
     type: '提交订单',
     name: '林东东',
     status: 'agree',
@@ -110,7 +110,7 @@ const advancedOperation1 = [
     memo: '很棒',
   },
   {
-    key: 'op5',
+    id: 'op5',
     type: '创建订单',
     name: '汗牙牙',
     status: 'agree',
@@ -121,7 +121,7 @@ const advancedOperation1 = [
 
 const advancedOperation2 = [
   {
-    key: 'op1',
+    id: 'op1',
     type: '订购关系生效',
     name: '曲丽丽',
     status: 'agree',
@@ -132,7 +132,7 @@ const advancedOperation2 = [
 
 const advancedOperation3 = [
   {
-    key: 'op1',
+    id: 'op1',
     type: '创建订单',
     name: '汗牙牙',
     status: 'agree',

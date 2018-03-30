@@ -49,10 +49,10 @@ export default class HeaderSearch extends PureComponent {
     });
   }
   leaveSearchMode = () => {
-    this.setState({
-      searchMode: false,
-      value: '',
-    });
+    this.setState(prevState => ({
+        searchMode: false,
+        value: '',
+      }));
   }
   render() {
     const { className, placeholder, ...restProps } = this.props;

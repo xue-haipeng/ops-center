@@ -197,18 +197,21 @@ export default class AdvancedProfile extends Component {
         loading={loading}
         dataSource={advancedOperation1}
         columns={columns}
+        rowKey={record => record.id}
       />,
       tab2: <Table
         pagination={false}
         loading={loading}
         dataSource={advancedOperation2}
         columns={columns}
+        rowKey={record => record.id}
       />,
       tab3: <Table
         pagination={false}
         loading={loading}
         dataSource={advancedOperation3}
         columns={columns}
+        rowKey={record => record.id}
       />,
     };
 

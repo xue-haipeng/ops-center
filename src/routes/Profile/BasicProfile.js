@@ -166,7 +166,7 @@ export default class BasicProfile extends Component {
             loading={loading}
             dataSource={goodsData}
             columns={goodsColumns}
-            rowKey="id"
+            rowKey={record => record.id}
           />
           <div className={styles.title}>退货进度</div>
           <Table
@@ -175,6 +175,7 @@ export default class BasicProfile extends Component {
             loading={loading}
             dataSource={basicProgress}
             columns={progressColumns}
+            rowKey={record => record.id}
           />
         </Card>
       </PageHeaderLayout>

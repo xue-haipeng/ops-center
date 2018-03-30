@@ -74,6 +74,14 @@ const menuData = [{
     path: 'custom',
   }],
 }, {
+  name: '订单页',
+  icon: 'table',
+  path: 'wxorder',
+  children: [{
+    name: '订单列表',
+    path: 'order',
+  }],
+}, {
   name: '结果页',
   icon: 'check-circle-o',
   path: 'result',

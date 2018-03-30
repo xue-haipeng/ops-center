@@ -28,10 +28,10 @@ class StandardTable extends PureComponent {
     // clean state
     if (nextProps.selectedRows.length === 0) {
       const needTotalList = initTotalList(nextProps.columns);
-      this.setState({
+      this.setState(prevState => ({
         selectedRowKeys: [],
         needTotalList,
-      });
+      }));
     }
   }
 
@@ -109,7 +109,7 @@ class StandardTable extends PureComponent {
         </div>
         <Table
           loading={loading}
-          rowKey={record => record.key}
+          rowKey={record => record.id}
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}

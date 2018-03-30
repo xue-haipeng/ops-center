@@ -153,9 +153,9 @@ export default class TableList extends PureComponent {
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
-    this.setState({
+    this.setState(prevState => ({
       formValues: {},
-    });
+    }));
     dispatch({
       type: 'rule/fetch',
       payload: {},
@@ -182,9 +182,9 @@ export default class TableList extends PureComponent {
             no: selectedRows.map(row => row.no).join(','),
           },
           callback: () => {
-            this.setState({
+            this.setState(prevState => ({
               selectedRows: [],
-            });
+            }));
           },
         });
         break;
@@ -194,9 +194,9 @@ export default class TableList extends PureComponent {
   }
 
   handleSelectRows = (rows) => {
-    this.setState({
+    this.setState(prevState => ({
       selectedRows: rows,
-    });
+    }));
   }
 
   handleSearch = (e) => {
@@ -212,9 +212,9 @@ export default class TableList extends PureComponent {
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
-      this.setState({
+      this.setState(prevState => ({
         formValues: values,
-      });
+      }));
 
       dispatch({
         type: 'rule/fetch',
@@ -224,9 +224,9 @@ export default class TableList extends PureComponent {
   }
 
   handleModalVisible = (flag) => {
-    this.setState({
+    this.setState(prevState => ({
       modalVisible: !!flag,
-    });
+    }));
   }
 
   handleAdd = (fields) => {
@@ -238,9 +238,9 @@ export default class TableList extends PureComponent {
     });
 
     message.success('添加成功');
-    this.setState({
+    this.setState(prevState => ({
       modalVisible: false,
-    });
+    }));
   }
 
   renderSimpleForm() {
