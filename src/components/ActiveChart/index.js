@@ -27,9 +27,9 @@ export default class ActiveChart extends Component {
 
   componentDidMount() {
     this.timer = setInterval(() => {
-      this.setState({
+      this.setState(prevState => ({
         activeData: getActiveData(),
-      });
+      }));
     }, 1000);
   }
 

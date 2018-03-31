@@ -8,7 +8,7 @@ let tableListDataSource =
       id: 103096,
       userId: null,
       amount: 10.0,
-      state: 1,
+      state: 3,
       dateTime: 1521103170000,
       orderTime: null,
       goodsList: [
@@ -64,7 +64,7 @@ let tableListDataSource =
       id: 103099,
       userId: null,
       amount: 0.11,
-      state: 1,
+      state: 2,
       dateTime: 1521102195000,
       orderTime: null,
       goodsList: [
@@ -120,7 +120,7 @@ let tableListDataSource =
       id: 103098,
       userId: null,
       amount: 1.0,
-      state: 1,
+      state: -1,
       dateTime: 1521098851000,
       orderTime: null,
       goodsList: [
@@ -176,7 +176,7 @@ let tableListDataSource =
       id: 103082,
       userId: null,
       amount: 1.0,
-      state: 1,
+      state: 16,
       dateTime: 1520928922000,
       orderTime: null,
       goodsList: [
@@ -288,7 +288,7 @@ let tableListDataSource =
       id: 103078,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 64,
       dateTime: 1520925638000,
       orderTime: null,
       goodsList: [
@@ -344,7 +344,7 @@ let tableListDataSource =
       id: 103058,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 16,
       dateTime: 1520826240000,
       orderTime: null,
       goodsList: [
@@ -456,7 +456,7 @@ let tableListDataSource =
       id: 103036,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 3,
       dateTime: 1519885437000,
       orderTime: null,
       goodsList: [
@@ -512,7 +512,7 @@ let tableListDataSource =
       id: 103032,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 2,
       dateTime: 1519885226000,
       orderTime: null,
       goodsList: [
@@ -568,7 +568,7 @@ let tableListDataSource =
       id: 103019,
       userId: null,
       amount: 1.0,
-      state: 1,
+      state: -1,
       dateTime: 1519721988000,
       orderTime: null,
       goodsList: [
@@ -792,7 +792,7 @@ let tableListDataSource =
       id: 102991,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 0,
       dateTime: 1517911421000,
       orderTime: null,
       goodsList: [
@@ -848,7 +848,7 @@ let tableListDataSource =
       id: 102981,
       userId: null,
       amount: 500.0,
-      state: 1,
+      state: 2,
       dateTime: 1517905977000,
       orderTime: null,
       goodsList: [
@@ -1145,12 +1145,14 @@ export function getOrder(req, res, u) {
   }
   if (params.state) {
     const state = params.state.split(',');
+    console.log('parsed: ', state);
     let filterDataSource = [];
     state.forEach((s) => {
       filterDataSource = filterDataSource.concat(
-        [...dataSource].filter(data => parseInt(data.state, 10) === parseInt(s[0], 10))
-      );
+        [...dataSource].filter(data => parseInt(data.state, 10) === parseInt(s, 10))
+      )
     });
+    dataSource = filterDataSource;
   }
   if (params.isvPin) {
     const isvPin = params.isvPin.split(',');

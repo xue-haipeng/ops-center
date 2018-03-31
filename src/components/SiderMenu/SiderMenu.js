@@ -39,9 +39,9 @@ export default class SiderMenu extends PureComponent {
   }
   componentWillReceiveProps(nextProps) {
     if (nextProps.location.pathname !== this.props.location.pathname) {
-      this.setState({
+      this.setState(prevState => ({
         openKeys: this.getDefaultCollapsedSubMenus(nextProps),
-      });
+      }));
     }
   }
   /**
@@ -191,9 +191,9 @@ export default class SiderMenu extends PureComponent {
   handleOpenChange = (openKeys) => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const moreThanOne = openKeys.filter(openKey => this.isMainMenu(openKey)).length > 1;
-    this.setState({
+    this.setState(prevState => ({
       openKeys: moreThanOne ? [lastOpenKey] : [...openKeys],
-    });
+    }));
   };
   render() {
     const { logo, collapsed, onCollapse } = this.props;

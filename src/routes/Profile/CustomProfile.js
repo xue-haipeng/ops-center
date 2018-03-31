@@ -77,14 +77,14 @@ export default class CustomProfile extends Component {
     console.log(`onOk: ${value}`)
   }
   showModal = () => {
-    this.setState({
+    this.setState(prevState => ({
       visible: true,
-    });
+    }));
   }
   hideModal = () => {
-    this.setState({
+    this.setState(prevState => ({
       visible: false,
-    });
+    }));
   }
 
   render() {

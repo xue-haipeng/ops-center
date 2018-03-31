@@ -67,15 +67,15 @@ export default class Analysis extends Component {
   }
 
   handleChangeSalesType = (e) => {
-    this.setState({
+    this.setState(prevState => ({
       salesType: e.target.value,
-    });
+    }));
   };
 
   handleTabChange = (key) => {
-    this.setState({
+    this.setState(prevState => ({
       currentTabKey: key,
-    });
+    }));
   };
 
   handleRangePickerChange = (rangePickerValue) => {
@@ -89,9 +89,9 @@ export default class Analysis extends Component {
   };
 
   selectDate = (type) => {
-    this.setState({
+    this.setState(prevState => ({
       rangePickerValue: getTimeDistance(type),
-    });
+    }));
 
     this.props.dispatch({
       type: 'chart/fetchSalesData',

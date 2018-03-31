@@ -41,7 +41,9 @@ const autoHeight = () => (WrappedComponent) => {
       if (!height) {
         const h = getAutoHeight(this.root);
         // eslint-disable-next-line
-        this.setState({ computedHeight: h });
+        this.setState(prevState => ({
+          computedHeight: h,
+        }));
       }
     }
 

@@ -11,8 +11,15 @@ const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
 const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
-const statusMap = ['processing', 'success', 'processing', 'error', 'error', 'processing', 'default'];
-const status = ['待付款', '已完成', '订单确认中', '支付失败', '已取消', '退款中', '退款完成'];
+const statusMapping = {
+  '0': { badge: 'processing', status: '待付款' },
+  '1': { badge: 'success', status: '已完成' },
+  '3': { badge: 'processing', status: '订单确认中' },
+  '-1': { badge: 'error', status: '支付失败' },
+  '2': { badge: 'error', status: '已取消' },
+  '16': { badge: 'processing', status: '退款中' },
+  '64': { badge: 'default', status: '退款完成' },
+};
 const columns = [
   {
     title: '订单号',
@@ -36,36 +43,36 @@ const columns = [
     dataIndex: 'state',
     filters: [
       {
-        text: status[0],
+        text: statusMapping["0"].status,
         value: 0,
       },
       {
-        text: status[1],
+        text: statusMapping["1"].status,
         value: 1,
       },
       {
-        text: status[2],
+        text: statusMapping["3"].status,
         value: 3,
       },
       {
-        text: status[3],
+        text: statusMapping["-1"].status,
         value: -1,
       },
       {
-        text: status[4],
+        text: statusMapping["2"].status,
         value: 2,
       },
       {
-        text: status[5],
+        text: statusMapping["16"].status,
         value: 16,
       },
       {
-        text: status[6],
+        text: statusMapping["64"].status,
         value: 64,
       },
     ],
     render(val) {
-      return <Badge status={statusMap[val]} text={status[val]} />;
+      return <Badge status={statusMapping[val.toString()].badge} text={statusMapping[val.toString()].status} />;
     },
   },
   {

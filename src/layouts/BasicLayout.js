@@ -100,9 +100,9 @@ class BasicLayout extends React.PureComponent {
   }
   componentDidMount() {
     enquireScreen((mobile) => {
-      this.setState({
+      this.setState(prevState => ({
         isMobile: mobile,
-      });
+      }));
     });
     this.props.dispatch({
       type: 'user/fetchCurrent',

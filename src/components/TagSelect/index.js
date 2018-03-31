@@ -25,7 +25,7 @@ class TagSelect extends Component {
   };
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps && nextProps.value) {
-      this.setState({ value: nextProps.value });
+      this.setState(prevState => ({ value: nextProps.value }));
     }
   }
 

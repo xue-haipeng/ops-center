@@ -74,7 +74,9 @@ export default class UserCenter extends Component {
   }
   handleConfirmBlur = (e) => {
     const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+    this.setState(prevState => ({
+      confirmDirty: this.state.confirmDirty || !!value
+    }));
   }
   compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
