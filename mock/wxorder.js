@@ -1145,7 +1145,6 @@ export function getOrder(req, res, u) {
   }
   if (params.state) {
     const state = params.state.split(',');
-    console.log('parsed: ', state);
     let filterDataSource = [];
     state.forEach((s) => {
       filterDataSource = filterDataSource.concat(

@@ -3,11 +3,7 @@ import NProgress from 'nprogress';
 import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
-
-// 设置全局参数，如响应超市时间，请求前缀等。
-// axios.defaults.timeout = 5000
-// axios.defaults.baseURL = '/api/v1';
-// axios.defaults.withCredentials = true;
+import {getAccessToken} from "./authority"
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -26,6 +22,7 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
+
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
@@ -41,24 +38,28 @@ function checkStatus(response) {
   throw error;
 }
 
-// 添加一个请求拦截器，用于设置请求过渡状态
-axios.interceptors.request.use((config) => {
-  // 请求开始，蓝色过渡滚动条开始出现
-  NProgress.start();
+const instance = axios.create({
+  baseURL: process.env.BASE_API,
+  timeout: 10000,
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN'
+})
+
+instance.interceptors.request.use(config => {
+  NProgress.start();  // 请求开始，蓝色过渡滚动条开始出现
+  if (getAccessToken()) {
+    config.headers.Authorization = `Bearer ${getAccessToken()}`
+  }
   return config;
 }, (error) => {
   return Promise.reject(error);
 });
 
-// 添加一个返回拦截器
-axios.interceptors.response.use((response) => {
-  // 请求结束，蓝色过渡滚动条消失
-  NProgress.done();
+instance.interceptors.response.use(response => {
+  NProgress.done();  // 请求结束，蓝色过渡滚动条消失
   return response;
 }, (error) => {
-  // 请求结束，蓝色过渡滚动条消失
-  // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
-  NProgress.done();
+  NProgress.done();  // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
   return Promise.reject(error);
 });
 
@@ -91,13 +92,16 @@ export default function request(url, options) {
     }
   }
 
-  return axios.request(newOptions)
+  return instance.request(newOptions)
     .then(checkStatus)
     .then(res => res.data)
     .catch((e) => {
       const { dispatch } = store;
       const status = e.name;
       if (status === 401) {
+        if (e.data.error === 'invalid token') {
+          // 刷新token
+        }
         dispatch({
           type: 'login/logout',
         });
