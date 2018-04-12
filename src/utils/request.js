@@ -86,7 +86,7 @@ export default function request(url, options) {
     } else {
       newOptions.headers = {
         Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        // 'Content-Type': 'multipart/form-data',
         ...newOptions.headers,
       };
     }
