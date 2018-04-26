@@ -1,0 +1,9 @@
+src/index.ejs
+**/*.jpg
+**/*.png
+**/*.svg
+**/*.less
+**/*.d.ts
+**/*.md
+**/.*
+package.json

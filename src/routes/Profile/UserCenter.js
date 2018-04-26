@@ -19,7 +19,9 @@ import DescriptionList from 'components/DescriptionList';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
-const { Option } = Select.Option;
+
+/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
+const Option = Select.Option;
 const AutoCompleteOption = AutoComplete.Option;
 
 const residences = [
