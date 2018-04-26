@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import styles from './index.less';
 
-const renderTotal = (total) => {
+const renderTotal = total => {
   let totalDom;
   switch (typeof total) {
     case 'undefined':
@@ -20,16 +20,16 @@ const renderTotal = (total) => {
 };
 
 const ChartCard = ({
-                     loading = false,
-                     contentHeight,
-                     title,
-                     avatar,
-                     action,
-                     total,
-                     footer,
-                     children,
-                     ...rest
-                   }) => {
+  loading = false,
+  contentHeight,
+  title,
+  avatar,
+  action,
+  total,
+  footer,
+  children,
+  ...rest
+}) => {
   const content = (
     <div className={styles.chartCard}>
       <div

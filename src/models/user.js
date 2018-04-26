@@ -1,5 +1,5 @@
 import { query as queryUsers, queryCurrent } from '../services/user';
-import {setToken} from "../utils/authority"
+import { setToken } from '../utils/authority';
 
 export default {
   namespace: 'user',

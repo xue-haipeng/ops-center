@@ -32,7 +32,7 @@ class Bar extends Component {
     }
     const minWidth = data.length * 30;
 
-    this.setState((prevState) => {
+    this.setState(prevState => {
       if (canvasWidth <= minWidth) {
         if (!prevState.autoHideXLabels) {
           return {
@@ -48,11 +48,11 @@ class Bar extends Component {
     });
   }
 
-  handleRoot = (n) => {
+  handleRoot = n => {
     this.root = n;
   };
 
-  handleRef = (n) => {
+  handleRef = n => {
     this.node = n;
   };
 

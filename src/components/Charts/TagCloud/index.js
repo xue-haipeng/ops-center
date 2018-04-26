@@ -39,7 +39,7 @@ class TagCloud extends Component {
     this.renderChart();
   };
 
-  saveRootRef = (node) => {
+  saveRootRef = node => {
     this.root = node;
   };
 
@@ -129,7 +129,7 @@ class TagCloud extends Component {
     } else {
       onload();
     }
-  };
+  }
 
   render() {
     const { className, height } = this.props;

@@ -10,7 +10,10 @@ import styles from './OrderList.less';
 const FormItem = Form.Item;
 const { Option } = Select;
 const { RangePicker } = DatePicker;
-const getValue = obj => Object.keys(obj).map(key => obj[key]).join(',');
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
 const statusMapping = {
   '0': { badge: 'processing', status: '待付款' },
   '1': { badge: 'success', status: '已完成' },
@@ -43,36 +46,41 @@ const columns = [
     dataIndex: 'state',
     filters: [
       {
-        text: statusMapping["0"].status,
+        text: statusMapping['0'].status,
         value: 0,
       },
       {
-        text: statusMapping["1"].status,
+        text: statusMapping['1'].status,
         value: 1,
       },
       {
-        text: statusMapping["3"].status,
+        text: statusMapping['3'].status,
         value: 3,
       },
       {
-        text: statusMapping["-1"].status,
+        text: statusMapping['-1'].status,
         value: -1,
       },
       {
-        text: statusMapping["2"].status,
+        text: statusMapping['2'].status,
         value: 2,
       },
       {
-        text: statusMapping["16"].status,
+        text: statusMapping['16'].status,
         value: 16,
       },
       {
-        text: statusMapping["64"].status,
+        text: statusMapping['64'].status,
         value: 64,
       },
     ],
     render(val) {
-      return <Badge status={statusMapping[val.toString()].badge} text={statusMapping[val.toString()].status} />;
+      return (
+        <Badge
+          status={statusMapping[val.toString()].badge}
+          text={statusMapping[val.toString()].status}
+        />
+      );
     },
   },
   {
@@ -133,27 +141,27 @@ export default class OrderList extends PureComponent {
       type: 'wxorder/fetch',
       payload: params,
     });
-  }
+  };
 
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
-    this.setState(prevState => ({
+    this.setState({
       formValues: {},
-    }));
+    });
     dispatch({
       type: 'wxorder/fetch',
       payload: {},
     });
-  }
+  };
 
   toggleForm = () => {
-    this.setState(prevState => ({
+    this.setState({
       expandForm: !this.state.expandForm,
-    }));
-  }
+    });
+  };
 
-  handleMenuClick = (e) => {
+  handleMenuClick = e => {
     const { dispatch } = this.props;
     const { selectedRows } = this.state;
 
@@ -167,24 +175,24 @@ export default class OrderList extends PureComponent {
             id: selectedRows.map(row => row.id).join(','),
           },
           callback: () => {
-            this.setState(prevState => ({
+            this.setState({
               selectedRows: [],
-            }));
+            });
           },
         });
         break;
       default:
         break;
     }
-  }
+  };
 
-  handleSelectRows = (rows) => {
-    this.setState(prevState => ({
+  handleSelectRows = rows => {
+    this.setState({
       selectedRows: rows,
-    }));
-  }
+    });
+  };
 
-  handleSearch = (e) => {
+  handleSearch = e => {
     e.preventDefault();
 
     const { dispatch, form } = this.props;
@@ -194,18 +202,20 @@ export default class OrderList extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        dateTime: fieldsValue.dateTime && `${fieldsValue.dateTime[0].valueOf()} - ${fieldsValue.dateTime[1].valueOf()}`,
+        dateTime:
+          fieldsValue.dateTime &&
+          `${fieldsValue.dateTime[0].valueOf()} - ${fieldsValue.dateTime[1].valueOf()}`,
       };
-      this.setState(prevState => ({
+      this.setState({
         formValues: values,
-      }));
+      });
 
       dispatch({
         type: 'wxorder/fetch',
         payload: values,
       });
     });
-  }
+  };
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -214,9 +224,7 @@ export default class OrderList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单号">
-              {getFieldDecorator('fuwuOrderId')(
-                <Input placeholder="请输入" />
-              )}
+              {getFieldDecorator('fuwuOrderId')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -236,8 +244,12 @@ export default class OrderList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">查询</Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                 展开 <Icon type="down" />
               </a>
@@ -255,9 +267,7 @@ export default class OrderList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单号">
-              {getFieldDecorator('fuwuOrderId')(
-                <Input placeholder="请输入" />
-              )}
+              {getFieldDecorator('fuwuOrderId')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -277,9 +287,7 @@ export default class OrderList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="买家名称">
-              {getFieldDecorator('isvPin')(
-                <Input placeholer="请输入" />
-              )}
+              {getFieldDecorator('isvPin')(<Input placeholer="请输入" />)}
             </FormItem>
           </Col>
         </Row>
@@ -298,8 +306,12 @@ export default class OrderList extends PureComponent {
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">查询</Button>
-            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>重置</Button>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              重置
+            </Button>
             <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
               收起 <Icon type="up" />
             </a>
@@ -321,9 +333,7 @@ export default class OrderList extends PureComponent {
       <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>
-              {this.renderForm()}
-            </div>
+            <div className={styles.tableListForm}>{this.renderForm()}</div>
             <StandardTable
               selectedRows={selectedRows}
               loading={loading}

@@ -7,21 +7,29 @@ import styles from './UserLayout.less';
 import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
 
-const links = [{
-  key: 'help',
-  title: '帮助',
-  href: '',
-}, {
-  key: 'privacy',
-  title: '隐私',
-  href: '',
-}, {
-  key: 'terms',
-  title: '条款',
-  href: '',
-}];
+const links = [
+  {
+    key: 'help',
+    title: '帮助',
+    href: '',
+  },
+  {
+    key: 'privacy',
+    title: '隐私',
+    href: '',
+  },
+  {
+    key: 'terms',
+    title: '条款',
+    href: '',
+  },
+];
 
-const copyright = <Fragment><Icon type="copyright" /> 2018  云计算业务部  平台应用组</Fragment>;
+const copyright = (
+  <Fragment>
+    <Icon type="copyright" /> 2018 云计算业务部 平台应用组
+  </Fragment>
+);
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
@@ -49,16 +57,14 @@ class UserLayout extends React.PureComponent {
               <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
             </div>
             <Switch>
-              {getRoutes(match.path, routerData).map(item =>
-                (
-                  <Route
-                    key={item.key}
-                    path={item.path}
-                    component={item.component}
-                    exact={item.exact}
-                  />
-                )
-              )}
+              {getRoutes(match.path, routerData).map(item => (
+                <Route
+                  key={item.key}
+                  path={item.path}
+                  component={item.component}
+                  exact={item.exact}
+                />
+              ))}
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>

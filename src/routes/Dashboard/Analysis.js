@@ -66,19 +66,19 @@ export default class Analysis extends Component {
     });
   }
 
-  handleChangeSalesType = (e) => {
-    this.setState(prevState => ({
+  handleChangeSalesType = e => {
+    this.setState({
       salesType: e.target.value,
-    }));
+    });
   };
 
-  handleTabChange = (key) => {
-    this.setState(prevState => ({
+  handleTabChange = key => {
+    this.setState({
       currentTabKey: key,
-    }));
+    });
   };
 
-  handleRangePickerChange = (rangePickerValue) => {
+  handleRangePickerChange = rangePickerValue => {
     this.setState({
       rangePickerValue,
     });
@@ -88,10 +88,10 @@ export default class Analysis extends Component {
     });
   };
 
-  selectDate = (type) => {
-    this.setState(prevState => ({
+  selectDate = type => {
+    this.setState({
       rangePickerValue: getTimeDistance(type),
-    }));
+    });
 
     this.props.dispatch({
       type: 'chart/fetchSalesData',

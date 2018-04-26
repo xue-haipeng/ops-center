@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'dva';
-import { Button, Menu, Dropdown, Icon, Row, Col, Steps, Card, Popover, Badge, Table, Tooltip, Divider } from 'antd';
+import { Card } from 'antd';
 import DescriptionList from 'components/DescriptionList';
 import SockJsClient from 'react-stomp';
 
@@ -11,25 +10,30 @@ export default class UserCenter extends Component {
     super(props);
     this.state = {
       count: 0,
-    }
+    };
   }
-  sendMessage = (msg) => {
+  sendMessage = msg => {
     this.clientRef.sendMessage('/topic/process', msg);
-  }
-  updateCount = (msg) => {
-    this.setState(prevState => ({
+  };
+  updateCount = msg => {
+    this.setState({
       count: msg,
-    }));
-  }
+    });
+  };
 
   render() {
     return (
       <Fragment>
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
           <div>
-            <SockJsClient url='http://localhost:8080/ws' topics={['/topic/process']}
-                          onMessage={this.updateCount}
-                          ref={ (client) => { this.clientRef = client }} />
+            <SockJsClient
+              url="http://localhost:8080/ws"
+              topics={['/topic/process']}
+              onMessage={this.updateCount}
+              ref={client => {
+                this.clientRef = client;
+              }}
+            />
           </div>
           <DescriptionList style={{ marginBottom: 24 }}>
             <Description term="用户姓名">曲丽丽</Description>

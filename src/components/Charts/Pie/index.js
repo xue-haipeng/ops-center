@@ -19,7 +19,7 @@ export default class Pie extends Component {
   };
 
   componentDidMount() {
-    this.getLengendData();
+    this.getLegendData();
     this.resize();
     window.addEventListener('resize', this.resize);
   }
@@ -28,14 +28,14 @@ export default class Pie extends Component {
     if (this.props.data !== nextProps.data) {
       // because of charts data create when rendered
       // so there is a trick for get rendered time
-      this.setState(prevState => (
-          {
-            legendData: [...prevState.legendData],
-          }
-        ),
+      this.setState(
+        prevState => ({
+          legendData: [...prevState.legendData],
+        }),
         () => {
-          this.getLengendData();
-        });
+          this.getLegendData();
+        }
+      );
     }
   }
 
@@ -44,17 +44,17 @@ export default class Pie extends Component {
     this.resize.cancel();
   }
 
-  getG2Instance = (chart) => {
+  getG2Instance = chart => {
     this.chart = chart;
   };
 
   // for custom lengend view
-  getLengendData = () => {
+  getLegendData = () => {
     if (!this.chart) return;
     const geom = this.chart.getAllGeoms()[0]; // 获取所有的图形
     const items = geom.get('dataArray') || []; // 获取图形对应的
 
-    const legendData = items.map((item) => {
+    const legendData = items.map(item => {
       /* eslint no-underscore-dangle:0 */
       const origin = item[0]._origin;
       origin.color = item[0].color;
@@ -76,7 +76,7 @@ export default class Pie extends Component {
       window.removeEventListener('resize', this.resize);
       return;
     }
-    this.setState((prevState) => {
+    this.setState(prevState => {
       if (this.root.parentNode.clientWidth <= 380) {
         if (!prevState.legendBlock) {
           return {
@@ -92,7 +92,7 @@ export default class Pie extends Component {
     });
   }
 
-  handleRoot = (n) => {
+  handleRoot = n => {
     this.root = n;
   };
 
@@ -100,15 +100,25 @@ export default class Pie extends Component {
     const newItem = item;
     newItem.checked = !newItem.checked;
 
-    this.setState((prevState) => {
-      return {
-        legendData: Object.assign(prevState.legendData[i], newItem),
-      };
-    }, () => {
-      if (this.chart) {
-        this.chart.filter('x', val => this.state.legendData.filter(l => l.checked).map(l => l.x).indexOf(val) > -1);
+    this.setState(
+      prevState => {
+        return {
+          legendData: Object.assign(prevState.legendData[i], newItem),
+        };
+      },
+      () => {
+        if (this.chart) {
+          this.chart.filter(
+            'x',
+            val =>
+              this.state.legendData
+                .filter(l => l.checked)
+                .map(l => l.x)
+                .indexOf(val) > -1
+          );
+        }
       }
-    });
+    );
   };
 
   render() {
@@ -154,7 +164,7 @@ export default class Pie extends Component {
     if (percent) {
       selected = false;
       tooltip = false;
-      formatColor = (value) => {
+      formatColor = value => {
         if (value === '占比') {
           return color || 'rgba(24, 144, 255, 0.85)';
         } else {

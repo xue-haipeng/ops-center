@@ -19,13 +19,17 @@ const desc2 = (
     <div style={{ margin: '8px 0 4px' }}>
       周毛毛<Icon type="dingding-o" style={{ color: '#00A0E9', marginLeft: 8 }} />
     </div>
-    <div><a href="">催一下</a></div>
+    <div>
+      <a href="">催一下</a>
+    </div>
   </div>
 );
 
 const extra = (
   <Fragment>
-    <div style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}>
+    <div
+      style={{ fontSize: 16, color: 'rgba(0, 0, 0, 0.85)', fontWeight: '500', marginBottom: 20 }}
+    >
       项目名称
     </div>
     <Row style={{ marginBottom: 16 }}>
