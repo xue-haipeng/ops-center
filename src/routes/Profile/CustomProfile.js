@@ -20,7 +20,9 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './CustomProfile.less';
 
 const CheckboxGroup = Checkbox.Group;
-const { Step } = Steps.Step;
+
+/* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
+const Step = Steps.Step;
 const { RangePicker } = DatePicker;
 
 const options = [
