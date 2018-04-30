@@ -1,5 +1,4 @@
 import { query as queryUsers, queryCurrent } from '../services/user';
-import { setToken } from '../utils/authority';
 
 export default {
   namespace: 'user',
@@ -34,10 +33,6 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
-      const res = action.payload;
-      if (res.refresh_token) {
-        setToken(res.access_token, res.refresh_token);
-      }
       return {
         ...state,
         currentUser: action.payload,

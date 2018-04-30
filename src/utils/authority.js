@@ -7,9 +7,9 @@ export function setAuthority(authority) {
   return localStorage.setItem('auth_role', authority);
 }
 
-export function setToken(access_token, refresh_token) {
-  localStorage.setItem('access_token', access_token);
-  localStorage.setItem('refresh_token', refresh_token);
+export function setToken(accessToken, refreshToken) {
+  localStorage.setItem('access_token', accessToken);
+  localStorage.setItem('refresh_token', refreshToken);
 }
 
 export function getAccessToken() {

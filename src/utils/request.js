@@ -43,6 +43,7 @@ const instance = axios.create({
   timeout: 10000,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
+  withCredentials: true,
 });
 
 /* eslint no-param-reassign: ["error", { "props": true, "ignorePropertyModificationsFor": ["config"] }] */

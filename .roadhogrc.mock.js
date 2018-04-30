@@ -14,7 +14,7 @@ const noProxy = process.env.NO_PROXY === 'true';
 // 代码中会兼容本地 service mock 以及部署站点的静态数据
 const proxy = {
   // 支持值为 Object 和 Array
-  'GET /api/currentUser': {
+/*  'GET /api/currentUser': {
     $desc: "获取当前用户接口",
     $params: {
       pageSize: {
@@ -33,7 +33,7 @@ const proxy = {
       access_token: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MjI1ODUyMDIsInVzZXJfbmFtZSI6Inh1ZSIsImF1dGhvcml0aWVzIjpbIlJPTEVfVVNFUiJdLCJqdGkiOiJlOWM4NTg2NS01MTgyLTQ1ZmEtYTZkOS1kMDgxMmRiY2Y4NDAiLCJjbGllbnRfaWQiOiJ1YWEtc2VydmljZSIsInNjb3BlIjpbInNlcnZpY2UiXX0.LPc7LbN9gpK80iJCw7XTSwZgWteRTY3keR7LRdZgJWoMx0lVG2P137JaUzVZS1gUVYIv7Iu41XDqMAaN1iwtI6_3jPVcvTqbkBFHjI1C3ap685_gJjqrolRmvbojrOQ94FwXZGBBStSIBEy6Y3nK6Eu34dxQvTdJFap2SEENdZbh2qzR0j5dCL__aaAu3m-0KoF9NQoz51Zx3Hk9PIvAIhGBPFdhbhY-TjaLjahMa4sqiJb0eepeMGGlIKVcrvrncTk_45YNivpQTX-frz_Zj-GRko8UgNMq7yh7ncsqdCpZIc8coNaQ-E4eBkPunxGCFpVzuA2ijHg0nHmUFQpJgQ',
       refresh_token: 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX25hbWUiOiJ4dWUiLCJzY29wZSI6WyJzZXJ2aWNlIl0sImF0aSI6ImU5Yzg1ODY1LTUxODItNDVmYS1hNmQ5LWQwODEyZGJjZjg0MCIsImV4cCI6MTUyNTE3MzYwMiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9VU0VSIl0sImp0aSI6ImFlYWVkM2JhLTE3ZTItNGU5MC05NTBkLTVhOTBkNDQyN2M3NCIsImNsaWVudF9pZCI6InVhYS1zZXJ2aWNlIn0.PN72cCkQ9c1WwrqYPwoQnp3Ta7xRH_wDbTY6W-0iA5MtDSqNgkT9D9Y-j_E5jGKyAlVGRw-fqNpsy8BspKQd-r8hu_alm_Xpzo9IJM-a1-7hLiaJrt6SvQuk1Y58hgFFb3ImFXVWwLBPivwB6n_4gOaeM92JAhitL1PLpDL-jOO8vylC-VGuajx68ofsh_meKrQDctejGTb6IgJ2MSmm6OMwgkY--G2jjpIyU-j6yLBHQOAAik5XWZ2Sv031AaXnzWsdG5_cxmUSzi_kFdyeTFT6onAsB6nP5NtukGozjOws9Txar479zMZzWSs7SOKarZBlYRU5sz5P7vb4EneRTg',
     },
-  },
+  },*/
   // GET POST 可省略
   'GET /api/users': [{
     key: '1',
@@ -84,8 +84,8 @@ const proxy = {
     $body: postOrder,
   },
   'POST /api/login/account': (req, res) => {
-    const { password, userName, type } = req.body;
-    if(password === '888888' && userName === 'admin'){
+    const { password, username, type } = req.body;
+    if(password === '888888' && username === 'admin'){
       res.send({
         status: 'ok',
         type,
@@ -93,7 +93,7 @@ const proxy = {
       });
       return ;
     }
-    if(password === '123456' && userName === 'user'){
+    if(password === '123456' && username === 'user'){
       res.send({
         status: 'ok',
         type,
