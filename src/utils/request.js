@@ -4,6 +4,7 @@ import { notification } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
 import { getAccessToken } from './authority';
+import { refreshAccessToken } from '../services/user';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -67,6 +68,11 @@ instance.interceptors.response.use(
   },
   error => {
     NProgress.done(); // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
+    const { status, data } = error.response;
+    if (status === 401 && data.error === 'invalid_token') {
+      refreshAccessToken();
+      return instance.request(error.config);
+    }
     return Promise.reject(error);
   }
 );
@@ -108,9 +114,6 @@ export default function request(url, options) {
       const { dispatch } = store;
       const status = e.name;
       if (status === 401) {
-        if (e.data.error === 'invalid token') {
-          // 刷新token
-        }
         dispatch({
           type: 'login/logout',
         });

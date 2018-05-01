@@ -19,3 +19,8 @@ export function getAccessToken() {
 export function getRefreshToken() {
   return localStorage.getItem('refresh_token');
 }
+
+export function deleteTokens() {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('refresh_token');
+}

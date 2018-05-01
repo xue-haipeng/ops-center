@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { setAuthority, setToken } from '../utils/authority';
+import { deleteTokens, setAuthority, setToken } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 import { signIn } from '../services/user';
 
@@ -14,7 +14,7 @@ export default {
     *login({ payload }, { call, put }) {
       const response = yield call(signIn, payload);
       yield put({
-        type: 'changeLoginStatus',
+        type: 'changeStatusToLogin',
         payload: response,
       });
       // Login successfully
@@ -35,7 +35,7 @@ export default {
         window.history.replaceState(null, 'login', urlParams.href);
       } finally {
         yield put({
-          type: 'changeLoginStatus',
+          type: 'changeStatusToLogout',
           payload: {
             status: false,
             currentAuthority: 'guest',
@@ -48,13 +48,21 @@ export default {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
+    changeStatusToLogin(state, { payload }) {
       // setAuthority(payload.currentAuthority);
       setAuthority('admin');
       return {
         ...state,
-        // status: payload.status,
-        status: 'ok',
+        status: payload.status || 'ok',
+        type: payload.type,
+      };
+    },
+    changeStatusToLogout(state, { payload }) {
+      setAuthority('guest');
+      deleteTokens();
+      return {
+        ...state,
+        status: payload.status,
         type: payload.type,
       };
     },
