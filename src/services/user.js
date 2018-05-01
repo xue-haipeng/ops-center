@@ -1,6 +1,6 @@
 import axios from 'axios';
 import request from '../utils/request';
-import { getRefreshToken, setToken } from '../utils/authority';
+import { getAccessToken, getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
 axios.defaults.headers.common.Authorization = 'Basic dWFhLXNlcnZpY2U6MTIzNDU2';
@@ -21,7 +21,7 @@ export async function signIn() {
   );
 }
 
-export async function refreshAccessToken() {
+export async function refreshAccessToken(config) {
   return axios
     .post(
       `http://localhost:8888/api/v1/uaa/oauth/token?grant_type=refresh_token&refresh_token=${getRefreshToken()}`
@@ -30,12 +30,15 @@ export async function refreshAccessToken() {
       if (res.status === 200) {
         const { access_token: accessToken, refresh_token: refreshToken } = res.data;
         setToken(accessToken, refreshToken);
+        const headers = { ...config.headers, Authorization: `Bearer ${getAccessToken()}` };
+        const newConfig = { ...config, headers };
+        axios(newConfig);
       }
     })
     .catch(e => {
       const { dispatch } = store;
-      const status = e.name;
-      if (status === 401) {
+      const { status, data } = e.response;
+      if (status === 401 && data.error === 'invalid_token') {
         dispatch({
           type: 'login/logout',
         });

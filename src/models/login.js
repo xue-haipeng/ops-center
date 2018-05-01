@@ -22,7 +22,7 @@ export default {
         const { access_token: accessToken, refresh_token: refreshToken } = response.data;
         setToken(accessToken, refreshToken);
         reloadAuthorized();
-        yield put(routerRedux.push('/'));
+        setTimeout(yield put(routerRedux.push('/')), 1000);
       }
     },
     *logout(_, { put, select }) {

@@ -70,8 +70,7 @@ instance.interceptors.response.use(
     NProgress.done(); // 即使出现异常，也要调用关闭方法，否则一直处于加载状态很奇怪
     const { status, data } = error.response;
     if (status === 401 && data.error === 'invalid_token') {
-      refreshAccessToken();
-      return instance.request(error.config);
+      refreshAccessToken(error.config);
     }
     return Promise.reject(error);
   }
