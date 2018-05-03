@@ -51,8 +51,15 @@ const instance = axios.create({
 instance.interceptors.request.use(
   config => {
     NProgress.start(); // 请求开始，蓝色过渡滚动条开始出现
-    if (getAccessToken()) {
-      config.headers.Authorization = `Bearer ${getAccessToken()}`;
+    const accessToken = getAccessToken();
+    const { dispatch } = store;
+    if (accessToken) {
+      config.headers.Authorization = `Bearer ${accessToken}`;
+    } else {
+      dispatch({
+        type: 'login/logout',
+      });
+      return;
     }
     return config;
   },
