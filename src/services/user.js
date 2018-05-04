@@ -3,9 +3,10 @@ import request from '../utils/request';
 import { getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
+const BASE_URL = 'https://app.haipeng.co'; // remote prod
+// const BASE_URL = 'http://localhost:8888';  // local dev
 const gwInstance = axios.create({
-  baseURL: 'http://localhost:8888', // local dev
-  // baseURL: 'https://app.haipeng.co',  // remote prod
+  baseURL: BASE_URL,
   headers: {
     Authorization: 'Basic dWFhLXNlcnZpY2U6MTIzNDU2',
   },
@@ -16,7 +17,7 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  return request('http://localhost:8888/api/v1/demo/currentUser', {
+  return request(`${BASE_URL}/api/v1/demo/currentUser`, {
     method: 'POST',
   });
 }

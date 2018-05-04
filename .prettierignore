@@ -4,5 +4,6 @@
 **/*.png
 **/*.d.ts
 **/*.ejs
+**/*.html
 **/.*
 package.json
