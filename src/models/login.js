@@ -38,7 +38,7 @@ export default {
           type: 'changeStatusToLogout',
           payload: {
             status: false,
-            currentAuthority: 'guest',
+            currentAuthority: 'ROLE_GUEST',
           },
         });
         reloadAuthorized();
@@ -49,16 +49,19 @@ export default {
 
   reducers: {
     changeStatusToLogin(state, { payload }) {
-      // setAuthority(payload.currentAuthority);
-      setAuthority('admin');
+      if (payload.status === 200) {
+        const { authorities } = payload.data;
+        const authority = authorities.map(ele => ele.authority).join(',');
+        setAuthority(authority);
+      }
       return {
         ...state,
-        status: payload.status || 'ok',
+        status: payload.status,
         type: payload.type,
       };
     },
     changeStatusToLogout(state, { payload }) {
-      setAuthority('guest');
+      setAuthority(payload.currentAuthority);
       deleteTokens();
       return {
         ...state,

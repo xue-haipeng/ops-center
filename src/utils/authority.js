@@ -1,10 +1,11 @@
 // use localStorage to store the authority info, which might be sent from server in actual project.
 export function getAuthority() {
-  return localStorage.getItem('auth_role') || 'admin';
+  const authorities = localStorage.getItem('authorities');
+  return authorities === null ? 'ROLE_GUEST' : authorities.split(',');
 }
 
-export function setAuthority(authority) {
-  return localStorage.setItem('auth_role', authority);
+export function setAuthority(authorities) {
+  return localStorage.setItem('authorities', authorities);
 }
 
 export function setToken(accessToken, refreshToken) {

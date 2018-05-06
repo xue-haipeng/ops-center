@@ -26,15 +26,22 @@ const checkPermissions = (authority, currentAuthority, target, Exception) => {
   }
   // 数组处理
   if (Array.isArray(authority)) {
-    if (authority.indexOf(currentAuthority) >= 0) {
+    if (currentAuthority.constructor.name === String && authority.indexOf(currentAuthority) >= 0) {
       return target;
+    } else if (currentAuthority.constructor.name === 'Array') {
+      const intersection = authority.filter(v => currentAuthority.includes(v));
+      if (intersection.length > 0) {
+        return target;
+      }
     }
     return Exception;
   }
 
   // string 处理
   if (typeof authority === 'string') {
-    if (authority === currentAuthority) {
+    if (typeof currentAuthority === 'string' && authority === currentAuthority) {
+      return target;
+    } else if (Array.isArray(currentAuthority) && currentAuthority.includes(authority)) {
       return target;
     }
     return Exception;

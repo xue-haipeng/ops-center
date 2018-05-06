@@ -3,8 +3,8 @@ import request from '../utils/request';
 import { getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
-const BASE_URL = 'https://app.haipeng.co'; // remote prod
-// const BASE_URL = 'http://localhost:8888';  // local dev
+// const BASE_URL = 'https://app.haipeng.co'; // remote prod
+const BASE_URL = 'http://localhost:8888'; // local dev
 const gwInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -22,10 +22,20 @@ export async function queryCurrent() {
   });
 }
 
-export async function signIn() {
-  return gwInstance.post(
-    '/api/v1/uaa/oauth/token?username=xue&password=123456&type=account&grant_type=password'
-  );
+export async function signIn(payload) {
+  try {
+    return await gwInstance.post(
+      `/api/v1/uaa/oauth/token?username=${payload.username}&password=${payload.password}&type=${
+        payload.type
+      }&grant_type=password`
+    );
+  } catch (error) {
+    return { ...error.response, type: payload.type };
+    // const { status, data } = error.response;
+    // if (status === 400 && data.error_description === 'Bad credentials') {
+    //   message.error('用户名/密码错误！');
+    // }
+  }
 }
 
 export async function refreshAccessToken(config) {
@@ -37,9 +47,6 @@ export async function refreshAccessToken(config) {
         setToken(accessToken, refreshToken);
         // eslint-disable-next-line no-console
         console.log(config);
-        /*        const headers = { ...config.headers, Authorization: `Bearer ${getAccessToken()}` };
-        const newConfig = { ...config, headers };
-        axios(newConfig); */
         location.reload(true);
       }
     })

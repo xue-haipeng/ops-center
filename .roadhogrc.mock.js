@@ -89,7 +89,7 @@ const proxy = {
       res.send({
         status: 'ok',
         type,
-        currentAuthority: 'admin'
+        currentAuthority: 'ROLE_ADMIN'
       });
       return ;
     }
@@ -97,14 +97,14 @@ const proxy = {
       res.send({
         status: 'ok',
         type,
-        currentAuthority: 'user'
+        currentAuthority: 'ROLE_USER'
       });
       return ;
     }
     res.send({
       status: 'error',
       type,
-      currentAuthority: 'guest'
+      currentAuthority: 'ROLE_GUEST'
     });
   },
   'POST /api/register': (req, res) => {

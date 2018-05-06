@@ -51,12 +51,12 @@ export default class LoginPage extends Component {
       <div className={styles.main}>
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
           <Tab key="account" tab="账户密码登录">
-            {login.status === 'error' &&
+            {login.status !== 200 &&
               login.type === 'account' &&
               !login.submitting &&
-              this.renderMessage('账户或密码错误（admin/888888）')}
-            <UserName name="username" placeholder="admin/user" />
-            <Password name="password" placeholder="888888/123456" />
+              this.renderMessage('账户或密码错误')}
+            <UserName name="username" placeholder="请输入用户名..." />
+            <Password name="password" placeholder="请输入密码..." />
           </Tab>
           <Tab key="mobile" tab="手机号登录">
             {login.status === 'error' &&
