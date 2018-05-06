@@ -12,8 +12,8 @@ export default class UserCenter extends Component {
       count: 0,
     };
   }
-  sendMessage = msg => {
-    this.clientRef.sendMessage('/topic/process', msg);
+  sendMessage = (topic, msg, headers) => {
+    this.clientRef.sendMessage(topic, msg, headers);
   };
   updateCount = msg => {
     this.setState({
@@ -27,7 +27,9 @@ export default class UserCenter extends Component {
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
           <div>
             <SockJsClient
-              url="http://localhost:8080/ws"
+              url="http://localhost:8899/demo/ws"
+              // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
+              // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
               topics={['/topic/process']}
               onMessage={this.updateCount}
               ref={client => {
