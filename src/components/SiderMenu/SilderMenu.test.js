@@ -1,24 +1,72 @@
-import { getMeunMatcheys } from './SiderMenu';
+import { urlToList } from "../utils/pathTools";
+import { getFlatMenuKeys, getMeunMatchKeys } from "./SiderMenu";
 
-const meun = ['/dashboard', '/userinfo', '/dashboard/name', '/userinfo/:id', '/userinfo/:id/info'];
+const menu = [
+  {
+    path: "/dashboard",
+    children: [
+      {
+        path: "/dashboard/name"
+      }
+    ]
+  },
+  {
+    path: "/userinfo",
+    children: [
+      {
+        path: "/userinfo/:id",
+        children: [
+          {
+            path: "/userinfo/:id/info"
+          }
+        ]
+      }
+    ]
+  }
+];
 
-describe('test meun match', () => {
-  it('simple path', () => {
-    expect(getMeunMatcheys(meun, '/dashboard')).toEqual(['/dashboard']);
+const flatMenuKeys = getFlatMenuKeys(menu);
+
+describe("test convert nested menu to flat menu", () => {
+  it("simple menu", () => {
+    expect(flatMenuKeys).toEqual([
+      "/dashboard",
+      "/dashboard/name",
+      "/userinfo",
+      "/userinfo/:id",
+      "/userinfo/:id/info"
+    ]);
   });
-  it('error path', () => {
-    expect(getMeunMatcheys(meun, '/dashboardname')).toEqual([]);
+});
+
+describe("test menu match", () => {
+  it("simple path", () => {
+    expect(getMeunMatchKeys(flatMenuKeys, urlToList("/dashboard"))).toEqual([
+      "/dashboard"
+    ]);
   });
 
-  it('Secondary path', () => {
-    expect(getMeunMatcheys(meun, '/dashboard/name')).toEqual(['/dashboard/name']);
+  it("error path", () => {
+    expect(getMeunMatchKeys(flatMenuKeys, urlToList("/dashboardname"))).toEqual(
+      []
+    );
   });
 
-  it('Parameter path', () => {
-    expect(getMeunMatcheys(meun, '/userinfo/2144')).toEqual(['/userinfo/:id']);
+  it("Secondary path", () => {
+    expect(
+      getMeunMatchKeys(flatMenuKeys, urlToList("/dashboard/name"))
+    ).toEqual(["/dashboard", "/dashboard/name"]);
   });
 
-  it('three parameter path', () => {
-    expect(getMeunMatcheys(meun, '/userinfo/2144/info')).toEqual(['/userinfo/:id/info']);
+  it("Parameter path", () => {
+    expect(getMeunMatchKeys(flatMenuKeys, urlToList("/userinfo/2144"))).toEqual(
+      ["/userinfo", "/userinfo/:id"]
+    );
+  });
+
+  it("three parameter path", () => {
+    expect(
+      getMeunMatchKeys(flatMenuKeys, urlToList("/userinfo/2144/info"))
+    ).toEqual(["/userinfo", "/userinfo/:id", "/userinfo/:id/info"]);
   });
 });
