@@ -86,6 +86,18 @@ export const getRouterData = app => {
       // name: '工作台',
       // authority: 'admin',
     },
+    '/monitor/app-status': {
+      component: dynamicWrapper(app, ['app'], () => import('../routes/Monitor/AppStatusCheck')),
+    },
+    '/monitor/backup': {
+      component: dynamicWrapper(app, ['app'], () => import('../routes/Monitor/BackupCheck')),
+    },
+    '/monitor/database': {
+      component: dynamicWrapper(app, ['db'], () => import('../routes/Monitor/Database')),
+    },
+    '/monitor/cpu': {
+      component: dynamicWrapper(app, ['db'], () => import('../routes/Monitor/CpuUtilization')),
+    },
     '/form/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
     },
@@ -145,8 +157,8 @@ export const getRouterData = app => {
     '/profile/ws': {
       component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/WebSocket')),
     },
-    '/wxorder/order': {
-      component: dynamicWrapper(app, ['wxorder'], () => import('../routes/WxOrder/OrderList')),
+    '/app/hosts': {
+      component: dynamicWrapper(app, ['app'], () => import('../routes/Application/HostList')),
     },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),

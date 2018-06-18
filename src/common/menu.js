@@ -23,6 +23,33 @@ const menuData = [
     ],
   },
   {
+    name: '日常监控',
+    icon: 'form',
+    path: 'monitor',
+    children: [
+      {
+        name: '应用状态监控',
+        path: 'app-status',
+      },
+      {
+        name: '数据库监控',
+        path: 'database',
+      },
+      {
+        name: '系统备份监控',
+        path: 'backup',
+      },
+      {
+        name: 'CPU使用率监控',
+        path: 'cpu',
+      },
+      {
+        name: '磁盘空间监控',
+        path: 'disk',
+      },
+    ],
+  },
+  {
     name: '表单页',
     icon: 'form',
     path: 'form',
@@ -100,13 +127,13 @@ const menuData = [
     ],
   },
   {
-    name: '订单页',
+    name: '应用管理',
     icon: 'table',
-    path: 'wxorder',
+    path: 'app',
     children: [
       {
-        name: '订单列表',
-        path: 'order',
+        name: '主机管理',
+        path: 'hosts',
       },
     ],
   },

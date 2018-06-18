@@ -95,7 +95,11 @@ export default function request(url, options) {
     credentials: 'include',
   };
   const newOptions = { ...defaultOptions, ...options, url };
-  if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
+  if (
+    newOptions.method === 'POST' ||
+    newOptions.method === 'PUT' ||
+    newOptions.method === 'DELETE'
+  ) {
     if (!(newOptions.data instanceof FormData)) {
       newOptions.headers = {
         Accept: 'application/json',

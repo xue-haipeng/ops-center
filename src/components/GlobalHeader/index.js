@@ -109,7 +109,7 @@ export default class GlobalHeader extends PureComponent {
               console.log('enter', value); // eslint-disable-line
             }}
           />
-          <Tooltip title="使用文档">
+          <Tooltip title="产品文档">
             <a
               target="_blank"
               href="http://pro.ant.design/docs/getting-started"

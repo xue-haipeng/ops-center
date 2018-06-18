@@ -15,7 +15,7 @@ import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
 import Authorized from '../utils/Authorized';
 import { getMenuData } from '../common/menu';
-import logo from '../assets/gears.svg';
+import logo from '../assets/logo1.png';
 
 const { Content, Header, Footer } = Layout;
 const { AuthorizedRoute, check } = Authorized;
@@ -128,7 +128,7 @@ class BasicLayout extends React.PureComponent {
     }
     return title;
   }
-  getBashRedirect = () => {
+  getBaseRedirect = () => {
     // According to the url parameter to redirect
     // 这里是重定向的,重定向到 url 的 redirect 参数所示地址
     const urlParams = new URL(window.location.href);
@@ -192,7 +192,7 @@ class BasicLayout extends React.PureComponent {
       match,
       location,
     } = this.props;
-    const bashRedirect = this.getBashRedirect();
+    const baseRedirect = this.getBaseRedirect();
     const layout = (
       <Layout>
         <SiderMenu
@@ -237,7 +237,7 @@ class BasicLayout extends React.PureComponent {
                   redirectPath="/exception/403"
                 />
               ))}
-              <Redirect exact from="/" to={bashRedirect} />
+              <Redirect exact from="/" to={baseRedirect} />
               <Route render={NotFound} />
             </Switch>
           </Content>

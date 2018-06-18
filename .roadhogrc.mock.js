@@ -5,7 +5,7 @@ import { getFakeChartData } from './mock/chart';
 import { getProfileBasicData } from './mock/profile';
 import { getProfileAdvancedData } from './mock/profile';
 import { getNotices } from './mock/notices';
-import { getOrder, postOrder } from './mock/wxorder';
+import { getHosts, postHosts } from './mock/app';
 import { format, delay } from 'roadhog-api-doc';
 
 // 是否禁用代理
@@ -73,15 +73,15 @@ const proxy = {
   'GET /api/fake_chart_data': getFakeChartData,
   'GET /api/profile/basic': getProfileBasicData,
   'GET /api/profile/advanced': getProfileAdvancedData,
-  'GET /api/wxorder': getOrder,
-  'POST /api/wxorder': {
+  'GET /api/app/hosts': getHosts,
+  'POST /api/app/hosts': {
     $params: {
       pageSize: {
         desc: '分页',
         exp: 2,
       },
     },
-    $body: postOrder,
+    $body: postHosts,
   },
   'POST /api/login/account': (req, res) => {
     const { password, username, type } = req.body;

@@ -99,7 +99,9 @@ export default class Workplace extends PureComponent {
   }
 
   renderActivities() {
-    const { activities: { list } } = this.props;
+    const {
+      activities: { list },
+    } = this.props;
     return list.map(item => {
       const events = item.template.split(/@\{([^{}]*)\}/gi).map(key => {
         if (item[key]) {
@@ -151,7 +153,7 @@ export default class Workplace extends PureComponent {
         </div>
         <div className={styles.content}>
           <div className={styles.contentTitle}>早安，曲丽丽，祝你开心每一天！</div>
-          <div>交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div>
+          <div>当前有3套数据库备份失败，2台主机CPU使用率过高。</div>
         </div>
       </div>
     );
@@ -159,18 +161,18 @@ export default class Workplace extends PureComponent {
     const extraContent = (
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
-          <p>项目数</p>
-          <p>56</p>
-        </div>
-        <div className={styles.statItem}>
-          <p>团队内排名</p>
+          <p>我本周的任务</p>
           <p>
-            8<span> / 24</span>
+            3<span> / 5</span>
           </p>
         </div>
         <div className={styles.statItem}>
-          <p>项目访问</p>
-          <p>2,223</p>
+          <p>我管理的系统</p>
+          <p>7</p>
+        </div>
+        <div className={styles.statItem}>
+          <p>我管理的主机</p>
+          <p>89</p>
         </div>
       </div>
     );
@@ -182,9 +184,9 @@ export default class Workplace extends PureComponent {
             <Card
               className={styles.projectList}
               style={{ marginBottom: 24 }}
-              title="进行中的项目"
+              title="各大平台"
               bordered={false}
-              extra={<Link to="/">全部项目</Link>}
+              extra={<Link to="/">全部平台</Link>}
               loading={projectLoading}
               bodyStyle={{ padding: 0 }}
             >

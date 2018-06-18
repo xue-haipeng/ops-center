@@ -53,7 +53,7 @@ export default class LoginPage extends Component {
           <Tab key="account" tab="账户密码登录">
             {login.status !== 200 &&
               login.type === 'account' &&
-              !login.submitting &&
+              !submitting &&
               this.renderMessage('账户或密码错误')}
             <UserName name="username" placeholder="请输入用户名..." />
             <Password name="password" placeholder="请输入密码..." />
@@ -61,7 +61,7 @@ export default class LoginPage extends Component {
           <Tab key="mobile" tab="手机号登录">
             {login.status === 'error' &&
               login.type === 'mobile' &&
-              !login.submitting &&
+              !submitting &&
               this.renderMessage('验证码错误')}
             <Mobile name="mobile" />
             <Captcha name="captcha" />
