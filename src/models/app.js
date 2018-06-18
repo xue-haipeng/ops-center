@@ -1,7 +1,7 @@
-import { queryOrder, removeOrder, addOrder } from '../services/wxorder';
+import { queryHosts, removeHosts, addHosts } from '../services/app';
 
 export default {
-  namespace: 'wxorder',
+  namespace: 'app',
 
   state: {
     data: {
@@ -12,14 +12,14 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      const response = yield call(queryOrder, payload);
+      const response = yield call(queryHosts, payload);
       yield put({
         type: 'save',
         payload: response,
       });
     },
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addOrder, payload);
+      const response = yield call(addHosts, payload);
       yield put({
         type: 'save',
         payload: response,
@@ -27,7 +27,7 @@ export default {
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeOrder, payload);
+      const response = yield call(removeHosts, payload);
       yield put({
         type: 'save',
         payload: response,
