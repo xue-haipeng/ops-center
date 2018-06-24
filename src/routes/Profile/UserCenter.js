@@ -130,7 +130,7 @@ export default class UserCenter extends Component {
 
   render() {
     const { currentUser } = this.props.user;
-    const { name, avatar, mobile, mail, team } = currentUser;
+    const { username, realName, avatar, mobile, mail, team } = currentUser;
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
 
@@ -162,7 +162,7 @@ export default class UserCenter extends Component {
       <Fragment>
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
           <DescriptionList style={{ marginBottom: 24 }}>
-            <Description term="用户姓名">{name}</Description>
+            <Description term="用户姓名">{realName}</Description>
             <Description term="手机号码">{mobile}</Description>
             <Description term="邮箱">{mail}</Description>
             <Description term="联系方式">18112345678</Description>
@@ -235,7 +235,7 @@ export default class UserCenter extends Component {
                 }
               >
                 {getFieldDecorator('nickname', {
-                  initialValue: name,
+                  initialValue: username,
                   rules: [
                     { required: true, message: 'Please input your nickname!', whitespace: true },
                   ],

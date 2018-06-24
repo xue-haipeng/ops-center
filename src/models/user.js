@@ -39,6 +39,7 @@ export default {
       };
     },
     changeNotifyCount(state, action) {
+      console.log('changeNotifyCount: ', action.payload);
       return {
         ...state,
         currentUser: {

@@ -345,7 +345,7 @@ export function getHosts(req, res, u) {
   }
 
   const params = getUrlParams(url);
-  console.log(params);
+  console.log('urlParams: ', params);
   let dataSource = [...tableListDataSource.content];
 
   if (params.sorter) {

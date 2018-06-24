@@ -8,9 +8,14 @@ export function setAuthority(authorities) {
   return localStorage.setItem('authorities', authorities);
 }
 
-export function setToken(accessToken, refreshToken) {
+export function setToken(username, accessToken, refreshToken) {
+  localStorage.setItem('username', username);
   localStorage.setItem('access_token', accessToken);
   localStorage.setItem('refresh_token', refreshToken);
+}
+
+export function getCurrentUser() {
+  return localStorage.getItem('username');
 }
 
 export function getAccessToken() {
@@ -22,6 +27,7 @@ export function getRefreshToken() {
 }
 
 export function deleteTokens() {
+  localStorage.removeItem('username');
   localStorage.removeItem('access_token');
   localStorage.removeItem('refresh_token');
 }

@@ -19,8 +19,8 @@ export default {
       });
       // Login successfully
       if (response.status === 200) {
-        const { access_token: accessToken, refresh_token: refreshToken } = response.data;
-        setToken(accessToken, refreshToken);
+        const { username, access_token: accessToken, refresh_token: refreshToken } = response.data;
+        setToken(username, accessToken, refreshToken);
         reloadAuthorized();
         setTimeout(yield put(routerRedux.push('/')), 1000);
       }

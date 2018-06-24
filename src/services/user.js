@@ -1,10 +1,10 @@
 import axios from 'axios';
 import request from '../utils/request';
-import { getRefreshToken, setToken } from '../utils/authority';
+import { getCurrentUser, getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
 // const BASE_URL = 'https://app.haipeng.co'; // remote prod
-const BASE_URL = 'http://localhost:8888'; // local dev
+const BASE_URL = 'http://kube-master.poc.cnpc:8888/api/v1/'; // local dev
 const gwInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -13,20 +13,18 @@ const gwInstance = axios.create({
 });
 
 export async function query() {
-  return request('/api/users');
+  return request('users');
 }
 
 export async function queryCurrent() {
-  return request(`${BASE_URL}/api/v1/demo/currentUser`, {
-    method: 'POST',
-  });
+  return request(`${BASE_URL}users/${getCurrentUser()}`);
 }
 
 export async function signIn(payload) {
   try {
     return await gwInstance.post(
-      `/api/v1/uaa/oauth/token?username=${payload.username}&password=${payload.password}&type=${
-        payload.type
+      `uaa/oauth/token?username=${payload.username}&password=${
+        payload.password
       }&grant_type=password`
     );
   } catch (error) {
@@ -40,13 +38,13 @@ export async function signIn(payload) {
 
 export async function refreshAccessToken(config) {
   return gwInstance
-    .post(`/api/v1/uaa/oauth/token?grant_type=refresh_token&refresh_token=${getRefreshToken()}`)
+    .post(`uaa/oauth/token?grant_type=refresh_token&refresh_token=${getRefreshToken()}`)
     .then(res => {
       if (res.status === 200) {
-        const { access_token: accessToken, refresh_token: refreshToken } = res.data;
-        setToken(accessToken, refreshToken);
+        const { username, access_token: accessToken, refresh_token: refreshToken } = res.data;
+        setToken(username, accessToken, refreshToken);
         // eslint-disable-next-line no-console
-        console.log(config);
+        console.log('config: ', config);
         location.reload(true);
       }
     })
@@ -59,8 +57,4 @@ export async function refreshAccessToken(config) {
         });
       }
     });
-}
-
-export async function topFunds() {
-  return request('/api/v1/fund/top-daily-fund');
 }
