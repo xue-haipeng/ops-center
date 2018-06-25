@@ -1,19 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import {
-  Row,
-  Col,
-  Card,
-  Modal,
-  message,
-  Form,
-  Input,
-  Select,
-  Icon,
-  Button,
-  Badge,
-  DatePicker,
-} from 'antd';
+import { Row, Col, Card, Modal, message, Form, Input, Select, Icon, Button, Badge, DatePicker } from 'antd';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -33,16 +20,7 @@ const lifeCycleStatusMapping = [
   { badge: 'error', status: '生产' },
   { badge: 'processing', status: '容灾' },
 ];
-const platformNameMapping = [
-  'ERP平台',
-  '用户平台',
-  '集成平台',
-  '决策支持平台',
-  '非结构化平台',
-  '权限平台',
-  '自主开发平台',
-  '其它平台',
-];
+const platformNameMapping = ['ERP平台', '用户平台', '集成平台', '决策支持平台', '非结构化平台', '权限平台', '自主开发平台', '其它平台'];
 const nodeTypeMapping = [
   'ASCS/SCS',
   'DI',
@@ -164,41 +142,33 @@ const CreateForm = Form.create({
     return {
       ipAddress: Form.createFormField({
         ...props.ipAddress,
-        value: isModify ? selectedItem[0].ipAddress : null,
+        value: isModify ?  selectedItem[0].ipAddress : null,
       }),
       hostname: Form.createFormField({
         // ...props.hostname,
-        value: isModify ? selectedItem[0].hostname : null,
+        value: isModify ?  selectedItem[0].hostname : null,
       }),
       systemName: Form.createFormField({
         // ...props.systemName,
-        value: isModify ? selectedItem[0].systemName : null,
+        value: isModify ?  selectedItem[0].systemName : null,
       }),
       lifecycleStatus: Form.createFormField({
         // ...props.lifecycleStatus,
-        value: isModify
-          ? selectedItem[0].lifecycleStatus && selectedItem[0].lifecycleStatus.toString()
-          : null,
+        value: isModify ?  selectedItem[0].lifecycleStatus && selectedItem[0].lifecycleStatus.toString() : null,
       }),
       platformName: Form.createFormField({
         // ...props.platformName,
-        value: isModify
-          ? selectedItem[0].platformName && selectedItem[0].platformName.toString()
-          : null,
+        value: isModify ?  selectedItem[0].platformName && selectedItem[0].platformName.toString() : null,
         // selected: 2,
       }),
       businessLine: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].businessLine && selectedItem[0].businessLine.toString()
-          : null,
+        value: isModify ? selectedItem[0].businessLine && selectedItem[0].businessLine.toString() : null,
       }),
       nodeType: Form.createFormField({
         value: isModify ? selectedItem[0].nodeType && selectedItem[0].nodeType.toString() : null,
       }),
       isVirtualized: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].isVirtualized && selectedItem[0].isVirtualized.toString()
-          : null,
+        value: isModify ? selectedItem[0].isVirtualized && selectedItem[0].isVirtualized.toString() : null,
       }),
       haType: Form.createFormField({
         value: isModify ? selectedItem[0].haType && selectedItem[0].haType.toString() : null,
@@ -216,14 +186,10 @@ const CreateForm = Form.create({
         value: isModify ? selectedItem[0].company && selectedItem[0].company.toString() : null,
       }),
       maintainer: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].maintainer && selectedItem[0].maintainer.toString()
-          : null,
+        value: isModify ? selectedItem[0].maintainer && selectedItem[0].maintainer.toString() : null,
       }),
       currentStatus: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].currentStatus && selectedItem[0].currentStatus.toString()
-          : null,
+        value: isModify ? selectedItem[0].currentStatus && selectedItem[0].currentStatus.toString() : null,
       }),
       applicant: Form.createFormField({
         value: isModify ? selectedItem[0].applicant && selectedItem[0].applicant : null,
@@ -232,30 +198,24 @@ const CreateForm = Form.create({
         value: isModify ? selectedItem[0].approver && selectedItem[0].approver.toString() : null,
       }),
       expiredDate: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].expiredDate && selectedItem[0].expiredDate.toString()
-          : null,
+        value: isModify ? selectedItem[0].expiredDate && selectedItem[0].expiredDate.toString() : null,
       }),
       projectCode: Form.createFormField({
-        value: isModify
-          ? selectedItem[0].projectCode && selectedItem[0].projectCode.toString()
-          : null,
+        value: isModify ? selectedItem[0].projectCode && selectedItem[0].projectCode.toString() : null,
       }),
       remarks: Form.createFormField({
         value: isModify ? selectedItem[0].remarks && selectedItem[0].remarks : null,
       }),
-    };
+    }
   },
 })(props => {
   const { modalVisible, modalTitle, selectedRows, form, handleAdd, handleModalVisible } = props;
   if (modalVisible && modalTitle === '修改信息') {
     const selectedItem = selectedRows[0];
     const values = {};
-    Object.keys(selectedItem)
-      .filter(k => selectedItem[k] !== null)
-      .forEach(k => {
-        values[k] = selectedItem[k];
-      });
+    Object.keys(selectedItem).filter(k => selectedItem[k] !== null).forEach(k => {
+      values[k] = selectedItem[k];
+    });
     // console.log('values: ', values);
   }
   const okHandle = () => {
@@ -511,19 +471,13 @@ const CreateForm = Form.create({
                   <Option value="D7">D7-总部ERP系统（含应用集成公用系统）</Option>
                   <Option value="D8">D8-总部ERP系统（含应用集成公用系统）</Option>
                   <Option value="D12">D12-人力资源ERP系统</Option>
-                  <Option value="D13">
-                    D13-油气田应用集成系统（含D2-勘探与生产ERP系统、D10-油田服务ERP系统）
-                  </Option>
-                  <Option value="D14">
-                    D14-天然气与管道应用集成系统（D3-天然气与管道ERP系统）
-                  </Option>
+                  <Option value="D13">D13-油气田应用集成系统（含D2-勘探与生产ERP系统、D10-油田服务ERP系统）</Option>
+                  <Option value="D14">D14-天然气与管道应用集成系统（D3-天然气与管道ERP系统）</Option>
                   <Option value="D15">D15-炼油与化工应用集成系统（D4-炼油与化工ERP系统）</Option>
                   <Option value="D16">D16-销售应用集成系统（含D5-销售ERP系统）</Option>
                   <Option value="D17">D17-工程技术应用集成系统（含D7-工程技术ERP系统）</Option>
                   <Option value="D18">D18-装备制造应用集成系统（含D8-装备制造ERP系统）</Option>
-                  <Option value="D19">
-                    D19-海外勘探开发应用集成系统（含D9-海外勘探开发ERP系统）
-                  </Option>
+                  <Option value="D19">D19-海外勘探开发应用集成系统（含D9-海外勘探开发ERP系统）</Option>
                   <Option value="D20">D20-工程建设应用集成系统（含D11-工程建设ERP系统）</Option>
                 </Select>
               )}
@@ -618,8 +572,9 @@ export default class HostList extends PureComponent {
       if (err) return;
       const values = {
         ...fieldsValue,
-        expiredDate: fieldsValue.expiredDate && fieldsValue.expiredDate.valueOf(),
-        // `${fieldsValue.expiredDate.valueOf()} - ${fieldsValue.dateTime[1].valueOf()}`,
+        expiredDate:
+          fieldsValue.expiredDate && fieldsValue.expiredDate.valueOf(),
+          // `${fieldsValue.expiredDate.valueOf()} - ${fieldsValue.dateTime[1].valueOf()}`,
       };
       this.setState({
         formValues: values,
@@ -850,12 +805,7 @@ export default class HostList extends PureComponent {
             />
           </div>
         </Card>
-        <CreateForm
-          {...parentMethods}
-          modalVisible={modalVisible}
-          modalTitle={modalTitle}
-          selectedRows={selectedRows}
-        />
+        <CreateForm {...parentMethods} modalVisible={modalVisible} modalTitle={modalTitle} selectedRows={selectedRows} />
       </PageHeaderLayout>
     );
   }

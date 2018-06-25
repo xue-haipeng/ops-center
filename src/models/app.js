@@ -39,7 +39,7 @@ export default {
   reducers: {
     save(state, action) {
       const { list, total, pageSize, pageNum: current } = action.payload.data;
-      console.log('list: ', list, ', payload: ', action.payload);
+      console.log("list: ", list, ", payload: ", action.payload);
       const pagination = { current, pageSize, total };
       return {
         ...state,
