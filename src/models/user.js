@@ -44,7 +44,7 @@ export default {
         ...state,
         currentUser: {
           ...state.currentUser,
-          notifyCount: action.payload,
+          notifyCount: action.payload || {},
         },
       };
     },

@@ -1,4 +1,4 @@
-import { queryHosts, removeHosts, addHosts } from '../services/app';
+import { queryHosts, removeHosts, addHost, updateHost } from '../services/app';
 
 export default {
   namespace: 'app',
@@ -19,11 +19,19 @@ export default {
       });
     },
     *add({ payload, callback }, { call, put }) {
-      const response = yield call(addHosts, payload);
-      yield put({
+      yield call(addHost, payload);
+      /*      yield put({
         type: 'save',
         payload: response,
-      });
+      }); */
+      if (callback) callback();
+    },
+    *update({ payload, callback }, { call, put }) {
+      yield call(updateHost, payload);
+      /*      yield put({
+              type: 'save',
+              payload: response,
+            }); */
       if (callback) callback();
     },
     *remove({ payload, callback }, { call, put }) {
@@ -39,7 +47,7 @@ export default {
   reducers: {
     save(state, action) {
       const { list, total, pageSize, pageNum: current } = action.payload.data;
-      console.log("list: ", list, ", payload: ", action.payload);
+      console.log('list: ', list, ', payload: ', action.payload);
       const pagination = { current, pageSize, total };
       return {
         ...state,

@@ -23,7 +23,9 @@ export async function queryCurrent() {
 export async function signIn(payload) {
   try {
     return await gwInstance.post(
-      `uaa/oauth/token?username=${payload.username}&password=${payload.password}&grant_type=password`
+      `uaa/oauth/token?username=${payload.username}&password=${
+        payload.password
+      }&grant_type=password`
     );
   } catch (error) {
     return { ...error.response, type: payload.type };

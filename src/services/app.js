@@ -4,13 +4,13 @@ import request from '../utils/request';
 
 export async function queryHosts(params) {
   const queryParams = {};
-  if (params && "currentPage" in params) {
+  if (params && 'currentPage' in params) {
     queryParams.currentPage = params.currentPage;
   }
-  if (params && "pageSize" in params) {
+  if (params && 'pageSize' in params) {
     queryParams.pageSize = params.pageSize;
   }
-  if (params && "sort" in params) {
+  if (params && 'sort' in params) {
     queryParams.sort = params.sort;
   }
   return axios.request(`http://localhost:8002/hosts/list?${stringify(queryParams)}`, {
@@ -30,10 +30,18 @@ export async function removeHosts(params) {
   });
 }
 
-export async function addHosts(params) {
-  console.log('params: ', params);
+export async function addHost(params) {
   return axios.request('http://localhost:8002/hosts', {
     method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function updateHost(params) {
+  return axios.request('http://localhost:8002/hosts', {
+    method: 'PUT',
     data: {
       ...params,
     },
