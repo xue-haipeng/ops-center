@@ -1,7 +1,7 @@
 import { isUrl } from '../utils/utils';
 
 const menuData = [
-  {
+  /*  {
     name: 'Dashboard',
     icon: 'dashboard',
     path: 'dashboard',
@@ -125,10 +125,10 @@ const menuData = [
         path: 'custom',
       },
     ],
-  },
+  }, */
   {
     name: '应用管理',
-    icon: 'table',
+    icon: 'api',
     path: 'app',
     children: [
       {
@@ -137,7 +137,7 @@ const menuData = [
       },
     ],
   },
-  {
+  /*  {
     name: '结果页',
     icon: 'check-circle-o',
     path: 'result',
@@ -195,7 +195,7 @@ const menuData = [
         path: 'register-result',
       },
     ],
-  },
+  }, */
 ];
 
 function formatter(data, parentPath = '/', parentAuthority) {

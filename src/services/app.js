@@ -22,11 +22,10 @@ export async function queryHosts(params) {
 }
 
 export async function removeHosts(params) {
-  return request('http://11.11.47.72:8888/api/v1/app/hosts', {
+  console.log('removeHosts params: ', params);
+  return axios.request('http://localhost:8002/hosts', {
     method: 'DELETE',
-    data: {
-      ...params,
-    },
+    data: params.ids,
   });
 }
 
@@ -46,4 +45,17 @@ export async function updateHost(params) {
       ...params,
     },
   });
+}
+
+export async function claimHosts(params) {
+  return axios.request('http://localhost:8002/hosts/claim', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
+}
+
+export async function queryVmInfo(ipAddress) {
+  return axios.request(`http://localhost:8003/vms/${ipAddress}`);
 }

@@ -1,4 +1,11 @@
-import { queryHosts, removeHosts, addHost, updateHost } from '../services/app';
+import {
+  queryHosts,
+  removeHosts,
+  addHost,
+  updateHost,
+  claimHosts,
+  queryVmInfo,
+} from '../services/app';
 
 export default {
   namespace: 'app',
@@ -7,6 +14,7 @@ export default {
     data: {
       list: [],
       pagination: {},
+      vmInfo: {},
     },
   },
 
@@ -18,26 +26,30 @@ export default {
         payload: response,
       });
     },
-    *add({ payload, callback }, { call, put }) {
+
+    *add({ payload, callback }, { call }) {
       yield call(addHost, payload);
-      /*      yield put({
-        type: 'save',
-        payload: response,
-      }); */
       if (callback) callback();
     },
-    *update({ payload, callback }, { call, put }) {
+    *update({ payload, callback }, { call }) {
       yield call(updateHost, payload);
-      /*      yield put({
-              type: 'save',
-              payload: response,
-            }); */
       if (callback) callback();
     },
-    *remove({ payload, callback }, { call, put }) {
-      const response = yield call(removeHosts, payload);
+
+    *remove({ payload, callback }, { call }) {
+      yield call(removeHosts, payload);
+      if (callback) callback();
+    },
+
+    *claim({ payload, callback }, { call }) {
+      yield call(claimHosts, payload);
+      if (callback) callback();
+    },
+
+    *queryVm({ payload, callback }, { call, put }) {
+      const response = yield call(queryVmInfo, payload);
       yield put({
-        type: 'save',
+        type: 'saveVmInfo',
         payload: response,
       });
       if (callback) callback();
@@ -52,6 +64,16 @@ export default {
       return {
         ...state,
         data: { list, pagination },
+      };
+    },
+
+    saveVmInfo(state, action) {
+      const vmInfo = { ...action.payload.data };
+      const data = { ...state.data, vmInfo };
+      console.log('data: ', data);
+      return {
+        ...state,
+        data,
       };
     },
   },

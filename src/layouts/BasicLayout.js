@@ -243,7 +243,7 @@ class BasicLayout extends React.PureComponent {
           </Content>
           <Footer style={{ padding: 0 }}>
             <GlobalFooter
-              links={[
+              /* links={[
                 {
                   key: 'Pro 首页',
                   title: 'Pro 首页',
@@ -262,10 +262,10 @@ class BasicLayout extends React.PureComponent {
                   href: 'http://ant.design',
                   blankTarget: true,
                 },
-              ]}
+              ]} */
               copyright={
                 <Fragment>
-                  <Icon type="copyright" /> 2018 云计算业务部 平台应用组
+                  <Icon type="copyright" /> 2018&nbsp; 云计算业务部&nbsp;&nbsp;平台应用组
                 </Fragment>
               }
             />

@@ -31,7 +31,7 @@ export default class Register extends Component {
     confirmDirty: false,
     visible: false,
     help: '',
-    mailsuffix: '@jd.com',
+    mailsuffix: '@cnpc.com.cn',
     mobilePrefix: '+86',
   };
 
@@ -184,15 +184,15 @@ export default class Register extends Component {
                     message: '邮箱地址格式错误！',
                   },
                 ],
-              })(<Input size="large" style={{ width: '70%' }} placeholder="邮箱" />)}
+              })(<Input size="large" style={{ width: '40%' }} placeholder="邮箱" />)}
               <Select
                 size="large"
                 value={mailsuffix}
                 onChange={this.changeMailSuffix}
-                style={{ width: '30%' }}
+                style={{ width: '60%' }}
               >
-                <Option value="@jd.com">@jd.com</Option>
-                <Option value="@qq.com">@qq.com</Option>
+                <Option value="@cnpc.com.cn">@cnpc.com.cn</Option>
+                <Option value="@petrochina.com.cn">@petrochina.com.cn</Option>
               </Select>
             </InputGroup>
           </FormItem>
@@ -203,7 +203,7 @@ export default class Register extends Component {
                   {passwordStatusMap[this.getPasswordStatus()]}
                   {this.renderPasswordProgress()}
                   <div style={{ marginTop: 10 }}>
-                    请至少输入 6 个字符。请不要使用容易被猜到的密码。
+                    请至少输入 8 个字符。请不要使用容易被猜到的密码。
                   </div>
                 </div>
               }
@@ -217,7 +217,7 @@ export default class Register extends Component {
                     validator: this.checkPassword,
                   },
                 ],
-              })(<Input size="large" type="password" placeholder="至少6位密码，区分大小写" />)}
+              })(<Input size="large" type="password" placeholder="不小于8位" />)}
             </Popover>
           </FormItem>
           <FormItem>
@@ -242,7 +242,6 @@ export default class Register extends Component {
                 style={{ width: '20%' }}
               >
                 <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
               </Select>
               {getFieldDecorator('mobile', {
                 rules: [

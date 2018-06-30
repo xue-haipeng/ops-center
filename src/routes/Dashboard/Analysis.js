@@ -34,13 +34,15 @@ import styles from './Analysis.less';
 const { TabPane } = Tabs;
 const { RangePicker } = DatePicker;
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
+const rankingListData = [
+  { hostname: 'EXOAPS007', utilization: 80 },
+  { hostname: 'EZHAP5008', utilization: 77 },
+  { hostname: 'EUAAP4003', utilization: 55 },
+  { hostname: 'EFOAP5004', utilization: 44 },
+  { hostname: 'EZHAP5009', utilization: 39 },
+  { hostname: 'EUEAP4002', utilization: 32 },
+  { hostname: 'EFOAP5001', utilization: 28 },
+];
 
 const Yuan = ({ children }) => (
   <span
@@ -136,7 +138,9 @@ export default class Analysis extends Component {
     const salesPieData =
       salesType === 'all'
         ? salesTypeData
-        : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
+        : salesType === 'online'
+          ? salesTypeDataOnline
+          : salesTypeDataOffline;
 
     const menu = (
       <Menu>
@@ -157,16 +161,16 @@ export default class Analysis extends Component {
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
           <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-            今日
+            30分钟
           </a>
           <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-            本周
+            3小时
           </a>
           <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
-            本月
+            6小时
           </a>
           <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
-            全年
+            12小时
           </a>
         </div>
         <RangePicker
@@ -179,25 +183,25 @@ export default class Analysis extends Component {
 
     const columns = [
       {
-        title: '排名',
-        dataIndex: 'index',
-        key: 'index',
-      },
-      {
-        title: '搜索关键词',
+        title: '系统名称',
         dataIndex: 'keyword',
         key: 'keyword',
         render: text => <a href="/">{text}</a>,
       },
       {
-        title: '用户数',
+        title: '前日',
         dataIndex: 'count',
         key: 'count',
         sorter: (a, b) => a.count - b.count,
         className: styles.alignRight,
       },
       {
-        title: '周涨幅',
+        title: '昨日',
+        dataIndex: 'index',
+        key: 'index',
+      },
+      {
+        title: '今日',
         dataIndex: 'range',
         key: 'range',
         sorter: (a, b) => a.range - b.range,
@@ -273,14 +277,23 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="访问量"
+              title="日志生成量"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(8846).format('0,0')}
-              footer={<Field label="日访问量" value={numeral(1234).format('0,0')} />}
+              footer={
+                <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                  <Trend flag="up" style={{ marginRight: 16 }}>
+                    周同比<span className={styles.trendText}>12%</span>
+                  </Trend>
+                  <Trend flag="down">
+                    日环比<span className={styles.trendText}>11%</span>
+                  </Trend>
+                </div>
+              }
               contentHeight={46}
             >
               <MiniArea color="#975FE4" data={visitData} />
@@ -305,7 +318,7 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="运营活动效果"
+              title="本周任务完成进度"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
@@ -332,22 +345,22 @@ export default class Analysis extends Component {
         <Card loading={loading} bordered={false} bodyStyle={{ padding: 0 }}>
           <div className={styles.salesCard}>
             <Tabs tabBarExtraContent={salesExtra} size="large" tabBarStyle={{ marginBottom: 24 }}>
-              <TabPane tab="销售额" key="sales">
+              <TabPane tab="ERP应用负载" key="sales">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      <Bar height={295} title="销售额趋势" data={salesData} />
+                      <Bar height={295} title="ASCS节点CPU平均使用率（%）" data={salesData} />
                     </div>
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店销售额排名</h4>
+                      <h4 className={styles.rankingTitle}>主机CPU使用率</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
-                          <li key={item.title}>
+                          <li key={item.hostname}>
                             <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
+                            <span>{item.hostname}</span>
+                            <span>{`${item.utilization}%`}</span>
                           </li>
                         ))}
                       </ul>
@@ -355,7 +368,7 @@ export default class Analysis extends Component {
                   </Col>
                 </Row>
               </TabPane>
-              <TabPane tab="访问量" key="views">
+              <TabPane tab="数据库负载" key="views">
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
@@ -367,10 +380,10 @@ export default class Analysis extends Component {
                       <h4 className={styles.rankingTitle}>门店访问量排名</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
-                          <li key={item.title}>
+                          <li key={item.hostname}>
                             <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
-                            <span>{item.title}</span>
-                            <span>{numeral(item.total).format('0,0')}</span>
+                            <span>{item.hostname}</span>
+                            <span>{`${item.utilization}%`}</span>
                           </li>
                         ))}
                       </ul>
@@ -387,7 +400,7 @@ export default class Analysis extends Component {
             <Card
               loading={loading}
               bordered={false}
-              title="线上热门搜索"
+              title="昨日系统备份情况"
               extra={iconGroup}
               style={{ marginTop: 24 }}
             >
@@ -437,26 +450,26 @@ export default class Analysis extends Component {
               loading={loading}
               className={styles.salesCard}
               bordered={false}
-              title="销售额类别占比"
+              title="系统/主机分布"
               bodyStyle={{ padding: 24 }}
               extra={
                 <div className={styles.salesCardExtra}>
                   {iconGroup}
                   <div className={styles.salesTypeRadio}>
                     <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">全部渠道</Radio.Button>
-                      <Radio.Button value="online">线上</Radio.Button>
-                      <Radio.Button value="offline">门店</Radio.Button>
+                      <Radio.Button value="all">按平台</Radio.Button>
+                      <Radio.Button value="online">按产品</Radio.Button>
+                      <Radio.Button value="offline">按主机类型</Radio.Button>
                     </Radio.Group>
                   </div>
                 </div>
               }
               style={{ marginTop: 24, minHeight: 509 }}
             >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>销售额</h4>
+              <h4 style={{ marginTop: 8, marginBottom: 32 }}>主机分布</h4>
               <Pie
                 hasLegend
-                subTitle="销售额"
+                subTitle="主机总数"
                 total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
                 data={salesPieData}
                 valueFormat={value => <Yuan>{value}</Yuan>}

@@ -13,12 +13,16 @@ import {
   Button,
   Badge,
   DatePicker,
+  List,
 } from 'antd';
+import moment from 'moment';
 import StandardTable from '../../components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import DescriptionList from '../../components/DescriptionList';
 import styles from './HostList.less';
-import moment from 'moment';
+import { getCurrentUser } from '../../utils/authority';
+
+const { Description } = DescriptionList;
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -164,29 +168,23 @@ const CreateForm = Form.create({
     const isModify = selectedItem.length === 1 && props.modalTitle === '修改信息';
     return {
       ipAddress: Form.createFormField({
-        ...props.ipAddress,
         value: isModify ? selectedItem[0].ipAddress : null,
       }),
       hostname: Form.createFormField({
-        // ...props.hostname,
         value: isModify ? selectedItem[0].hostname : null,
       }),
       systemName: Form.createFormField({
-        // ...props.systemName,
         value: isModify ? selectedItem[0].systemName : null,
       }),
       lifecycleStatus: Form.createFormField({
-        // ...props.lifecycleStatus,
         value: isModify
           ? selectedItem[0].lifecycleStatus && selectedItem[0].lifecycleStatus.toString()
           : null,
       }),
       platformName: Form.createFormField({
-        // ...props.platformName,
         value: isModify
           ? selectedItem[0].platformName && selectedItem[0].platformName.toString()
           : null,
-        // selected: 2,
       }),
       businessLine: Form.createFormField({
         value: isModify
@@ -567,6 +565,7 @@ export default class HostList extends PureComponent {
   state = {
     modalVisible: false,
     modalTitle: '',
+    viewModalVisible: false,
     expandForm: false,
     selectedRows: [],
     formValues: {},
@@ -578,6 +577,12 @@ export default class HostList extends PureComponent {
       type: 'app/fetch',
     });
   }
+
+  onViewCancel = () => {
+    this.setState({
+      viewModalVisible: false,
+    });
+  };
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -624,6 +629,7 @@ export default class HostList extends PureComponent {
   };
 
   handleSelectRows = rows => {
+    console.log('rows: ', rows);
     this.setState({
       selectedRows: rows,
     });
@@ -714,7 +720,7 @@ export default class HostList extends PureComponent {
     this.props.dispatch({
       type: 'app/remove',
       payload: {
-        id: this.state.selectedRows.map(row => row.id).join(','),
+        ids: this.state.selectedRows.map(row => row.id),
       },
       callback: () => {
         this.setState({
@@ -723,6 +729,56 @@ export default class HostList extends PureComponent {
       },
     });
     message.success('删除成功');
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'app/fetch',
+          payload: this.state.formValues,
+        }),
+      1000
+    );
+  };
+
+  handleClaim = () => {
+    this.props.dispatch({
+      type: 'app/claim',
+      payload: {
+        ids: this.state.selectedRows.map(row => row.id),
+        maintainer: getCurrentUser(),
+      },
+      callback: () => {
+        this.setState({
+          selectedRows: [],
+        });
+      },
+    });
+    message.success('已成功认领');
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'app/fetch',
+          payload: this.state.formValues,
+        }),
+      1000
+    );
+  };
+
+  handleViewModalVisible = flag => {
+    const { selectedRows } = this.state;
+    if (
+      selectedRows.length > 0 &&
+      selectedRows[0].isVirtualized != null &&
+      selectedRows[0].isVirtualized === 1
+    ) {
+      this.props.dispatch({
+        type: 'app/queryVm',
+        // payload: selectedRows[0].ipAddress,
+        payload: '11.22.33.44',
+      });
+    }
+    this.setState({
+      viewModalVisible: !!flag,
+    });
   };
 
   renderSimpleForm() {
@@ -843,7 +899,11 @@ export default class HostList extends PureComponent {
       app: { data },
       loading,
     } = this.props;
-    const { selectedRows, modalVisible, modalTitle } = this.state;
+    const { selectedRows, modalVisible, modalTitle, viewModalVisible } = this.state;
+    const disks =
+      data.vmInfo && data.vmInfo.diskUsage
+        ? Object.entries(data.vmInfo.diskUsage).map(arr => `${arr[0]} : ${arr[1]}`)
+        : [];
 
     const parentMethods = {
       handleAdd: this.handleAdd,
@@ -871,7 +931,7 @@ export default class HostList extends PureComponent {
                 <span>
                   {selectedRows.length === 1 && (
                     <span>
-                      <Button onClick={() => this.handleModalVisible(true, '查看详情')}>
+                      <Button onClick={() => this.handleViewModalVisible(true)}>
                         <Icon type="info-circle-o" />查看
                       </Button>
                       <Button onClick={() => parentMethods.handleEdit()}>
@@ -881,6 +941,9 @@ export default class HostList extends PureComponent {
                   )}
                   <Button onClick={() => this.handleDelete()}>
                     <Icon type="delete" />删除
+                  </Button>
+                  <Button onClick={() => this.handleClaim()}>
+                    <Icon type="heart-o" />认领
                   </Button>
                 </span>
               )}
@@ -901,6 +964,125 @@ export default class HostList extends PureComponent {
           modalTitle={modalTitle}
           selectedRows={selectedRows}
         />
+        <Modal
+          width="820px"
+          title="查看详情"
+          visible={viewModalVisible}
+          onCancel={this.onViewCancel}
+          footer={[
+            <Button key="close" onClick={this.onViewCancel}>
+              关闭
+            </Button>,
+          ]}
+        >
+          <DescriptionList size="large" title="" col={3} gutter={32}>
+            <Description term="主机名称">
+              {selectedRows.length > 0 ? selectedRows[0].hostname : ''}
+            </Description>
+            <Description term="IP地址">
+              {selectedRows.length > 0 ? selectedRows[0].ipAddress : ''}
+            </Description>
+            <Description term="系统名称">
+              {selectedRows.length > 0 ? selectedRows[0].systemName : ''}
+            </Description>
+            <Description term="系统类型">
+              {selectedRows.length > 0 ? selectedRows[0].lifecycleStatus : ''}
+            </Description>
+            <Description term="节点类型">
+              {selectedRows.length > 0 ? selectedRows[0].nodeType : ''}
+            </Description>
+            <Description term="平台名称">
+              {selectedRows.length > 0 ? selectedRows[0].platformName : ''}
+            </Description>
+            <Description term="业务域">
+              {selectedRows.length > 0 ? selectedRows[0].businessLine : ''}
+            </Description>
+            <Description term="项目名称">
+              {selectedRows.length > 0 ? selectedRows[0].projectCode : ''}
+            </Description>
+            <Description term="产品类型">
+              {selectedRows.length > 0 ? selectedRows[0].product : ''}
+            </Description>
+            <Description term="操作系统">
+              {selectedRows.length > 0 ? selectedRows[0].osRelease : ''}
+            </Description>
+            <Description term="是否虚机">
+              {selectedRows.length > 0
+                ? selectedRows[0].isVirtualized != null
+                  ? selectedRows[0].isVirtualized === 1
+                    ? '虚拟机'
+                    : '物理机'
+                  : ''
+                : ''}
+            </Description>
+            <Description term="HA类型">
+              {selectedRows.length > 0 ? selectedRows[0].haType : ''}
+            </Description>
+            <Description term="机房位置">
+              {selectedRows.length > 0 ? selectedRows[0].location : ''}
+            </Description>
+            <Description term="VLAN ID">
+              {selectedRows.length > 0 ? selectedRows[0].vlanId : ''}
+            </Description>
+            <Description term="维护单位">
+              {selectedRows.length > 0 ? selectedRows[0].company : ''}
+            </Description>
+            <Description term="管理员">
+              {selectedRows.length > 0 ? selectedRows[0].maintainer : ''}
+            </Description>
+            <Description term="当前状态">
+              {selectedRows.length > 0 ? selectedRows[0].currentStatus : ''}
+            </Description>
+            <Description term="申请人">
+              {selectedRows.length > 0 ? selectedRows[0].applicant : ''}
+            </Description>
+            <Description term="审批人">
+              {selectedRows.length > 0 ? selectedRows[0].approver : ''}
+            </Description>
+            <Description term="过期时间">
+              {selectedRows.length > 0 ? selectedRows[0].expiredDate : ''}
+            </Description>
+            <Description term="备注">
+              {selectedRows.length > 0 ? selectedRows[0].remarks : ''}
+            </Description>
+            <Description term="创建者">
+              {selectedRows.length > 0 ? selectedRows[0].creator : ''}
+            </Description>
+            <Description term="创建时间">
+              {selectedRows.length > 0 ? selectedRows[0].createTime : ''}
+            </Description>
+            <Description term="更新者">
+              {selectedRows.length > 0 ? selectedRows[0].reviser : ''}
+            </Description>
+            <Description term="更新时间">
+              {selectedRows.length > 0 ? selectedRows[0].updateTime : ''}
+            </Description>
+          </DescriptionList>
+
+          {data.vmInfo && (
+            <DescriptionList size="large" title="" col={3} gutter={32} className={styles.mt20}>
+              <Description term="启动时间">{data.vmInfo.bootSince}</Description>
+              <Description term="ESXi主机">{data.vmInfo.esxiHost}</Description>
+              <Description term="域名">{data.vmInfo.guestDomainName}</Description>
+              <Description term="操作系统">{data.vmInfo.guestOsVersion}</Description>
+              <Description term="vCPU数量">{data.vmInfo.numCpu}</Description>
+              <Description term="内存大小">{`${data.vmInfo.memoryGb}GB`}</Description>
+              <Description term="vDisk数量">{data.vmInfo.numVirtualDisk}</Description>
+              <Description term="电源状态">{data.vmInfo.powerState}</Description>
+              <Description term="guest状态">{data.vmInfo.guestState}</Description>
+              <Description term="总体状态">{data.vmInfo.overallStatus}</Description>
+              <Description term="FT状态">{data.vmInfo.ftState}</Description>
+
+              <Description term="磁盘使用率">
+                <List
+                  size="small"
+                  dataSource={disks}
+                  renderItem={item => <List.Item>{item}</List.Item>}
+                />
+              </Description>
+            </DescriptionList>
+          )}
+        </Modal>
       </PageHeaderLayout>
     );
   }
