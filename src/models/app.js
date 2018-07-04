@@ -58,8 +58,7 @@ export default {
 
   reducers: {
     save(state, action) {
-      const { list, total, pageSize, pageNum: current } = action.payload.data;
-      console.log('list: ', list, ', payload: ', action.payload);
+      const { list, total, pageSize, pageNum: current } = action.payload;
       const pagination = { current, pageSize, total };
       return {
         ...state,
@@ -68,9 +67,8 @@ export default {
     },
 
     saveVmInfo(state, action) {
-      const vmInfo = { ...action.payload.data };
+      const vmInfo = { ...action.payload };
       const data = { ...state.data, vmInfo };
-      console.log('data: ', data);
       return {
         ...state,
         data,

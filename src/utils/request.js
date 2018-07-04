@@ -40,7 +40,8 @@ function checkStatus(response) {
 }
 
 const instance = axios.create({
-  baseURL: process.env.BASE_API,
+  // baseURL: process.env.BASE_API,
+  baseURL: 'http://11.11.47.72:8888/api/v1/',
   timeout: 10000,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
@@ -106,7 +107,7 @@ export default function request(url, options) {
         'Content-Type': 'application/json; charset=utf-8',
         ...newOptions.headers,
       };
-      newOptions.data = newOptions.body;
+      // newOptions.data = newOptions.body;
     } else {
       newOptions.headers = {
         Accept: 'application/json',
