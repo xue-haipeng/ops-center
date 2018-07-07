@@ -3,8 +3,6 @@ import { connect } from 'dva';
 import {
   Button,
   Icon,
-  Row,
-  Col,
   Card,
   Tooltip,
   Avatar,
@@ -13,45 +11,35 @@ import {
   Input,
   Cascader,
   Select,
-  AutoComplete,
+  Upload,
+  message,
 } from 'antd';
 import DescriptionList from 'components/DescriptionList';
+import CustForm from '../Forms/CustForm';
+import { getCurrentUser, setCurrentUser } from '../../utils/authority';
 
 const { Description } = DescriptionList;
 const FormItem = Form.Item;
 
 /* eslint prefer-destructuring: ["error", {VariableDeclarator: {object: false}}] */
 const Option = Select.Option;
-const AutoCompleteOption = AutoComplete.Option;
 
-const residences = [
+const teams = [
   {
-    value: 'zhejiang',
-    label: 'Zhejiang',
+    value: '中油瑞飞',
+    label: '中油瑞飞',
     children: [
       {
-        value: 'hangzhou',
-        label: 'Hangzhou',
+        value: '云计算业务部',
+        label: '云计算业务部',
         children: [
           {
-            value: 'xihu',
-            label: 'West Lake',
+            value: '平台应用组',
+            label: '平台应用组',
           },
-        ],
-      },
-    ],
-  },
-  {
-    value: 'jiangsu',
-    label: 'Jiangsu',
-    children: [
-      {
-        value: 'nanjing',
-        label: 'Nanjing',
-        children: [
           {
-            value: 'zhonghuamen',
-            label: 'Zhong Hua Men',
+            value: '虚拟化组',
+            label: '虚拟化组',
           },
         ],
       },
@@ -68,71 +56,106 @@ const residences = [
 export default class UserCenter extends Component {
   state = {
     visible: false,
-    confirmDirty: false,
-    autoCompleteResult: [],
+    passwdModalVisible: false,
+    imgUrl: '',
+    loading: false,
+  };
+
+  beforeUpload = file => {
+    const isJPG = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJPG) {
+      message.error('仅支持JPG/PNG格式图片');
+    }
+    const isLt500k = file.size / 1024 < 200;
+    if (!isLt500k) {
+      message.error('图片大小不能超过200Kb');
+    }
+    return isJPG && isLt500k;
+  };
+
+  handleAvatarChange = info => {
+    const { status, response: avatar } = info.file;
+    if (status === 'uploading') {
+      this.setState({ loading: true });
+      return;
+    }
+    if (status === 'done') {
+      this.props.form.setFieldsValue({
+        avatar,
+      });
+      this.setState({
+        imgUrl: avatar,
+        loading: false,
+      });
+    }
+  };
+  normFile = e => {
+    return e.file.response;
   };
   showModal = () => {
     this.setState({
       visible: true,
     });
   };
+  showPassModal = () => {
+    this.setState({
+      passwdModalVisible: true,
+    });
+  };
   handleOk = e => {
-    console.log(e);
+    this.handleSubmit(e);
     this.setState({
       visible: false,
     });
   };
-  handleCancel = e => {
-    console.log(e);
+  handleCancel = () => {
     this.setState({
       visible: false,
+    });
+  };
+  handlePassCancel = () => {
+    this.setState({
+      passwdModalVisible: false,
     });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log('values: ', values);
       if (!err) {
-        console.log('Received values of form: ', values);
+        this.props.dispatch({
+          type: 'user/updateAccount',
+          payload: values,
+        });
+        if (getCurrentUser() !== values.username) {
+          setCurrentUser(values.username);
+        }
+        setTimeout(() => {
+          this.props.dispatch({
+            type: 'user/fetchCurrent',
+          });
+        }, 500);
+      } else {
+        message.error(err);
       }
     });
   };
-  handleConfirmBlur = e => {
-    const { value } = e.target.value;
-    this.setState({
-      confirmDirty: this.state.confirmDirty || !!value,
+  handlePassSubmit = values => {
+    console.log('values: ', values);
+    this.props.dispatch({
+      type: 'user/changePasswd',
+      payload: values,
     });
-  };
-  compareToFirstPassword = (rule, value, callback) => {
-    const { form } = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  };
-  validateToNextPassword = (rule, value, callback) => {
-    const { form } = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
-    }
-    callback();
-  };
-  handleWebsiteChange = value => {
-    let autoCompleteResult;
-    if (!value) {
-      autoCompleteResult = [];
-    } else {
-      autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-    }
-    this.setState({ autoCompleteResult });
+    this.setState({
+      passwdModalVisible: false,
+    });
   };
 
   render() {
     const { currentUser } = this.props.user;
-    const { username, realName, avatar, mobile, mail, team } = currentUser;
+    const { id, username, realName, avatar, mobile, company, department, mail, team } = currentUser;
     const { getFieldDecorator } = this.props.form;
-    const { autoCompleteResult } = this.state;
 
     const formItemLayout = {
       labelCol: {
@@ -145,150 +168,138 @@ export default class UserCenter extends Component {
       },
     };
 
-    const prefixSelector = getFieldDecorator('prefix', {
-      initialValue: '86',
+    const suffixSelector = getFieldDecorator('suffix', {
+      initialValue: mail && mail.indexOf('@') > -1 ? `@${mail.split('@')[1]}` : '@cnpc.com.cn',
     })(
-      <Select style={{ width: 70 }}>
-        <Option value="86">+86</Option>
-        <Option value="87">+87</Option>
+      <Select style={{ width: 170 }}>
+        <Option value="@cnpc.com.cn">@cnpc.com.cn</Option>
+        <Option value="@petrochina.com.cn">@petrochina.com.cn</Option>
       </Select>
     );
-
-    const websiteOptions = autoCompleteResult.map(website => (
-      <AutoCompleteOption key={website}>{website}</AutoCompleteOption>
-    ));
 
     return (
       <Fragment>
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
           <DescriptionList style={{ marginBottom: 24 }}>
-            <Description term="用户姓名">{realName}</Description>
+            <Description term="用户名">{username}</Description>
+            <Description term="姓名">{realName}</Description>
             <Description term="手机号码">{mobile}</Description>
             <Description term="邮箱">{mail}</Description>
-            <Description term="联系方式">18112345678</Description>
+            <Description term="单位">{company}</Description>
+            <Description term="部门">{department}</Description>
             <Description term="项目组">{team}</Description>
-            <Description term="职位">前端交互设计师</Description>
             <Description term="头像">
-              <Avatar src={avatar} />
+              {this.state.imgUrl ? <Avatar src={this.state.imgUrl} /> : <Avatar src={avatar} />}
             </Description>
           </DescriptionList>
-          <Button type="primary" onClick={this.showModal}>
-            修改
+          <Button type="primary" onClick={this.showModal} style={{ margin: '10px' }}>
+            修改用户信息
+          </Button>
+          <Button type="danger" onClick={this.showPassModal} style={{ margin: '10px' }}>
+            修改登陆密码
           </Button>
           <Modal
-            title="个人信息修改"
+            title="修改个人信息"
             visible={this.state.visible}
             onOk={this.handleOk}
             onCancel={this.handleCancel}
           >
-            <Form onSubmit={this.handleSubmit}>
-              <FormItem {...formItemLayout} label="邮箱">
-                {getFieldDecorator('email', {
-                  initialValue: mail,
-                  rules: [
-                    {
-                      type: 'email',
-                      message: 'The input is not valid E-mail!',
-                    },
-                    {
-                      required: true,
-                      message: 'Please input your E-mail!',
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="密码">
-                {getFieldDecorator('password', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please input your password!',
-                    },
-                    {
-                      validator: this.validateToNextPassword,
-                    },
-                  ],
-                })(<Input type="password" />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="确认密码">
-                {getFieldDecorator('confirm', {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Please confirm your password!',
-                    },
-                    {
-                      validator: this.compareToFirstPassword,
-                    },
-                  ],
-                })(<Input type="password" onBlur={this.handleConfirmBlur} />)}
+            <Form
+              ref={form => {
+                this.userForm = form;
+              }}
+            >
+              <FormItem {...formItemLayout}>
+                {getFieldDecorator('id', {
+                  initialValue: id,
+                })(<Input type="hidden" />)}
               </FormItem>
               <FormItem
                 {...formItemLayout}
                 label={
                   <span>
-                    昵称&nbsp;
-                    <Tooltip title="What do you want others to call you?">
+                    头像&nbsp;
+                    <Tooltip title="JPG/PNG格式，小于200Kb">
                       <Icon type="question-circle-o" />
                     </Tooltip>
                   </span>
                 }
               >
-                {getFieldDecorator('nickname', {
-                  initialValue: username,
-                  rules: [
-                    { required: true, message: 'Please input your nickname!', whitespace: true },
-                  ],
-                })(<Input />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="城市">
-                {getFieldDecorator('residence', {
-                  initialValue: ['zhejiang', 'hangzhou', 'xihu'],
-                  rules: [
-                    {
-                      type: 'array',
-                      required: true,
-                      message: 'Please select your habitual residence!',
-                    },
-                  ],
-                })(<Cascader options={residences} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="手机号">
-                {getFieldDecorator('phone', {
-                  initialValue: mobile,
-                  rules: [{ required: true, message: 'Please input your phone number!' }],
-                })(<Input addonBefore={prefixSelector} style={{ width: '100%' }} />)}
-              </FormItem>
-              <FormItem {...formItemLayout} label="网站">
-                {getFieldDecorator('website', {
-                  rules: [{ required: true, message: 'Please input website!' }],
+                {getFieldDecorator('avatar', {
+                  initialValue: avatar,
+                  valuePropName: 'file',
+                  getValueFromEvent: this.normFile,
                 })(
-                  <AutoComplete
-                    dataSource={websiteOptions}
-                    onChange={this.handleWebsiteChange}
-                    placeholder="website"
+                  <Upload
+                    name="avatar"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    showUploadList={false}
+                    action="http://localhost:8001/users/avatar"
+                    beforeUpload={this.beforeUpload}
+                    onChange={this.handleAvatarChange}
                   >
-                    <Input />
-                  </AutoComplete>
+                    {this.state.imgUrl ? (
+                      <img
+                        src={this.state.imgUrl}
+                        alt="avatar"
+                        style={{ width: '125px', height: '125px' }}
+                      />
+                    ) : avatar ? (
+                      <img src={avatar} alt="avatar" style={{ width: '125px', height: '125px' }} />
+                    ) : (
+                      <div>
+                        <Icon type={this.state.loading ? 'loading' : 'plus'} />
+                        <div className="ant-upload-text">Upload</div>
+                      </div>
+                    )}
+                  </Upload>
                 )}
               </FormItem>
-              <FormItem
-                {...formItemLayout}
-                label="Captcha"
-                extra="We must make sure that your are a human."
-              >
-                <Row gutter={8}>
-                  <Col span={12}>
-                    {getFieldDecorator('captcha', {
-                      rules: [{ required: true, message: 'Please input the captcha you got!' }],
-                    })(<Input />)}
-                  </Col>
-                  <Col span={12}>
-                    <Button>Get captcha</Button>
-                  </Col>
-                </Row>
+              <FormItem {...formItemLayout} label="用户名">
+                {getFieldDecorator('username', {
+                  initialValue: username,
+                  rules: [{ required: true, message: '请填写用户名', whitespace: true }],
+                })(<Input />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="邮箱">
+                {getFieldDecorator('mailPrefix', {
+                  initialValue: mail && mail.indexOf('@') > -1 ? mail.split('@')[0] : '',
+                  rules: [
+                    {
+                      required: true,
+                      message: '请填写请填写邮箱',
+                    },
+                  ],
+                })(<Input addonAfter={suffixSelector} style={{ width: '100%' }} />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="项目组">
+                {getFieldDecorator('team', {
+                  initialValue:
+                    company || department || team
+                      ? [company, department, team]
+                      : ['中油瑞飞', '云计算业务部', '平台应用组'],
+                })(<Cascader options={teams} />)}
+              </FormItem>
+              <FormItem {...formItemLayout} label="手机号">
+                {getFieldDecorator('mobile', {
+                  initialValue: mobile,
+                })(<Input />)}
               </FormItem>
             </Form>
+          </Modal>
+
+          <Modal
+            title="修改登陆密码"
+            visible={this.state.passwdModalVisible}
+            footer={null}
+            onCancel={this.handlePassCancel}
+          >
+            <CustForm
+              handlePassSubmit={this.handlePassSubmit}
+              handlePassCancel={this.handlePassCancel}
+              accountId={id}
+            />
           </Modal>
         </Card>
       </Fragment>

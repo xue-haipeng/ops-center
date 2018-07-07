@@ -6,6 +6,7 @@ import {
   Card,
   Modal,
   message,
+  Popconfirm,
   Form,
   Input,
   Select,
@@ -913,12 +914,26 @@ export default class HostList extends PureComponent {
                       </Button>
                     </span>
                   )}
-                  <Button onClick={() => this.handleDelete()}>
-                    <Icon type="delete" />删除
-                  </Button>
-                  <Button onClick={() => this.handleClaim()}>
-                    <Icon type="heart-o" />认领
-                  </Button>
+                  <Popconfirm
+                    title={`确定要删除这${selectedRows.length}台主机？`}
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => this.handleDelete()}
+                  >
+                    <Button>
+                      <Icon type="delete" />删除
+                    </Button>
+                  </Popconfirm>
+                  <Popconfirm
+                    title={`确定将这${selectedRows.length}台主机收入囊中？`}
+                    okText="Yes"
+                    cancelText="No"
+                    onConfirm={() => this.handleClaim()}
+                  >
+                    <Button>
+                      <Icon type="heart-o" />认领
+                    </Button>
+                  </Popconfirm>
                 </span>
               )}
             </div>

@@ -21,7 +21,6 @@ export async function queryHosts(params) {
 }
 
 export async function removeHosts(params) {
-  console.log('removeHosts params: ', params.ids);
   return request('app/hosts', {
     method: 'DELETE',
     data: params.ids,
@@ -47,7 +46,6 @@ export async function updateHost(params) {
 }
 
 export async function claimHosts(params) {
-  console.log('claimHost: ', params);
   return request('app/hosts/claim', {
     method: 'POST',
     data: {

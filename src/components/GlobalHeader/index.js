@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip } from 'antd';
+import { Menu, Icon, Spin, Tag, Dropdown, Avatar, Divider, Tooltip, notification } from 'antd';
 import moment from 'moment';
 import groupBy from 'lodash/groupBy';
 import Debounce from 'lodash-decorators/debounce';
@@ -101,18 +101,22 @@ export default class GlobalHeader extends PureComponent {
           <HeaderSearch
             className={`${styles.action} ${styles.search}`}
             placeholder="站内搜索"
-            dataSource={['搜索提示一', '搜索提示二', '搜索提示三']}
+            dataSource={['暂未实现', '敬请期待']}
             onSearch={value => {
-              console.log('input', value); // eslint-disable-line
+              console.log('searched: ', value);
             }}
             onPressEnter={value => {
+              notification['warning']({
+                message: '暂未实现',
+                description: '敬请期待！',
+              });
               console.log('enter', value); // eslint-disable-line
             }}
           />
           <Tooltip title="产品文档">
             <a
               target="_blank"
-              href="http://pro.ant.design/docs/getting-started"
+              href="http://11.11.47.72:1080/ops-center"
               rel="noopener noreferrer"
               className={styles.action}
             >
@@ -137,9 +141,9 @@ export default class GlobalHeader extends PureComponent {
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/wAhyIChODzsoKIOBHcBk.svg"
             />
             <NoticeIcon.Tab
-              list={noticeData['消息']}
-              title="消息"
-              emptyText="您已读完所有消息"
+              list={noticeData['站内信']}
+              title="站内信"
+              emptyText="您已读完所有站内信"
               emptyImage="https://gw.alipayobjects.com/zos/rmsportal/sAuJeJzSKbUmHfBQRzmZ.svg"
             />
             <NoticeIcon.Tab

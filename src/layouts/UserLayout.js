@@ -27,7 +27,7 @@ const links = [
 
 const copyright = (
   <Fragment>
-    <Icon type="copyright" /> 2018 云计算业务部 平台应用组
+    <Icon type="copyright" /> 2018 云计算业务部&nbsp;&nbsp;平台应用组
   </Fragment>
 );
 

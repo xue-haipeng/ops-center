@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Checkbox, Alert, Icon } from 'antd';
+import { Checkbox, Alert, Tooltip } from 'antd';
 import Login from 'components/Login';
 import styles from './Login.less';
 
@@ -58,7 +58,7 @@ export default class LoginPage extends Component {
             <UserName name="username" placeholder="请输入用户名..." />
             <Password name="password" placeholder="请输入密码..." />
           </Tab>
-          <Tab key="mobile" tab="手机号登录">
+          <Tab key="mobile" tab="微信扫码登录" disabled>
             {login.status === 'error' &&
               login.type === 'mobile' &&
               !submitting &&
@@ -68,14 +68,16 @@ export default class LoginPage extends Component {
           </Tab>
           <div>
             <Checkbox checked={this.state.autoLogin} onChange={this.changeAutoLogin}>
-              自动登录
+              记住我
             </Checkbox>
-            <a style={{ float: 'right' }} href="">
-              忘记密码
-            </a>
+            <Tooltip placement="rightTop" title="请线下联系重置">
+              <a style={{ float: 'right' }} href="">
+                忘记密码
+              </a>
+            </Tooltip>
           </div>
           <Submit loading={submitting}>登录</Submit>
-          <div className={styles.other}>
+          {/*          <div className={styles.other}>
             其他登录方式
             <Icon className={styles.icon} type="alipay-circle" />
             <Icon className={styles.icon} type="taobao-circle" />
@@ -83,7 +85,7 @@ export default class LoginPage extends Component {
             <Link className={styles.register} to="/user/register">
               注册账户
             </Link>
-          </div>
+          </div> */}
         </Login>
       </div>
     );

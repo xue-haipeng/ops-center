@@ -1,5 +1,6 @@
 import { stringify } from 'qs';
 import request from '../utils/request';
+import { getCurrentUser } from '../utils/authority';
 
 export async function queryProjectNotice() {
   return request('/api/project/notice');
@@ -75,5 +76,5 @@ export async function fakeRegister(params) {
 }
 
 export async function queryNotices() {
-  return request('/api/notices');
+  return request(`http://localhost:8001/users/notices/${getCurrentUser()}`);
 }

@@ -1,4 +1,5 @@
-import { query as queryUsers, queryCurrent } from '../services/user';
+import { message } from 'antd';
+import { query as queryUsers, queryCurrent, updateAccount, updatePasswd } from '../services/user';
 
 export default {
   namespace: 'user',
@@ -22,6 +23,22 @@ export default {
         type: 'saveCurrentUser',
         payload: response,
       });
+    },
+    *updateAccount({ payload }, { call }) {
+      const response = yield call(updateAccount, payload);
+      if (response.status === 0) {
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
+    },
+    *changePasswd({ payload }, { call }) {
+      const response = yield call(updatePasswd, payload);
+      if (response.status === 0) {
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
     },
   },
 

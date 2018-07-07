@@ -17,7 +17,8 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  return request(`${BASE_URL}users/${getCurrentUser()}`);
+  // return request(`${BASE_URL}users/${getCurrentUser()}`);
+  return request(`http://localhost:8001/users/${getCurrentUser()}`);
 }
 
 export async function signIn(payload) {
@@ -57,4 +58,21 @@ export async function refreshAccessToken(config) {
         });
       }
     });
+}
+
+export async function updateAccount(payload) {
+  return request('http://localhost:8001/users', {
+    method: 'PUT',
+    data: {
+      ...payload,
+    },
+  });
+}
+export async function updatePasswd(payload) {
+  return request('http://localhost:8001/users/passwd', {
+    method: 'PUT',
+    data: {
+      ...payload,
+    },
+  });
 }

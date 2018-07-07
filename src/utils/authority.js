@@ -18,6 +18,10 @@ export function getCurrentUser() {
   return localStorage.getItem('username');
 }
 
+export function setCurrentUser(username) {
+  return localStorage.setItem('username', username);
+}
+
 export function getAccessToken() {
   return localStorage.getItem('access_token');
 }
