@@ -235,7 +235,7 @@ export default class UserCenter extends Component {
                     listType="picture-card"
                     className="avatar-uploader"
                     showUploadList={false}
-                    action="http://localhost:8001/users/avatar"
+                    action="http://11.11.47.72:8001/users/avatar"
                     beforeUpload={this.beforeUpload}
                     onChange={this.handleAvatarChange}
                   >

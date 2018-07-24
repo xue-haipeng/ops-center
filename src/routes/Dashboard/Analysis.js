@@ -8,7 +8,6 @@ import {
   Tabs,
   Table,
   Radio,
-  DatePicker,
   Tooltip,
   Menu,
   Dropdown,
@@ -16,7 +15,6 @@ import {
 import numeral from 'numeral';
 import {
   ChartCard,
-  yuan,
   MiniArea,
   MiniBar,
   MiniProgress,
@@ -27,28 +25,19 @@ import {
 } from 'components/Charts';
 import Trend from 'components/Trend';
 import NumberInfo from 'components/NumberInfo';
-import { getTimeDistance } from '../../utils/utils';
+// import { getTimeDistance } from '../../utils/utils';
 
 import styles from './Analysis.less';
 
 const { TabPane } = Tabs;
-const { RangePicker } = DatePicker;
+// const { RangePicker } = DatePicker;
 
 const rankingListData = [
-  { hostname: 'EXOAPS007', utilization: 80 },
-  { hostname: 'EZHAP5008', utilization: 77 },
-  { hostname: 'EUAAP4003', utilization: 55 },
-  { hostname: 'EFOAP5004', utilization: 44 },
-  { hostname: 'EZHAP5009', utilization: 39 },
-  { hostname: 'EUEAP4002', utilization: 32 },
-  { hostname: 'EFOAP5001', utilization: 28 },
+  { hostname: 'HP1', rate: 11.10 },
+  { hostname: 'CPF', rate: 9.77 },
+  { hostname: 'CP2', rate: 6.55 },
+  { hostname: 'ZHDP5', rate: 44 },
 ];
-
-const Yuan = ({ children }) => (
-  <span
-    dangerouslySetInnerHTML={{ __html: yuan(children) }}
-  /> /* eslint-disable-line react/no-danger */
-);
 
 @connect(({ chart, loading }) => ({
   chart,
@@ -56,9 +45,10 @@ const Yuan = ({ children }) => (
 }))
 export default class Analysis extends Component {
   state = {
-    salesType: 'all',
+    hostDistrTypeSelected: 'platform',
     currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
+    currHours: 2,
+    // rangePickerValue: getTimeDistance('today'),
   };
 
   componentDidMount() {
@@ -74,9 +64,13 @@ export default class Analysis extends Component {
     });
   }
 
-  handleChangeSalesType = e => {
+  handleChangeHostDistrType = e => {
     this.setState({
-      salesType: e.target.value,
+      hostDistrTypeSelected: e.target.value,
+    });
+    this.props.dispatch({
+      type: 'chart/fetchHostsDistrType',
+      payload: e.target.value,
     });
   };
 
@@ -86,61 +80,45 @@ export default class Analysis extends Component {
     });
   };
 
-  handleRangePickerChange = rangePickerValue => {
+/*  handleRangePickerChange = rangePickerValue => {
     this.setState({
       rangePickerValue,
     });
 
     this.props.dispatch({
-      type: 'chart/fetchSalesData',
+      type: 'chart/fetchAscsCpuCurr',
     });
-  };
+  }; */
 
-  selectDate = type => {
+  selectHours = hours => {
     this.setState({
-      rangePickerValue: getTimeDistance(type),
+      currHours: hours,
     });
-
     this.props.dispatch({
-      type: 'chart/fetchSalesData',
+      type: 'chart/fetchNHoursHostsCpuAvg7',
+      payload: hours,
     });
   };
 
-  isActive(type) {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return;
-    }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
+  isActive(hours) {
+    if (this.state.currHours === hours) {
       return styles.currentDate;
     }
   }
 
   render() {
-    const { rangePickerValue, salesType, currentTabKey } = this.state;
+    const { hostDistrTypeSelected, currentTabKey } = this.state;
     const { chart, loading } = this.props;
     const {
       visitData,
       visitData2,
-      salesData,
+      ascsCpuCurr,
+      nHoursHostsCpuAvg7,
       searchData,
       offlineData,
       offlineChartData,
-      salesTypeData,
-      salesTypeDataOnline,
-      salesTypeDataOffline,
+      hostDistrType,
     } = chart;
-
-    const salesPieData =
-      salesType === 'all'
-        ? salesTypeData
-        : salesType === 'online'
-          ? salesTypeDataOnline
-          : salesTypeDataOffline;
 
     const menu = (
       <Menu>
@@ -160,24 +138,24 @@ export default class Analysis extends Component {
     const salesExtra = (
       <div className={styles.salesExtraWrap}>
         <div className={styles.salesExtra}>
-          <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-            30分钟
+          <a className={this.isActive(2)} onClick={() => this.selectHours(2)}>
+            2小时
           </a>
-          <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-            3小时
+          <a className={this.isActive(4)} onClick={() => this.selectHours(4)}>
+            4小时
           </a>
-          <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
+          <a className={this.isActive(6)} onClick={() => this.selectHours(6)}>
             6小时
           </a>
-          <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
+          <a className={this.isActive(12)} onClick={() => this.selectHours(12)}>
             12小时
           </a>
         </div>
-        <RangePicker
+        { /*  <RangePicker
           value={rangePickerValue}
           onChange={this.handleRangePickerChange}
           style={{ width: 256 }}
-        />
+        /> */}
       </div>
     );
 
@@ -256,21 +234,21 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="总销售额"
+              title="示例指标"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={() => <Yuan>126560</Yuan>}
-              footer={<Field label="日均销售额" value={`￥${numeral(12423).format('0,0')}`} />}
+              total={() => 126560}
+              footer={<Field label="虚机总计" value={`${numeral(2423).format('0,0')}`} />}
               contentHeight={46}
             >
               <Trend flag="up" style={{ marginRight: 16 }}>
-                周同比<span className={styles.trendText}>12%</span>
+                告警<span className={styles.trendText}>85</span>
               </Trend>
               <Trend flag="down">
-                日环比<span className={styles.trendText}>11%</span>
+                健康<span className={styles.trendText}>1979</span>
               </Trend>
             </ChartCard>
           </Col>
@@ -302,14 +280,14 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="支付笔数"
+              title="示例指标"
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
               total={numeral(6560).format('0,0')}
-              footer={<Field label="转化率" value="60%" />}
+              footer={<Field label="示例说明" value="60%" />}
               contentHeight={46}
             >
               <MiniBar data={visitData} />
@@ -328,10 +306,10 @@ export default class Analysis extends Component {
               footer={
                 <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                   <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
+                    月同比<span className={styles.trendText}>12%</span>
                   </Trend>
                   <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
+                    周环比<span className={styles.trendText}>11%</span>
                   </Trend>
                 </div>
               }
@@ -349,18 +327,18 @@ export default class Analysis extends Component {
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      <Bar height={295} title="ASCS节点CPU平均使用率（%）" data={salesData} />
+                      <Bar height={295} title="当前ASCS节点CPU平均使用率（%）" data={ascsCpuCurr} />
                     </div>
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
                       <h4 className={styles.rankingTitle}>主机CPU使用率</h4>
                       <ul className={styles.rankingList}>
-                        {rankingListData.map((item, i) => (
+                        {nHoursHostsCpuAvg7 && nHoursHostsCpuAvg7.map((item, i) => (
                           <li key={item.hostname}>
                             <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
                             <span>{item.hostname}</span>
-                            <span>{`${item.utilization}%`}</span>
+                            <span>{`${item.rate}%`}</span>
                           </li>
                         ))}
                       </ul>
@@ -372,18 +350,18 @@ export default class Analysis extends Component {
                 <Row>
                   <Col xl={16} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesBar}>
-                      <Bar height={292} title="访问量趋势" data={salesData} />
+                      <Bar height={292} title="当前负载（Avg Active Sessions）" data={ascsCpuCurr} />
                     </div>
                   </Col>
                   <Col xl={8} lg={12} md={12} sm={24} xs={24}>
                     <div className={styles.salesRank}>
-                      <h4 className={styles.rankingTitle}>门店访问量排名</h4>
+                      <h4 className={styles.rankingTitle}>当前数据库负载</h4>
                       <ul className={styles.rankingList}>
                         {rankingListData.map((item, i) => (
                           <li key={item.hostname}>
                             <span className={i < 3 ? styles.active : ''}>{i + 1}</span>
                             <span>{item.hostname}</span>
-                            <span>{`${item.utilization}%`}</span>
+                            <span>{`${item.rate}%`}</span>
                           </li>
                         ))}
                       </ul>
@@ -409,25 +387,25 @@ export default class Analysis extends Component {
                   <NumberInfo
                     subTitle={
                       <span>
-                        搜索用户数
-                        <Tooltip title="指标文案">
+                        备份成功数
+                        <Tooltip title="近3天备份情况">
                           <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
                         </Tooltip>
                       </span>
                     }
                     gap={8}
-                    total={numeral(12321).format('0,0')}
-                    status="up"
-                    subTotal={17.1}
+                    total={numeral(10321).format('0,0')}
+                    // status="up"
+                    subTotal={<Icon type="check-circle" style={{ fontSize: 16, color: '#24cc78' }} />}
                   />
                   <MiniArea line height={45} data={visitData2} />
                 </Col>
                 <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
                   <NumberInfo
-                    subTitle="人均搜索次数"
-                    total={2.7}
-                    status="down"
-                    subTotal={26.2}
+                    subTitle="备份失败数"
+                    total={4}
+                    // status="down"
+                    subTotal={<Icon type="close-circle" style={{ fontSize: 16, color: '#e27582' }} />}
                     gap={8}
                   />
                   <MiniArea line height={45} data={visitData2} />
@@ -455,24 +433,24 @@ export default class Analysis extends Component {
               extra={
                 <div className={styles.salesCardExtra}>
                   {iconGroup}
-                  <div className={styles.salesTypeRadio}>
-                    <Radio.Group value={salesType} onChange={this.handleChangeSalesType}>
-                      <Radio.Button value="all">按平台</Radio.Button>
-                      <Radio.Button value="online">按产品</Radio.Button>
-                      <Radio.Button value="offline">按主机类型</Radio.Button>
+                  <div className={styles.hostDistrTypeRadio}>
+                    <Radio.Group value={hostDistrTypeSelected} onChange={this.handleChangeHostDistrType}>
+                      <Radio.Button value="platform">按平台</Radio.Button>
+                      {/* <Radio.Button value="businessLine">按业务线</Radio.Button> */}
+                      <Radio.Button value="nodeType">按主机类型</Radio.Button>
                     </Radio.Group>
                   </div>
                 </div>
               }
               style={{ marginTop: 24, minHeight: 509 }}
             >
-              <h4 style={{ marginTop: 8, marginBottom: 32 }}>主机分布</h4>
+              {/* <h4 style={{ marginTop: 8, marginBottom: 32 }}>主机分布</h4> */}
               <Pie
                 hasLegend
                 subTitle="主机总数"
-                total={() => <Yuan>{salesPieData.reduce((pre, now) => now.y + pre, 0)}</Yuan>}
-                data={salesPieData}
-                valueFormat={value => <Yuan>{value}</Yuan>}
+                total={() => `${hostDistrType && hostDistrType.reduce((pre, now) => now.y + pre, 0)}`}
+                data={hostDistrType}
+                valueFormat={value => `${value}`}
                 height={248}
                 lineWidth={4}
               />
@@ -480,7 +458,7 @@ export default class Analysis extends Component {
           </Col>
         </Row>
 
-        <Card
+{/*        <Card
           loading={loading}
           className={styles.offlineCard}
           bordered={false}
@@ -500,7 +478,7 @@ export default class Analysis extends Component {
               </TabPane>
             ))}
           </Tabs>
-        </Card>
+        </Card> */}
       </Fragment>
     );
   }

@@ -4,7 +4,7 @@ import { getCurrentUser, getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
 // const BASE_URL = 'https://app.haipeng.co'; // remote prod
-const BASE_URL = 'http://kube-master.poc.cnpc:8888/api/v1/'; // local dev
+const BASE_URL = 'http://11.11.47.72:8888/api/v1/'; // local dev
 const gwInstance = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -17,8 +17,7 @@ export async function query() {
 }
 
 export async function queryCurrent() {
-  // return request(`${BASE_URL}users/${getCurrentUser()}`);
-  return request(`http://localhost:8001/users/${getCurrentUser()}`);
+  return request(`/users/${getCurrentUser()}`);
 }
 
 export async function signIn(payload) {
@@ -30,10 +29,6 @@ export async function signIn(payload) {
     );
   } catch (error) {
     return { ...error.response, type: payload.type };
-    // const { status, data } = error.response;
-    // if (status === 400 && data.error_description === 'Bad credentials') {
-    //   message.error('用户名/密码错误！');
-    // }
   }
 }
 
@@ -61,7 +56,7 @@ export async function refreshAccessToken(config) {
 }
 
 export async function updateAccount(payload) {
-  return request('http://localhost:8001/users', {
+  return request('/users', {
     method: 'PUT',
     data: {
       ...payload,
@@ -69,7 +64,7 @@ export async function updateAccount(payload) {
   });
 }
 export async function updatePasswd(payload) {
-  return request('http://localhost:8001/users/passwd', {
+  return request('/users/passwd', {
     method: 'PUT',
     data: {
       ...payload,

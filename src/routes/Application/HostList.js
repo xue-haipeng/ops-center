@@ -13,7 +13,6 @@ import {
   Icon,
   Button,
   Badge,
-  DatePicker,
   List,
 } from 'antd';
 import moment from 'moment';
@@ -127,7 +126,7 @@ const columns = [
       },
     ],
     render(val) {
-      return <Badge status={LIFECYCLE_STATUS[val].badge} text={LIFECYCLE_STATUS[val].status} />;
+      return LIFECYCLE_STATUS[val] ? <Badge status={LIFECYCLE_STATUS[val].badge} text={LIFECYCLE_STATUS[val].status} /> : '';
     },
   },
   {
@@ -173,7 +172,9 @@ const CreateForm = Form.create({
           : null,
       }),
       nodeType: Form.createFormField({
-        value: isModify ? selectedItem[0].nodeType && selectedItem[0].nodeType.toString() : null,
+        value: isModify
+          ? selectedItem[0].nodeType && selectedItem[0].nodeType.toString()
+          : null,
       }),
       isVirtualized: Form.createFormField({
         value: isModify
@@ -181,19 +182,27 @@ const CreateForm = Form.create({
           : null,
       }),
       haType: Form.createFormField({
-        value: isModify ? selectedItem[0].haType && selectedItem[0].haType.toString() : null,
+        value: isModify
+          ? selectedItem[0].haType && selectedItem[0].haType.toString()
+          : null,
       }),
       osRelease: Form.createFormField({
-        value: isModify ? selectedItem[0].osRelease && selectedItem[0].osRelease.toString() : null,
+        value: isModify
+          ? selectedItem[0].osRelease && selectedItem[0].osRelease.toString()
+          : null,
       }),
       location: Form.createFormField({
-        value: isModify ? selectedItem[0].location && selectedItem[0].location.toString() : null,
+        value: isModify
+          ? selectedItem[0].location && selectedItem[0].location.toString()
+          : null,
       }),
       vlanId: Form.createFormField({
         value: isModify ? selectedItem[0].vlanId : null,
       }),
       company: Form.createFormField({
-        value: isModify ? selectedItem[0].company && selectedItem[0].company.toString() : null,
+        value: isModify
+          ? selectedItem[0].company && selectedItem[0].company.toString()
+          : null,
       }),
       maintainer: Form.createFormField({
         value: isModify
@@ -209,7 +218,12 @@ const CreateForm = Form.create({
         value: isModify ? selectedItem[0].applicant && selectedItem[0].applicant : null,
       }),
       approver: Form.createFormField({
-        value: isModify ? selectedItem[0].approver && selectedItem[0].approver.toString() : null,
+        value: isModify
+          ? selectedItem[0].approver && selectedItem[0].approver.toString()
+          : null,
+      }),
+      product: Form.createFormField({
+        value: isModify ? selectedItem[0].product && selectedItem[0].product : null,
       }),
       expiredDate: Form.createFormField({
         value: isModify
@@ -497,8 +511,8 @@ const CreateForm = Form.create({
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="到期时间（临时系统填写）">
-              {form.getFieldDecorator('expiredDate')(<DatePicker />)}
+            <FormItem label="产品名称">
+              {form.getFieldDecorator('product')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
@@ -547,6 +561,7 @@ export default class HostList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     formValues: {},
+    pagination: {},
   };
 
   componentDidMount() {
@@ -566,6 +581,9 @@ export default class HostList extends PureComponent {
     const { dispatch } = this.props;
     const { formValues } = this.state;
 
+    this.setState({
+      pagination,
+    });
     const filters = Object.keys(filtersArg).reduce((obj, key) => {
       const newObj = { ...obj };
       newObj[key] = getValue(filtersArg[key]);
@@ -655,7 +673,11 @@ export default class HostList extends PureComponent {
       () =>
         this.props.dispatch({
           type: 'app/fetch',
-          payload: this.state.formValues,
+          payload: {
+            ...this.state.formValues,
+            currentPage: this.state.pagination.current,
+            pageSize: this.state.pagination.pageSize,
+          },
         }),
       800
     );
@@ -677,7 +699,11 @@ export default class HostList extends PureComponent {
       () =>
         this.props.dispatch({
           type: 'app/fetch',
-          payload: this.state.formValues,
+          payload: {
+            ...this.state.formValues,
+            currentPage: this.state.pagination.current,
+            pageSize: this.state.pagination.pageSize,
+          },
         }),
       1000
     );
@@ -710,7 +736,11 @@ export default class HostList extends PureComponent {
       () =>
         this.props.dispatch({
           type: 'app/fetch',
-          payload: this.state.formValues,
+          payload: {
+            ...this.state.formValues,
+            currentPage: this.state.pagination.current,
+            pageSize: this.state.pagination.pageSize,
+          },
         }),
       1000
     );
@@ -734,10 +764,22 @@ export default class HostList extends PureComponent {
       () =>
         this.props.dispatch({
           type: 'app/fetch',
-          payload: this.state.formValues,
+          payload: {
+            ...this.state.formValues,
+            currentPage: this.state.pagination.current,
+            pageSize: this.state.pagination.pageSize,
+          },
         }),
       1000
     );
+  };
+
+  handleExport = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'app/export',
+      payload: this.state.formValues,
+    });
   };
 
   handleViewModalVisible = flag => {
@@ -902,6 +944,14 @@ export default class HostList extends PureComponent {
               >
                 新建
               </Button>
+              <Button
+                icon="table"
+                // style={{ background: '#80bba0' }}
+                // type="primary"
+                onClick={() => this.handleExport()}
+              >
+                导出
+              </Button>
               {selectedRows.length > 0 && (
                 <span>
                   {selectedRows.length === 1 && (
@@ -996,7 +1046,10 @@ export default class HostList extends PureComponent {
                 : ''}
             </Description>
             <Description term="业务域">
-              {selectedRows.length > 0 ? selectedRows[0].businessLine : ''}
+              {selectedRows.length > 0
+                ? selectedRows[0].businessLine != null
+                  ? BUSINESS_LINE[selectedRows[0].businessLine] : ''
+                : ''}
             </Description>
             <Description term="项目名称">
               {selectedRows.length > 0
@@ -1005,7 +1058,7 @@ export default class HostList extends PureComponent {
                   : ''
                 : ''}
             </Description>
-            <Description term="产品类型">
+            <Description term="产品名称">
               {selectedRows.length > 0 ? selectedRows[0].product : ''}
             </Description>
             <Description term="操作系统">
@@ -1052,7 +1105,10 @@ export default class HostList extends PureComponent {
               {selectedRows.length > 0 ? selectedRows[0].maintainer : ''}
             </Description>
             <Description term="当前状态">
-              {selectedRows.length > 0 ? selectedRows[0].currentStatus : ''}
+              {selectedRows.length > 0
+                ? selectedRows[0].currentStatus != null
+                  ? CURRENT_STATUS[selectedRows[0].currentStatus - 1] : ''
+                : ''}
             </Description>
             <Description term="申请人">
               {selectedRows.length > 0 ? selectedRows[0].applicant : ''}
@@ -1064,19 +1120,19 @@ export default class HostList extends PureComponent {
                   : ''
                 : ''}
             </Description>
-            <Description term="过期时间">
+            {/* <Description term="过期时间">
               {selectedRows.length > 0 ? selectedRows[0].expiredDate : ''}
-            </Description>
+            </Description> */}
             <Description term="备注">
               {selectedRows.length > 0 ? selectedRows[0].remarks : ''}
             </Description>
-            <Description term="创建者">
+            <Description term="创建人">
               {selectedRows.length > 0 ? selectedRows[0].creator : ''}
             </Description>
             <Description term="创建时间">
               {selectedRows.length > 0 ? selectedRows[0].createTime : ''}
             </Description>
-            <Description term="更新者">
+            <Description term="更新人">
               {selectedRows.length > 0 ? selectedRows[0].reviser : ''}
             </Description>
             <Description term="更新时间">
@@ -1095,7 +1151,7 @@ export default class HostList extends PureComponent {
               <Description term="域名">{data.vmInfo.guestDomainName}</Description>
               <Description term="操作系统">{data.vmInfo.guestOsVersion}</Description>
               <Description term="vCPU数量">{data.vmInfo.numCpu}</Description>
-              <Description term="内存大小">{`${data.vmInfo.memoryGb}GB`}</Description>
+              <Description term="内存大小">{data.vmInfo.memoryGb && `${data.vmInfo.memoryGb}GB`}</Description>
               <Description term="vDisk数量">{data.vmInfo.numVirtualDisk}</Description>
               <Description term="电源状态">{data.vmInfo.powerState}</Description>
               <Description term="guest状态">{data.vmInfo.guestState}</Description>

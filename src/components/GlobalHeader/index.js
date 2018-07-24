@@ -113,14 +113,14 @@ export default class GlobalHeader extends PureComponent {
               console.log('enter', value); // eslint-disable-line
             }}
           />
-          <Tooltip title="产品文档">
+          <Tooltip title="项目代码">
             <a
               target="_blank"
               href="http://11.11.47.72:1080/ops-center"
               rel="noopener noreferrer"
               className={styles.action}
             >
-              <Icon type="question-circle-o" />
+              <Icon type="github" />
             </a>
           </Tooltip>
           <NoticeIcon

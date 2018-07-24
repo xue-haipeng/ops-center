@@ -19,7 +19,8 @@ export const PLATFORM_NAME = [
 export const NODE_TYPE = [
   'ASCS/SCS',
   'DI',
-  'AServer/DMGR/应用',
+  'AServer/DMGR',
+  'M/AppServer/应用',
   '数据库',
   'HANA/一体机',
   'Web服务器',
@@ -72,7 +73,7 @@ export const COMPANY = [
   '中油瑞飞',
   '规划总院',
   '大庆金桥',
-  '三家共管',
+  '瑞飞+规划院+金桥',
   '瑞飞+规划院',
   '瑞飞+金桥',
   '其它单位',

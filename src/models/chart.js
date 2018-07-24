@@ -1,4 +1,4 @@
-import { fakeChartData } from '../services/api';
+import { ascsCpuCurr, fetchCharts, nHoursHostsCpuAvg7, queryHostsDistrType } from '../services/api';
 
 export default {
   namespace: 'chart',
@@ -6,31 +6,64 @@ export default {
   state: {
     visitData: [],
     visitData2: [],
-    salesData: [],
+    ascsCpuCurr: [],
+    nHoursHostsCpuAvg7: [{"hostname":"EBSAP8001","rate":99.9},{"hostname":"EBSAP4001","rate":99.8}],
     searchData: [],
     offlineData: [],
     offlineChartData: [],
-    salesTypeData: [],
-    salesTypeDataOnline: [],
-    salesTypeDataOffline: [],
+    hostDistrType: [{
+      x: 'ERP平台',
+      y: 4544,
+    },
+      {
+        x: '用户平台',
+        y: 3321,
+      },
+      {
+        x: '集成平台',
+        y: 3113,
+      }],
     radarData: [],
     loading: false,
   },
 
   effects: {
     *fetch(_, { call, put }) {
-      const response = yield call(fakeChartData);
+      const res = yield call(fetchCharts);
+      const arr = [];
+      res.ascsCpuCurr.forEach(e => arr.push({x: e.sid, y: e.cpuusage}));
+      const payload = { ...res, ascsCpuCurr: arr, hostDistrType: res.hostDistrTypePlatformData };
       yield put({
         type: 'save',
-        payload: response,
+        payload,
       });
     },
     *fetchSalesData(_, { call, put }) {
-      const response = yield call(fakeChartData);
+      const response = yield call(ascsCpuCurr);
+      const arr = [];
+      response.forEach(e => arr.push({x: e.sid, y: e.cpuusage}));
       yield put({
         type: 'save',
         payload: {
-          salesData: response.salesData,
+          ascsCpuCurr: arr,
+        },
+      });
+    },
+    *fetchHostsDistrType({ payload }, { call, put }) {
+      const response = yield call(queryHostsDistrType, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          hostDistrType: response,
+        },
+      });
+    },
+    *fetchNHoursHostsCpuAvg7({ payload }, { call, put }) {
+      const response = yield call(nHoursHostsCpuAvg7, payload);
+      yield put({
+        type: 'save',
+        payload: {
+          nHoursHostsCpuAvg7: response,
         },
       });
     },
@@ -47,13 +80,12 @@ export default {
       return {
         visitData: [],
         visitData2: [],
-        salesData: [],
+        ascsCpuCurr: [],
         searchData: [],
         offlineData: [],
         offlineChartData: [],
-        salesTypeData: [],
-        salesTypeDataOnline: [],
-        salesTypeDataOffline: [],
+        nHoursHostsCpuAvg7: [],
+        hostDistrType: [],
         radarData: [],
       };
     },

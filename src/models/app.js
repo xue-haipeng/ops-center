@@ -4,7 +4,7 @@ import {
   addHost,
   updateHost,
   claimHosts,
-  queryVmInfo,
+  queryVmInfo, exportHosts,
 } from '../services/app';
 
 export default {
@@ -26,7 +26,9 @@ export default {
         payload: response,
       });
     },
-
+    *export({ payload }, { call }) {
+      yield call(exportHosts, payload)
+    },
     *add({ payload, callback }, { call }) {
       yield call(addHost, payload);
       if (callback) callback();
@@ -35,17 +37,14 @@ export default {
       yield call(updateHost, payload);
       if (callback) callback();
     },
-
     *remove({ payload, callback }, { call }) {
       yield call(removeHosts, payload);
       if (callback) callback();
     },
-
     *claim({ payload, callback }, { call }) {
       yield call(claimHosts, payload);
       if (callback) callback();
     },
-
     *queryVm({ payload, callback }, { call, put }) {
       const response = yield call(queryVmInfo, payload);
       yield put({

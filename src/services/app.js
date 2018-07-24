@@ -1,5 +1,7 @@
 import { stringify } from 'qs';
+import FileSaver from 'file-saver'
 import request from '../utils/request';
+import { getCurrentUser } from '../utils/authority';
 
 export async function queryHosts(params) {
   const queryParams = {};
@@ -17,6 +19,21 @@ export async function queryHosts(params) {
     data: {
       ...params,
     },
+  });
+}
+
+export async function exportHosts(params) {
+  return request('app/hosts/excel', {
+    headers: {
+      'Accept': 'application/octet-stream',
+    },
+    method: 'POST',
+    responseType:'blob',
+    data: {
+      ...params,
+    },
+  }).then(response => {
+    FileSaver.saveAs(response, '主机列表.xlsx');
   });
 }
 
@@ -40,7 +57,7 @@ export async function updateHost(params) {
   return request('app/hosts', {
     method: 'PUT',
     data: {
-      ...params,
+      ...params, reviser: getCurrentUser(),
     },
   });
 }

@@ -25,13 +25,15 @@ export default class Pie extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
+    const { data } = this.props;
+    if (data !== nextProps.data) {
       // because of charts data create when rendered
       // so there is a trick for get rendered time
+      const { legendData } = this.state;
       this.setState(
-        prevState => ({
-          legendData: [...prevState.legendData],
-        }),
+        {
+          legendData: [...legendData],
+        },
         () => {
           this.getLegendData();
         }
@@ -67,6 +69,28 @@ export default class Pie extends Component {
     });
   };
 
+  handleRoot = n => {
+    this.root = n;
+  };
+
+  handleLegendClick = (item, i) => {
+/*    const newItem = item;
+    newItem.checked = !newItem.checked;
+
+    const { legendData } = this.state;
+    legendData[i] = newItem;
+
+    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.x);
+
+    if (this.chart) {
+      this.chart.filter('x', val => filteredLegendData.indexOf(val) > -1);
+    }
+
+    this.setState({
+      legendData,
+    }); */
+  };
+
   // for window resize auto responsive legend
   @Bind()
   @Debounce(300)
@@ -76,50 +100,19 @@ export default class Pie extends Component {
       window.removeEventListener('resize', this.resize);
       return;
     }
-    this.setState(prevState => {
-      if (this.root.parentNode.clientWidth <= 380) {
-        if (!prevState.legendBlock) {
-          return {
-            legendBlock: true,
-          };
-        }
-      } else if (prevState.legendBlock) {
-        return {
-          legendBlock: false,
-        };
+    const { legendBlock } = this.state;
+    if (this.root.parentNode.clientWidth <= 380) {
+      if (!legendBlock) {
+        this.setState({
+          legendBlock: true,
+        });
       }
-      return prevState;
-    });
+    } else if (legendBlock) {
+      this.setState({
+        legendBlock: false,
+      });
+    }
   }
-
-  handleRoot = n => {
-    this.root = n;
-  };
-
-  handleLegendClick = (item, i) => {
-    const newItem = item;
-    newItem.checked = !newItem.checked;
-
-    this.setState(
-      prevState => {
-        return {
-          legendData: Object.assign(prevState.legendData[i], newItem),
-        };
-      },
-      () => {
-        if (this.chart) {
-          this.chart.filter(
-            'x',
-            val =>
-              this.state.legendData
-                .filter(l => l.checked)
-                .map(l => l.x)
-                .indexOf(val) > -1
-          );
-        }
-      }
-    );
-  };
 
   render() {
     const {
@@ -145,10 +138,20 @@ export default class Pie extends Component {
       [styles.legendBlock]: legendBlock,
     });
 
+    const {
+      data: propsData,
+      selected: propsSelected = true,
+      tooltip: propsTooltip = true,
+    } = this.props;
+
+    let data = propsData || [];
+    let selected = propsSelected;
+    let tooltip = propsTooltip;
+
     const defaultColors = colors;
-    let data = this.props.data || [];
-    let selected = this.props.selected || true;
-    let tooltip = this.props.tooltip || true;
+    // let data = this.props.data || [];
+    // let selected = this.props.selected || true;
+    // let tooltip = this.props.tooltip || true;
     let formatColor;
 
     const scale = {
@@ -245,7 +248,9 @@ export default class Pie extends Component {
               <li key={item.x} onClick={() => this.handleLegendClick(item, i)}>
                 <span
                   className={styles.dot}
-                  style={{ backgroundColor: !item.checked ? '#aaa' : item.color }}
+                  style={{
+                    backgroundColor: !item.checked ? '#aaa' : item.color,
+                  }}
                 />
                 <span className={styles.legendTitle}>{item.x}</span>
                 <Divider type="vertical" />

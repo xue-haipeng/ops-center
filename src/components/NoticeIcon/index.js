@@ -73,7 +73,7 @@ export default class NoticeIcon extends PureComponent {
     const notificationBox = this.getNotificationBox();
     const trigger = (
       <span className={noticeButtonClass}>
-        <Badge count={count} className={styles.badge}>
+        <Badge count={(typeof count === "number") ? count : 0} className={styles.badge}>
           <Icon type="bell" className={styles.icon} />
         </Badge>
       </span>

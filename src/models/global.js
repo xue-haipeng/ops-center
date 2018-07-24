@@ -1,4 +1,4 @@
-import { queryNotices } from '../services/api';
+import { clearNotices, queryNotices } from '../services/api';
 
 export default {
   namespace: 'global',
@@ -13,14 +13,15 @@ export default {
       const data = yield call(queryNotices);
       yield put({
         type: 'saveNotices',
-        payload: data,
+        payload: data || [],
       });
       yield put({
         type: 'user/changeNotifyCount',
-        payload: data.length,
+        payload: data ? data.length : 0,
       });
     },
-    *clearNotices({ payload }, { put, select }) {
+    *clearNotices({ payload }, { call, put, select }) {
+      yield call(clearNotices, payload);
       yield put({
         type: 'saveClearedNotices',
         payload,
@@ -43,7 +44,7 @@ export default {
     saveNotices(state, { payload }) {
       return {
         ...state,
-        notices: payload,
+        notices: payload || [],
       };
     },
     saveClearedNotices(state, { payload }) {

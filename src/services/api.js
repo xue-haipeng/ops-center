@@ -41,8 +41,20 @@ export async function fakeSubmitForm(params) {
   });
 }
 
-export async function fakeChartData() {
-  return request('/api/fake_chart_data');
+export async function fetchCharts() {
+  return request('tivoli/cpu/charts');
+}
+
+export async function ascsCpuCurr() {
+  return request('tivoli/cpu/sap_curr');
+}
+
+export async function nHoursHostsCpuAvg7(n) {
+  return request(`tivoli/cpu/${n}_hour_host_cpu_7`);
+}
+
+export async function queryHostsDistrType(type) {
+  return request(`tivoli/cpu/hostDistr/${type}`);
 }
 
 export async function queryTags() {
@@ -76,5 +88,12 @@ export async function fakeRegister(params) {
 }
 
 export async function queryNotices() {
-  return request(`http://localhost:8001/users/notices/${getCurrentUser()}`);
+  return request(`http://11.11.47.72:8001/users/notices/${getCurrentUser()}`);
+}
+
+export async function clearNotices(type) {
+  return request(`/users/notices/${type}/${getCurrentUser()}`, {
+    method: 'DELETE',
+  })
+
 }
