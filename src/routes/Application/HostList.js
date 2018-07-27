@@ -380,6 +380,11 @@ const CreateForm = Form.create({
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="产品名称">
+              {form.getFieldDecorator('product')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <FormItem label="是否虚拟机">
               {form.getFieldDecorator('isVirtualized')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -389,6 +394,8 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="高可用类型">
               {form.getFieldDecorator('haType')(
@@ -405,8 +412,6 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="操作系统">
               {form.getFieldDecorator('osRelease')(
@@ -435,13 +440,13 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="VLAN ID">
               {form.getFieldDecorator('vlanId')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="维护单位">
               {form.getFieldDecorator('company')(
@@ -478,6 +483,8 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="当前状态">
               {form.getFieldDecorator('currentStatus')(
@@ -490,8 +497,6 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
-        </Row>
-        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="申请人/业务联系人">
               {form.getFieldDecorator('applicant')(<Input placeholder="请输入" />)}
@@ -510,11 +515,7 @@ const CreateForm = Form.create({
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <FormItem label="产品名称">
-              {form.getFieldDecorator('product')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
+
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={16} sm={48}>
@@ -791,7 +792,10 @@ export default class HostList extends PureComponent {
     ) {
       this.props.dispatch({
         type: 'app/queryVm',
-        payload: selectedRows[0].ipAddress,
+        payload: {
+          ip: selectedRows[0].ipAddress,
+          hostname: selectedRows[0].hostname,
+        },
       });
     }
     this.setState({
@@ -1038,6 +1042,9 @@ export default class HostList extends PureComponent {
                   : ''
                 : ''}
             </Description>
+            <Description term="产品名称">
+              {selectedRows.length > 0 ? selectedRows[0].product : ''}
+            </Description>
             <Description term="平台名称">
               {selectedRows.length > 0
                 ? selectedRows[0].platformName != null
@@ -1058,9 +1065,7 @@ export default class HostList extends PureComponent {
                   : ''
                 : ''}
             </Description>
-            <Description term="产品名称">
-              {selectedRows.length > 0 ? selectedRows[0].product : ''}
-            </Description>
+
             <Description term="操作系统">
               {selectedRows.length > 0
                 ? selectedRows[0].osRelease != null

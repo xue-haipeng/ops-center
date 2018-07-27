@@ -50,13 +50,13 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
+      const currentUser = { ...action.payload.account, notifyCount: action.payload.notifyCount };
       return {
         ...state,
-        currentUser: action.payload,
+        currentUser,
       };
     },
     changeNotifyCount(state, action) {
-      console.log('changeNotifyCount: ', action.payload);
       return {
         ...state,
         currentUser: {

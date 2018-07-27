@@ -71,6 +71,6 @@ export async function claimHosts(params) {
   });
 }
 
-export async function queryVmInfo(ipAddress) {
-  return request(`vms/${ipAddress}-`);
+export async function queryVmInfo(params) {
+  return request(`vms/${params.ip}-${params.hostname}`);
 }

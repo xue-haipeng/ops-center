@@ -88,7 +88,7 @@ export async function fakeRegister(params) {
 }
 
 export async function queryNotices() {
-  return request(`http://11.11.47.72:8001/users/notices/${getCurrentUser()}`);
+  return request(`/users/notices/${getCurrentUser()}`);
 }
 
 export async function clearNotices(type) {

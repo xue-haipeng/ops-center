@@ -12,7 +12,7 @@ export default class GlobalHeader extends PureComponent {
   componentWillUnmount() {
     this.triggerResizeEvent.cancel();
   }
-  getNoticeData() {
+  getNoticeData = () => {
     const { notices } = this.props;
     if (notices == null || notices.length === 0) {
       return {};
@@ -42,7 +42,7 @@ export default class GlobalHeader extends PureComponent {
       return newNotice;
     });
     return groupBy(newNotices, 'type');
-  }
+  };
   toggle = () => {
     const { collapsed, onCollapse } = this.props;
     onCollapse(!collapsed);
@@ -57,7 +57,7 @@ export default class GlobalHeader extends PureComponent {
   }
   render() {
     const {
-      currentUser = {},
+      currentUser,
       collapsed,
       fetchingNotices,
       isMobile,
