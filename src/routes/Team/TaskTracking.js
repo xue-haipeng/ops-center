@@ -18,7 +18,7 @@ import {
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-import styles from './BasicList.less';
+import styles from './TaskTracking.less';
 
 const RadioButton = Radio.Button;
 const RadioGroup = Radio.Group;
@@ -44,7 +44,7 @@ const ListContent = ({ data: { owner, createdAt, percent, status } }) => (
   list,
   loading: loading.models.list,
 }))
-export default class BasicList extends PureComponent {
+export default class TaskTracking extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -126,7 +126,7 @@ export default class BasicList extends PureComponent {
           <Card
             className={styles.listCard}
             bordered={false}
-            title="标准列表"
+            title="任务列表"
             style={{ marginTop: 24 }}
             bodyStyle={{ padding: '0 32px 40px 32px' }}
             extra={extraContent}

@@ -34,7 +34,8 @@ export default class NoticeIcon extends PureComponent {
   };
   onTabChange = tabType => {
     this.setState({ tabType });
-    this.props.onTabChange(tabType);
+    const { onTabChange } = this.props;
+    onTabChange(tabType);
   };
   getNotificationBox() {
     const { children, loading, locale } = this.props;

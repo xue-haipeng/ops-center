@@ -8,6 +8,9 @@ export default {
       extraBabelPlugins: ['dva-hmr'],
     },
   },
+  externals: {
+    '@antv/data-set': 'DataSet',
+  },
   alias: {
     components: path.resolve(__dirname, 'src/components/'),
   },

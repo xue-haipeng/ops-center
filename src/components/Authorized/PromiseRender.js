@@ -39,7 +39,7 @@ export default class PromiseRender extends React.PureComponent {
     return () => target;
   };
   render() {
-    const Component = this.state.component;
+    const { component: Component } = this.state;
     return Component ? (
       <Component {...this.props} />
     ) : (

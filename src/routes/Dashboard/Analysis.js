@@ -194,6 +194,7 @@ export default class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="示例指标"
+              loading={loading}
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
@@ -215,6 +216,7 @@ export default class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="日志生成量"
+              loading={loading}
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
@@ -240,6 +242,7 @@ export default class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="示例指标"
+              loading={loading}
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />
@@ -256,6 +259,7 @@ export default class Analysis extends Component {
             <ChartCard
               bordered={false}
               title="本周任务完成进度"
+              loading={loading}
               action={
                 <Tooltip title="指标说明">
                   <Icon type="info-circle-o" />

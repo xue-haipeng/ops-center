@@ -5,7 +5,7 @@ import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
 import styles from './UserLayout.less';
 import logo from '../assets/logo1.png';
-import { getRoutes } from '../utils/utils';
+import { getRoutes, getPageQuery, getQueryPath } from '../utils/utils';
 
 const links = [
   {
@@ -30,6 +30,14 @@ const copyright = (
     <Icon type="copyright" /> 2018 云计算业务部&nbsp;&nbsp;平台应用组
   </Fragment>
 );
+
+function getLoginPathWithRedirectPath() {
+  const params = getPageQuery();
+  const { redirect } = params;
+  return getQueryPath('/user/login', {
+    redirect,
+  });
+}
 
 class UserLayout extends React.PureComponent {
   getPageTitle() {
@@ -65,7 +73,7 @@ class UserLayout extends React.PureComponent {
                   exact={item.exact}
                 />
               ))}
-              <Redirect exact from="/user" to="/user/login" />
+              <Redirect exact from="/user" to="/user/login" /><Redirect from="/user" to={getLoginPathWithRedirectPath()} />
             </Switch>
           </div>
           <GlobalFooter links={links} copyright={copyright} />
