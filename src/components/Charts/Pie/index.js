@@ -74,7 +74,7 @@ export default class Pie extends Component {
   };
 
   handleLegendClick = (item, i) => {
-/*    const newItem = item;
+    const newItem = item;
     newItem.checked = !newItem.checked;
 
     const { legendData } = this.state;
@@ -88,7 +88,7 @@ export default class Pie extends Component {
 
     this.setState({
       legendData,
-    }); */
+    });
   };
 
   // for window resize auto responsive legend

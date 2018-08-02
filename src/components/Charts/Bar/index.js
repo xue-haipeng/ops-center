@@ -39,21 +39,19 @@ class Bar extends Component {
       return;
     }
     const minWidth = data.length * 30;
+    const { autoHideXLabels } = this.state;
 
-    this.setState(prevState => {
-      if (canvasWidth <= minWidth) {
-        if (!prevState.autoHideXLabels) {
-          return {
-            autoHideXLabels: true,
-          };
-        }
-      } else if (prevState.autoHideXLabels) {
-        return {
-          autoHideXLabels: false,
-        };
+    if (canvasWidth <= minWidth) {
+      if (!autoHideXLabels) {
+        this.setState({
+          autoHideXLabels: true,
+        });
       }
-      return prevState;
-    });
+    } else if (autoHideXLabels) {
+      this.setState({
+        autoHideXLabels: false,
+      });
+    }
   }
 
   render() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Chart, Tooltip, Geom, Coord, Axis } from 'bizcharts';
-import { Row, Col } from 'antd';
+import { Axis, Chart, Coord, Geom, Tooltip } from 'bizcharts';
+import { Col, Row } from 'antd';
 import autoHeight from '../autoHeight';
 import styles from './index.less';
 
@@ -16,7 +16,8 @@ export default class Radar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.data !== nextProps.data) {
+    const { data } = this.props;
+    if (data !== nextProps.data) {
       this.getLengendData();
     }
   }
@@ -55,28 +56,19 @@ export default class Radar extends Component {
     const newItem = item;
     newItem.checked = !newItem.checked;
 
-    this.setState(
-      prevState => {
-        const { legendData } = prevState;
-        legendData[i] = newItem;
-        return {
-          legendData,
-        };
-      },
-      () => {
-        if (this.chart) {
-          this.chart.filter(
-            'name',
-            val =>
-              this.state.legendData
-                .filter(l => l.checked)
-                .map(l => l.name)
-                .indexOf(val) > -1
-          );
-          this.chart.repaint();
-        }
-      }
-    );
+    const { legendData } = this.state;
+    legendData[i] = newItem;
+
+    const filteredLegendData = legendData.filter(l => l.checked).map(l => l.name);
+
+    if (this.chart) {
+      this.chart.filter('name', val => filteredLegendData.indexOf(val) > -1);
+      this.chart.repaint();
+    }
+
+    this.setState({
+      legendData,
+    });
   };
 
   render() {

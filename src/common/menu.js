@@ -1,4 +1,5 @@
 import { isUrl } from '../utils/utils';
+import userGroup from '../assets/ico-user-group-on.svg'
 
 const menuData = [
   {
@@ -28,6 +29,17 @@ const menuData = [
         // hideInBreadcrumb: true,
         // hideInMenu: true,
       }, */
+    ],
+  },
+  {
+    name: '团队管理',
+    icon: 'user',
+    path: 'team',
+    children: [
+      {
+        name: '重点任务跟踪',
+        path: 'task',
+      },
     ],
   },
   /*    {

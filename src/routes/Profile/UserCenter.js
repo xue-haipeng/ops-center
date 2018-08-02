@@ -122,7 +122,6 @@ export default class UserCenter extends Component {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log('values: ', values);
       if (!err) {
         this.props.dispatch({
           type: 'user/updateAccount',
@@ -142,7 +141,6 @@ export default class UserCenter extends Component {
     });
   };
   handlePassSubmit = values => {
-    console.log('values: ', values);
     this.props.dispatch({
       type: 'user/changePasswd',
       payload: values,
@@ -183,11 +181,11 @@ export default class UserCenter extends Component {
           <DescriptionList style={{ marginBottom: 24 }}>
             <Description term="用户名">{username}</Description>
             <Description term="姓名">{realName}</Description>
-            <Description term="手机号码">{mobile}</Description>
             <Description term="邮箱">{mail}</Description>
             <Description term="单位">{company}</Description>
             <Description term="部门">{department}</Description>
             <Description term="项目组">{team}</Description>
+            <Description term="手机号码">{mobile}</Description>
             <Description term="头像">
               {this.state.imgUrl ? <Avatar src={this.state.imgUrl} /> : <Avatar src={avatar} />}
             </Description>
