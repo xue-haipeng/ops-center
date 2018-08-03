@@ -4,7 +4,7 @@ import { getCurrentUser, getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
 
 // const BASE_URL = 'https://app.haipeng.co'; // remote prod
-const BASE_URL = 'http://11.11.47.72:8888/api/v1/'; // local dev
+const BASE_URL = 'http://11.11.47.72:9999/api/v1/'; // local dev
 const gwInstance = axios.create({
   baseURL: BASE_URL,
   headers: {

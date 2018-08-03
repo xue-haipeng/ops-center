@@ -477,6 +477,13 @@ export default class TaskList extends PureComponent {
     dispatch({
       type: 'user/fetchCurrent',
     });
+    dispatch({
+      type: 'team/countNotFinished',
+    });
+/*    dispatch({
+      type: 'team/countNotFinished',
+      payload: user.currentUser.realName,
+    }) */
   }
 
   componentWillUnmount() {
@@ -590,49 +597,48 @@ export default class TaskList extends PureComponent {
   render() {
     const {
       project: { notice },
-      projectLoading,
       team: { data },
       user: { currentUser },
     } = this.props;
 
+    console.log('data: ', data);
+    const allTasksCount = data && data.pagination.total;
+    const allNotFinishedCount = data && data.notFinishedCount;
+    const greeting = new Date().getHours() < 12 ? '早上好，' : '下午好，';
     const pageHeaderContent = (
       <div className={styles.pageHeaderContent}>
         <div className={styles.avatar}>
           <Avatar
             size="large"
-            src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
+            src={currentUser.avatar}
           />
         </div>
         <div className={styles.content}>
-          <div className={styles.contentTitle}>早安，曲丽丽，祝你开心每一天！</div>
-          <div>交互专家 | 蚂蚁金服－某某某事业群－某某平台部－某某技术部－UED</div>
+          <div className={styles.contentTitle}>{greeting}{currentUser.realName}，祝你开心每一天！</div>
+          <div>记录和分享每一次辛勤的劳动付出，让工作更加清晰调理！</div>
         </div>
       </div>
     );
 
     const extraContent = (
       <div className={styles.extraContent}>
+        {/*   <div className={styles.statItem}>
+          <p>我参与的任务</p>
+          <p>4</p>
+        </div> */}
         <div className={styles.statItem}>
-          <p>项目数</p>
-          <p>56</p>
-        </div>
-        <div className={styles.statItem}>
-          <p>团队内排名</p>
+          <p>项目组总任务</p>
           <p>
-            8
-            <span> / 24</span>
+            {allTasksCount}
+            {/* <span> {allTasksCount}</span> */}
           </p>
-        </div>
-        <div className={styles.statItem}>
-          <p>项目访问</p>
-          <p>2,223</p>
         </div>
       </div>
     );
 
     return (
       <PageHeaderLayout content={pageHeaderContent} extraContent={extraContent}>
-        <Row gutter={24}>
+        {/* <Row gutter={24}>
           <Col xl={16} lg={24} md={24} sm={24} xs={24}>
             <Card
               className={styles.projectList}
@@ -712,7 +718,7 @@ export default class TaskList extends PureComponent {
               </div>
             </Card>
           </Col>
-        </Row>
+        </Row> */}
         <Row gutter={24} style={{ marginTop: 24, marginLeft: 3, marginRight: 3 }}>
           <Card style={{ paddingLeft: 0, paddingRight: 0 }}>
             <Button type="dashed" onClick={() => this.onOpen('新建任务')} style={{ width: '100%', marginBottom: 8 }} icon="plus">

@@ -37,6 +37,14 @@ export async function updateTask(params) {
   });
 }
 
-export async function queryTaskById(id) {
-  return request(`team/tasks/${id}`);
+export async function queryTaskById(param) {
+  return request(`team/tasks/${param.id}`);
+}
+
+export async function queryCountByMe(param) {
+  return request(`team/tasks/${param.realName}`);
+}
+
+export async function queryCountNotFinished() {
+  return request('team/tasks/count-not-finished');
 }

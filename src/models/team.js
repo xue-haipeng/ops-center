@@ -1,4 +1,12 @@
-import { addTask, queryTaskById, queryTasks, removeTask, updateTask } from '../services/team';
+import {
+  addTask,
+  queryCountByMe,
+  queryCountNotFinished,
+  queryTaskById,
+  queryTasks,
+  removeTask,
+  updateTask,
+} from '../services/team';
 
 
 export default {
@@ -8,6 +16,7 @@ export default {
     data: {
       list: [],
       pagination: {},
+      notFinishedCount: 0,
       taskInfo: {},
     },
   },
@@ -40,6 +49,20 @@ export default {
       });
       if (callback) callback();
     },
+    *countNotFinished(_, { call, put }) {
+      const response = yield call(queryCountNotFinished);
+      yield put({
+        type: 'saveCount',
+        payload: response,
+      });
+    },
+    *countByMe({ payload }, { call, put }) {
+      const response = yield call(queryCountByMe, payload);
+      yield put({
+        type: 'saveCount',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
@@ -60,6 +83,14 @@ export default {
         ...state,
         data,
       };
+    },
+    saveCount(state, action) {
+      console.log('action.payload: ', action.payload);
+      const data = { ...state.data, notFinishedCount: action.payload }
+      return {
+        ...state,
+        data,
+      }
     },
   },
 };
