@@ -855,12 +855,12 @@ export default class HostList extends PureComponent {
             <FormItem label="系统类型">
               {getFieldDecorator('lifecycleStatus')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="4">{LIFECYCLE_STATUS[4]}</Option>
-                  <Option value="3">{LIFECYCLE_STATUS[3]}</Option>
-                  <Option value="2">{LIFECYCLE_STATUS[2]}</Option>
-                  <Option value="1">{LIFECYCLE_STATUS[1]}</Option>
-                  <Option value="0">{LIFECYCLE_STATUS[0]}</Option>
-                  <Option value="5">{LIFECYCLE_STATUS[5]}</Option>
+                  <Option value="4">{LIFECYCLE_STATUS[4].status}</Option>
+                  <Option value="3">{LIFECYCLE_STATUS[3].status}</Option>
+                  <Option value="2">{LIFECYCLE_STATUS[2].status}</Option>
+                  <Option value="1">{LIFECYCLE_STATUS[1].status}</Option>
+                  <Option value="0">{LIFECYCLE_STATUS[0].status}</Option>
+                  <Option value="5">{LIFECYCLE_STATUS[5].status}</Option>
                 </Select>
               )}
             </FormItem>

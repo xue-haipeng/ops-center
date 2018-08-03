@@ -222,7 +222,7 @@ const CreateForm = Form.create({
       actualDate: Form.createFormField({
         value: isModify
           ? selectedItem.actualDate && moment(selectedItem.actualDate.toString())
-          : null,
+          : moment(),
       }),
       progress: Form.createFormField({
         value: isModify
@@ -730,21 +730,21 @@ export default class TaskList extends PureComponent {
                 <Row gutter={24}>
                   <Col span={20}>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
-                      <Col span={8}>
-                        <p style={{ margin: 0 }}>创建时间：{`${record.createdTime}`.replace("T", " ")}</p>
-                      </Col>
-                      <Col span={8}>
+                      <Col span={7}>
                         <p style={{ margin: 0 }}>开始日期：{record.startDate}</p>
+                      </Col>
+                      <Col span={9}>
+                        <p style={{ margin: 0 }}>创建时间：{`${record.createdTime}`.replace("T", " ")}</p>
                       </Col>
                       <Col span={8}>
                         <p style={{ margin: 0 }}>{ record.status === 4 ? `完成日期：${record.actualDate}` : `当前状态：${STATUS[record.status]}` }</p>
                       </Col>
                     </Row>
                     <Row gutter={24}>
-                      <Col span={8}>
+                      <Col span={7}>
                         <p style={{ margin: 0 }}>参与人：{record.participant}</p>
                       </Col>
-                      <Col gutter={16}>
+                      <Col gutter={17}>
                         <p style={{ margin: 0 }}>任务描述：{record.description}</p>
                       </Col>
                     </Row>
