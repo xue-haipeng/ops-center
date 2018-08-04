@@ -622,10 +622,13 @@ export default class TaskList extends PureComponent {
 
     const extraContent = (
       <div className={styles.extraContent}>
-        {/*   <div className={styles.statItem}>
+        <div className={styles.statItem}>
           <p>我参与的任务</p>
-          <p>4</p>
-        </div> */}
+          <p>
+            {currentUser.taskNotFinished}
+            <span> {currentUser.taskTotalOfMe}</span>
+          </p>
+        </div>
         <div className={styles.statItem}>
           <p>项目组总任务</p>
           <p>
@@ -733,11 +736,16 @@ export default class TaskList extends PureComponent {
                       <Col span={7}>
                         <p style={{ margin: 0 }}>开始日期：{record.startDate}</p>
                       </Col>
-                      <Col span={9}>
-                        <p style={{ margin: 0 }}>创建时间：{`${record.createdTime}`.replace("T", " ")}</p>
+                      <Col span={7} style={{ paddingLeft: 0 }}>
+                        {/* <p style={{ margin: 0 }}>{ record.status === 4 ? `完成日期：${record.actualDate}` : `当前状态：${STATUS[record.status].name}` }</p> */}
+                        {
+                          record.status === 4
+                            ? <p style={{ margin: 0 }}>完成日期：{record.actualDate}</p>
+                            : <p style={{ margin: 0 }}>当前状态：<Badge status={STATUS[record.status].status} text={STATUS[record.status].name} /></p>
+                        }
                       </Col>
-                      <Col span={8}>
-                        <p style={{ margin: 0 }}>{ record.status === 4 ? `完成日期：${record.actualDate}` : `当前状态：${STATUS[record.status]}` }</p>
+                      <Col span={10}>
+                        <p style={{ margin: 0 }}>创建时间：{`${record.createdTime}`.replace("T", " ")}</p>
                       </Col>
                     </Row>
                     <Row gutter={24}>

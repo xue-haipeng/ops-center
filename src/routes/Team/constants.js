@@ -21,7 +21,12 @@ export const CATEGORY = {
 };
 
 export const STATUS = [
-  '未开始','进行中','暂停中', '阻塞中', '已终止', '已完成', '已终止',
+  { name: '未开始', status: 'default' },
+  { name: '进行中', status: 'processing' },
+  { name: '暂停中', status: 'warning' },
+  { name: '阻塞中', status: 'warning' },
+  { name: '已完成', status: 'success' },
+  { name: '已终止', status: 'error' },
 ];
 
 export const MEMBERS = [
