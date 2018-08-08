@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { Form, Input, Button, Card } from 'antd';
+import { passwordStrengthTest } from '../../utils/utils';
 
 const FormItem = Form.Item;
 
@@ -16,6 +17,9 @@ export default class BasicForms extends PureComponent {
     }
   };
   validateToNextPassword = (rule, value, callback) => {
+    if (value && (value.length < 8 || passwordStrengthTest(value) < 2)) {
+      callback('密码强度太弱');
+    }
     const { form } = this.props.form;
     if (value && this.state.confirmDirty) {
       form.validateFields(['confirm'], { force: true });
@@ -35,10 +39,15 @@ export default class BasicForms extends PureComponent {
         this.props.handlePassSubmit(values);
       }
     });
+    this.props.form.setFieldsValue({
+      oldPass: '',
+      password: '',
+      confirm: '',
+    })
   };
   render() {
     const { submitting } = this.props;
-    const { getFieldDecorator, getFieldValue } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
 
     const formItemLayout = {
       labelCol: {

@@ -40,6 +40,10 @@ const menuData = [
         name: '重点任务跟踪',
         path: 'task',
       },
+      {
+        name: '用户管理',
+        path: 'user',
+      },
     ],
   },
   /*    {

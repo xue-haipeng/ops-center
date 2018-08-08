@@ -55,6 +55,15 @@ export async function refreshAccessToken(config) {
     });
 }
 
+export async function createAccount(payload) {
+  return request('/users', {
+    method: 'POST',
+    data: {
+      ...payload,
+    },
+  });
+}
+
 export async function updateAccount(payload) {
   return request('/users', {
     method: 'PUT',
@@ -69,5 +78,21 @@ export async function updatePasswd(payload) {
     data: {
       ...payload,
     },
+  });
+}
+
+export async function updatePasswdByAdmin(payload) {
+  return request(`/users/passwdAdmin`, {
+    method: 'PUT',
+    data: {
+      ...payload,
+    },
+  });
+}
+
+export async function deleteAccount(id) {
+  console.log('payload: ', id);
+  return request(`/users/${id}`, {
+    method: 'DELETE',
   });
 }

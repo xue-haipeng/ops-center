@@ -180,3 +180,23 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(?::\d+)?|(
 export function isUrl(path) {
   return reg.test(path);
 }
+
+export function passwordStrengthTest(pass) {
+  let level = 0;
+  if (pass == null || pass === '') {
+    return level;
+  }
+  if (/[0-9]/.test(pass)) {
+    level += 1;
+  }
+  if (/[a-z]/.test(pass)) {
+    level += 1;
+  }
+  if (/[A-Z]/.test(pass)) {
+    level += 1;
+  }
+  if (/[^0-9a-zA-Z_]/.test(pass)) {
+    level += 1;
+  }
+  return level;
+}

@@ -1,5 +1,12 @@
 import { message } from 'antd';
-import { query as queryUsers, queryCurrent, updateAccount, updatePasswd } from '../services/user';
+import {
+  createAccount,
+  deleteAccount,
+  query as queryUsers,
+  queryCurrent,
+  updateAccount,
+  updatePasswd, updatePasswdByAdmin,
+} from '../services/user';
 
 export default {
   namespace: 'user',
@@ -24,6 +31,14 @@ export default {
         payload: response,
       });
     },
+    *createAccount({ payload }, { call }) {
+      const response = yield call(createAccount, payload);
+      if (response.status === 0) {
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
+    },
     *updateAccount({ payload }, { call }) {
       const response = yield call(updateAccount, payload);
       if (response.status === 0) {
@@ -40,6 +55,22 @@ export default {
         message.error(response.message);
       }
     },
+    *changePasswdByAdmin({ payload }, { call }) {
+      const response = yield call(updatePasswdByAdmin, payload);
+      if (response.status === 0) {
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
+    },
+    *deleteUser({ payload }, { call }) {
+      const response = yield call(deleteAccount, payload);
+      if (response.status === 0) {
+        message.success(response.message);
+      } else {
+        message.error(response.message);
+      }
+    },
   },
 
   reducers: {
@@ -50,7 +81,13 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
-      const currentUser = { ...action.payload.account, notifyCount: action.payload.notifyCount };
+      const { account, notifyCount, taskNotFinished, taskTotalOfMe } = action.payload;
+      const currentUser = {
+        ...account,
+        notifyCount,
+        taskNotFinished,
+        taskTotalOfMe,
+      };
       return {
         ...state,
         currentUser,

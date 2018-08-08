@@ -34,39 +34,6 @@ const Option = Select.Option;
 const { TextArea } = Input;
 const RadioGroup = Radio.Group;
 
-const members = [
-  {
-    id: 'members-1',
-    title: '科学搬砖组',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png',
-    link: '',
-  },
-  {
-    id: 'members-2',
-    title: '程序员日常',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/cnrhVkzwxjPwAaCfPbdc.png',
-    link: '',
-  },
-  {
-    id: 'members-3',
-    title: '设计天团',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/gaOngJwsRYRaVAuXXcmB.png',
-    link: '',
-  },
-  {
-    id: 'members-4',
-    title: '中二少女团',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/ubnKSIfAJTxIgXOKlciN.png',
-    link: '',
-  },
-  {
-    id: 'members-5',
-    title: '骗你学计算机',
-    logo: 'https://gw.alipayobjects.com/zos/rmsportal/WhxKECPNujWoWEFNdnJE.png',
-    link: '',
-  },
-];
-
 const radarOriginData = [
   {
     name: '个人',
@@ -253,8 +220,6 @@ const CreateForm = Form.create({
     handleAdd,
     handleUpdate,
     handleCancel,
-    currentUser,
-    percent,
   } = props;
 
   const formItemLayout = {
@@ -477,9 +442,6 @@ export default class TaskList extends PureComponent {
     dispatch({
       type: 'user/fetchCurrent',
     });
-    dispatch({
-      type: 'team/countNotFinished',
-    });
 /*    dispatch({
       type: 'team/countNotFinished',
       payload: user.currentUser.realName,
@@ -601,9 +563,8 @@ export default class TaskList extends PureComponent {
       user: { currentUser },
     } = this.props;
 
-    console.log('data: ', data);
     const allTasksCount = data && data.pagination.total;
-    const allNotFinishedCount = data && data.notFinishedCount;
+    const { taskNotFinished: taskNotFinishedOfMe, taskTotalOfMe } = currentUser;
     const greeting = new Date().getHours() < 12 ? '早上好，' : '下午好，';
     const pageHeaderContent = (
       <div className={styles.pageHeaderContent}>
@@ -625,12 +586,12 @@ export default class TaskList extends PureComponent {
         <div className={styles.statItem}>
           <p>我参与的任务</p>
           <p>
-            {currentUser.taskNotFinished}
-            <span> {currentUser.taskTotalOfMe}</span>
+            {taskNotFinishedOfMe}
+            <span> / {taskTotalOfMe}</span>
           </p>
         </div>
         <div className={styles.statItem}>
-          <p>项目组总任务</p>
+          <p>所有任务</p>
           <p>
             {allTasksCount}
             {/* <span> {allTasksCount}</span> */}
@@ -759,14 +720,19 @@ export default class TaskList extends PureComponent {
                   </Col>
                   <Col span={4}>
                     <Button size="small" style={{ marginRight: 10 }} onClick={() => this.onOpen('修改任务', record)}>修改</Button>
-                    <Popconfirm
-                      title="确定要删除这项任务？"
-                      okText="Yes"
-                      cancelText="No"
-                      onConfirm={() => this.handleDelete(record.id)}
-                    >
-                      <Button type="danger" size="small">删除</Button>
-                    </Popconfirm>
+                    {
+                      record.participant.split(',').indexOf(currentUser.realName) > -1 &&
+                      (
+                        <Popconfirm
+                          title="确定要删除这项任务？"
+                          okText="Yes"
+                          cancelText="No"
+                          onConfirm={() => this.handleDelete(record.id)}
+                        >
+                          <Button type="danger" size="small">删除</Button>
+                        </Popconfirm>
+                      )
+                    }
                   </Col>
                 </Row>
               )}

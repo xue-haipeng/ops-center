@@ -49,3 +49,15 @@ export const MEMBERS = [
   '赵鑫',
   '周惟',
 ];
+
+export const USER_STATUS = [
+  { code: 0, name: '已激活', status: 'success' },
+  { code: 1, name: '未激活', status: 'default' },
+  { code: 2, name: '已锁定', status: 'error' },
+  { code: 3, name: '已过期', status: 'warning' },
+];
+
+export const AUTHORITIES = [
+  { code: 1, name: '管理员' },
+  { code: 2, name: '普通用户' },
+];
