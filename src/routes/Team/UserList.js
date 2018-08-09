@@ -66,7 +66,6 @@ export default class UserList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -74,12 +73,13 @@ export default class UserList extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       this.setState({
         formValues: values,
       });
+
+      console.log('values: ', values);
 
       dispatch({
         type: 'user/fetch',
@@ -244,16 +244,17 @@ export default class UserList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(<Input placeholder="请输入" />)}
+            <FormItem label="姓名">
+              {getFieldDecorator('realName')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('status')(
+            <FormItem label="项目组">
+              {getFieldDecorator('team')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+                  <Option value="平台应用组">平台应用组</Option>
+                  <Option value="虚拟化组">虚拟化组</Option>
+                  <Option value="存储组">存储组</Option>
                 </Select>
               )}
             </FormItem>
@@ -343,6 +344,10 @@ export default class UserList extends PureComponent {
                 value: '虚拟化组',
                 label: '虚拟化组',
               },
+              {
+                value: '存储组',
+                label: '存储组',
+              },
             ],
           },
         ],
@@ -374,13 +379,13 @@ export default class UserList extends PureComponent {
     );
 
     return (
-      <PageHeaderLayout title="查询表格">
+      <PageHeaderLayout title="用户列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={() => this.showModal()}>
-                新建
+              <Button type="dashed" onClick={() => this.showModal()} style={{ width: '100%' }} icon="plus">
+                添加用户
               </Button>
             </div>
             <Table columns={columns} dataSource={list} rowKey="id" />
@@ -403,7 +408,7 @@ export default class UserList extends PureComponent {
               label={
                 <span>
                     头像&nbsp;
-                  <Tooltip title="JPG/PNG格式，小于200Kb">
+                  <Tooltip title="JPG/PNG格式，小于200Kb的图片">
                     <Icon type="question-circle-o" />
                   </Tooltip>
                 </span>
@@ -434,7 +439,7 @@ export default class UserList extends PureComponent {
                   ) : (
                     <div>
                       <Icon type={this.state.loading ? 'loading' : 'plus'} />
-                      <div className="ant-upload-text">Upload</div>
+                      <div className="ant-upload-text">上传</div>
                     </div>
                   )}
                 </Upload>
@@ -444,17 +449,17 @@ export default class UserList extends PureComponent {
               {getFieldDecorator('username', {
                 initialValue: username,
                 rules: [{ required: true, message: '请填写用户名', whitespace: true }],
-              })(<Input />)}
+              })(<Input placeholder="建议使用邮箱前缀" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="姓名">
               {getFieldDecorator('realName', {
                 initialValue: realName,
                 rules: [{ required: true, message: '请填写姓名', whitespace: true }],
-              })(<Input />)}
+              })(<Input placeholder="真实姓名" />)}
             </FormItem>
             {!id && (
               <FormItem {...formItemLayout} label="密码">
-                {getFieldDecorator('password')(<Input type='password' />)}
+                {getFieldDecorator('password')(<Input type='password' placeholder="登陆密码" />)}
               </FormItem>
             )}
             <FormItem {...formItemLayout} label="邮箱">
@@ -466,7 +471,7 @@ export default class UserList extends PureComponent {
                     message: '请填写请填写邮箱',
                   },
                 ],
-              })(<Input addonAfter={suffixSelector} style={{ width: '100%' }} />)}
+              })(<Input addonAfter={suffixSelector} placeholder="邮箱前缀" style={{ width: '100%' }} />)}
             </FormItem>
             <FormItem {...formItemLayout} label="角色">
               {getFieldDecorator('authorities', {
@@ -488,13 +493,13 @@ export default class UserList extends PureComponent {
                 initialValue:
                   company || department || team
                     ? [company, department, team]
-                    : ['中油瑞飞', '云计算业务部', '平台应用组'],
-              })(<Cascader options={teams} />)}
+                    : [],
+              })(<Cascader options={teams} placeholder="请选择" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="手机号">
               {getFieldDecorator('mobile', {
                 initialValue: mobile,
-              })(<Input />)}
+              })(<Input placeholder="个人手机号" />)}
             </FormItem>
             {id && (
               <FormItem {...formItemLayout} label="状态">

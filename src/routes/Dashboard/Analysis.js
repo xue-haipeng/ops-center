@@ -201,7 +201,7 @@ export default class Analysis extends Component {
                 </Tooltip>
               }
               total={() => 126560}
-              footer={<Field label="虚机总计" value={`${numeral(2423).format('0,0')}`} />}
+              footer={<Field label="主机总计" value={`${numeral(2123).format('0,0')}`} />}
               contentHeight={46}
             >
               <Trend flag="up" style={{ marginRight: 16 }}>

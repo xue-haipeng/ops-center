@@ -76,7 +76,8 @@ class UserLayout extends React.PureComponent {
               <Redirect exact from="/user" to="/user/login" /><Redirect from="/user" to={getLoginPathWithRedirectPath()} />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
+          {/* <GlobalFooter links={links} copyright={copyright} /> */}
+          <GlobalFooter copyright={copyright} />
         </div>
       </DocumentTitle>
     );

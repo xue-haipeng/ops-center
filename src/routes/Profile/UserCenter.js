@@ -41,6 +41,10 @@ const teams = [
             value: '虚拟化组',
             label: '虚拟化组',
           },
+          {
+            value: '存储组',
+            label: '存储组',
+          },
         ],
       },
     ],

@@ -718,11 +718,10 @@ export default class TaskList extends PureComponent {
                       </Col>
                     </Row>
                   </Col>
-                  <Col span={4}>
-                    <Button size="small" style={{ marginRight: 10 }} onClick={() => this.onOpen('修改任务', record)}>修改</Button>
-                    {
-                      record.participant.split(',').indexOf(currentUser.realName) > -1 &&
-                      (
+                  { record.participant.split(',').indexOf(currentUser.realName) > -1 &&
+                    (
+                      <Col span={4}>
+                        <Button size="small" style={{ marginRight: 10 }} onClick={() => this.onOpen('修改任务', record)}>修改</Button>
                         <Popconfirm
                           title="确定要删除这项任务？"
                           okText="Yes"
@@ -731,9 +730,9 @@ export default class TaskList extends PureComponent {
                         >
                           <Button type="danger" size="small">删除</Button>
                         </Popconfirm>
-                      )
-                    }
-                  </Col>
+                      </Col>
+                    )
+                  }
                 </Row>
               )}
               dataSource={data.list}

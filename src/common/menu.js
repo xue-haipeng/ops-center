@@ -42,6 +42,7 @@ const menuData = [
       },
       {
         name: '用户管理',
+        authority: ['ROLE_ADMIN'],
         path: 'user',
       },
     ],

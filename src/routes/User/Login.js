@@ -71,7 +71,7 @@ export default class LoginPage extends Component {
               记住我
             </Checkbox>
             <Tooltip placement="rightTop" title="请线下联系重置">
-              <a style={{ float: 'right' }} href="">
+              <a style={{ float: 'right' }}>
                 忘记密码
               </a>
             </Tooltip>
