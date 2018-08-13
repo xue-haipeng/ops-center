@@ -7,6 +7,7 @@ import {
   removeTask,
   updateTask,
 } from '../services/team';
+import { message } from 'antd';
 
 
 export default {
@@ -30,11 +31,21 @@ export default {
       });
     },
     *add({ payload, callback }, { call }) {
-      yield call(addTask, payload);
+      const res = yield call(addTask, payload);
+      if (res && res.id) {
+        message.success('添加成功', 4);
+      } else {
+        message.error('添加失败', 4);
+      }
       if (callback) callback();
     },
     *update({ payload, callback }, { call }) {
-      yield call(updateTask, payload);
+      const res = yield call(updateTask, payload);
+      if (res && res.id) {
+        message.success('更新成功', 4);
+      } else {
+        message.error('更新失败', 4);
+      }
       if (callback) callback();
     },
     *remove({ payload, callback }, { call }) {
@@ -85,7 +96,6 @@ export default {
       };
     },
     saveCount(state, action) {
-      console.log('action.payload: ', action.payload);
       const data = { ...state.data, notFinishedCount: action.payload }
       return {
         ...state,

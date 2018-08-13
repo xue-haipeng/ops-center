@@ -249,6 +249,14 @@ const CreateForm = Form.create({
   const okHandle = () => {
     form.validateFields((err, fieldsValue) => {
       if (err) return;
+      const { status, progress } = fieldsValue;
+      if (status === 4 && progress !== 100 || status === 0 && progress !== 0) {
+        message.error('当前状态与当前进度不匹配，请修改！');
+        return;
+      }
+      if (status !== 4 && progress === 100) {
+        message.warn('因当前进度为100%，当前状态将被置为已完成！')
+      }
       form.resetFields();
       const values = {
         ...fieldsValue,
@@ -410,7 +418,9 @@ const CreateForm = Form.create({
           {...formItemLayout}
           label="任务描述"
         >
-          {form.getFieldDecorator('description')(<TextArea rows={3} />)}
+          {form.getFieldDecorator('description', {
+            rules: [{ required: true, message: '请填写任务描述' }],
+          })(<TextArea rows={3} />)}
         </FormItem>
       </Form>
     </Modal>
@@ -471,30 +481,6 @@ export default class TaskList extends PureComponent {
         ...fields,
       },
     });
-    message.success('添加成功', 4);
-    this.setState({
-      visible: false,
-    });
-    setTimeout(
-      () =>
-        this.props.dispatch({
-          type: 'team/fetch',
-          payload: {
-            page: this.state.pagination.current,
-            size: this.state.pagination.pageSize,
-          },
-        }),
-      800
-    );
-  };
-  handleUpdate = fields => {
-    this.props.dispatch({
-      type: 'team/update',
-      payload: {
-        ...fields,
-      },
-    });
-    message.success('更新成功', 4);
     this.setState({
       visible: false,
     });
@@ -509,6 +495,40 @@ export default class TaskList extends PureComponent {
         }),
       1000
     );
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'user/fetchCurrent',
+        }), 1000
+    )
+  };
+  handleUpdate = fields => {
+    this.props.dispatch({
+      type: 'team/update',
+      payload: {
+        ...fields,
+      },
+    });
+    this.setState({
+      visible: false,
+    });
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'team/fetch',
+          payload: {
+            page: this.state.pagination.current,
+            size: this.state.pagination.pageSize,
+          },
+        }),
+      1000
+    );
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'user/fetchCurrent',
+        }), 1000
+    )
   };
 
   handleDelete = (id) => {
@@ -530,6 +550,12 @@ export default class TaskList extends PureComponent {
         }),
       1000
     );
+    setTimeout(
+      () =>
+        this.props.dispatch({
+          type: 'user/fetchCurrent',
+        }), 1000
+    )
   };
 
   handleCancel = () => {
@@ -558,7 +584,6 @@ export default class TaskList extends PureComponent {
 
   render() {
     const {
-      project: { notice },
       team: { data },
       user: { currentUser },
     } = this.props;
