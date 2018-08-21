@@ -9,15 +9,15 @@ export const SIGNIFICANCE = [
 ];
 
 export const CATEGORY = {
-  'M': '运维',
-  'I': '实施',
-  'T': '排错',
-  'L': '培训',
-  'D': '文档',
-  'P': 'PaaS',
-  'B': '大数据',
-  'S': '支持',
-  'O': '其它',
+  'M': { name: '运维', color: '#e8ab88' },
+  'I': { name: '实施', color: '#6bdd98' },
+  'T': { name: '排错', color: '#f87d90' },
+  'L': { name: '培训', color: '#a284dc' },
+  'D': { name: '设计', color: '#35d0e6' },
+  'P': { name: 'PaaS', color: '#5fb5f0' },
+  'B': { name: '大数据', color: '#f1af43' },
+  'S': { name: '支持', color: '#f68ac8' },
+  'O': { name: '其它', color: '#abbba2' },
 };
 
 export const STATUS = [

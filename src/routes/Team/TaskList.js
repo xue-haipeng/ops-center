@@ -24,6 +24,7 @@ import {
 } from 'antd';
 import { Radar, TagCloud } from 'components/Charts';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import Ellipsis from '../../components/Ellipsis';
 
 import { CATEGORY, MEMBERS, STATUS } from './constants';
 import styles from './TaskList.less';
@@ -90,13 +91,20 @@ for (let i = 0; i < 50; i += 1) {
 
 const columns = [
   // { title: '编号', dataIndex: 'sn', key: 'sn' },
-  { title: '标题', dataIndex: 'title', key: 'title' },
+  {
+    title: '标题',
+    dataIndex: 'title',
+    key: 'title',
+    render: val => (
+      <Ellipsis length={24}>{val}</Ellipsis>
+    ),
+  },
   {
     title: '分类',
     dataIndex: 'category',
     key: 'category',
     render: val => (
-      <Badge count={CATEGORY[val]} style={{ backgroundColor: '#80bba0' }} />
+      <Badge count={CATEGORY[val].name} style={{ backgroundColor: `${CATEGORY[val].color}` }} />
     ),
   },
   {
@@ -250,7 +258,7 @@ const CreateForm = Form.create({
     form.validateFields((err, fieldsValue) => {
       if (err) return;
       const { status, progress } = fieldsValue;
-      if (status === 4 && progress !== 100 || status === 0 && progress !== 0) {
+      if (status === 4 && progress !== 100 || status === 0 && (progress !== null && progress !== 0)) {
         message.error('当前状态与当前进度不匹配，请修改！');
         return;
       }
@@ -427,10 +435,11 @@ const CreateForm = Form.create({
   );
 });
 
-@connect(({ project, team, user, loading }) => ({
+@connect(({ project, team, user, global, loading }) => ({
   project,
   team,
   user,
+  global,
   loading,
 /*  projectLoading: loading.effects['project/fetchNotice'],
   activitiesLoading: loading.effects['activities/fetchList'], */
@@ -586,7 +595,10 @@ export default class TaskList extends PureComponent {
     const {
       team: { data },
       user: { currentUser },
+      global: { collapsed },
     } = this.props;
+
+    console.log('collapsed: ', collapsed);
 
     const allTasksCount = data && data.pagination.total;
     const { taskNotFinished: taskNotFinishedOfMe, taskTotalOfMe } = currentUser;
