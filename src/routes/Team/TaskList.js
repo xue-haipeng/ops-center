@@ -144,7 +144,7 @@ const columns = [
   { title: '预计完成日期', dataIndex: 'scheduledDate', key: 'scheduledDate' },
   // { title: '实际完成日期', dataIndex: 'actualDate', key: 'actualDate' },
   {
-    title: '进度',
+    title: '当前进度',
     dataIndex: 'progress',
     key: 'progress',
     width: 160,
@@ -440,7 +440,7 @@ const CreateForm = Form.create({
   team,
   user,
   global,
-  loading,
+  loading: loading.models.team,
 /*  projectLoading: loading.effects['project/fetchNotice'],
   activitiesLoading: loading.effects['activities/fetchList'], */
 }))
@@ -596,9 +596,10 @@ export default class TaskList extends PureComponent {
       team: { data },
       user: { currentUser },
       global: { collapsed },
+      loading,
     } = this.props;
 
-    console.log('collapsed: ', collapsed);
+    console.log('currentUser: ', currentUser);
 
     const allTasksCount = data && data.pagination.total;
     const { taskNotFinished: taskNotFinishedOfMe, taskTotalOfMe } = currentUser;
@@ -613,7 +614,7 @@ export default class TaskList extends PureComponent {
         </div>
         <div className={styles.content}>
           <div className={styles.contentTitle}>{greeting}{currentUser.realName}，祝你开心每一天！</div>
-          <div>记录和分享每一次辛勤的劳动付出，让工作更加清晰调理！</div>
+          <div>{currentUser.company} / {currentUser.department} / {currentUser.team} </div>
         </div>
       </div>
     );
@@ -727,6 +728,7 @@ export default class TaskList extends PureComponent {
             </Button>
             <Table
               columns={columns}
+              loading={loading}
               expandedRowRender={record => (
                 <Row gutter={24}>
                   <Col span={20}>

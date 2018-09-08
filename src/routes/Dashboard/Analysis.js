@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
+import moment from 'moment'
 import {
   Row,
   Col,
@@ -98,7 +99,7 @@ export default class Analysis extends Component {
     const { hostDistrTypeSelected } = this.state;
     const { chart, loading } = this.props;
     const {
-      visitData,
+      logCount,
       visitData2,
       ascsCpuCurr,
       nHoursHostsCpuAvg7,
@@ -106,6 +107,13 @@ export default class Analysis extends Component {
       hostDistrType,
     } = chart;
 
+/*    const logCount = [];
+    for (let i = 0; i < 24; i += 1) {
+      logCount.push({
+        x: moment({hour: i, minute: 0}).format("HH:mm"),
+        y: Math.floor(Math.random() * 100) + 10,
+      })
+    } */
     const menu = (
       <Menu>
         <Menu.Item>操作一</Menu.Item>
@@ -222,7 +230,7 @@ export default class Analysis extends Component {
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={numeral(8846).format('0,0')}
+              total={numeral(8000000).format('0,0')}
               footer={
                 <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                   <Trend flag="up" style={{ marginRight: 16 }}>
@@ -235,7 +243,7 @@ export default class Analysis extends Component {
               }
               contentHeight={46}
             >
-              <MiniArea color="#975FE4" data={visitData} />
+              <MiniArea color="#975FE4" data={logCount} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -252,7 +260,7 @@ export default class Analysis extends Component {
               footer={<Field label="示例说明" value="60%" />}
               contentHeight={46}
             >
-              <MiniBar data={visitData} />
+              <MiniBar data={logCount} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>

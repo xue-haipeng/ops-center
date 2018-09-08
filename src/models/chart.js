@@ -4,7 +4,7 @@ export default {
   namespace: 'chart',
 
   state: {
-    visitData: [],
+    logCount: [{"id":1,"x":"2018-09-07T10:39:38","y":7851},{"id":2,"x":"2018-09-07T11:09:59","y":7867}],
     visitData2: [],
     ascsCpuCurr: [],
     nHoursHostsCpuAvg7: [{"hostname":"EBSAP8001","rate":99.9},{"hostname":"EBSAP4001","rate":99.8}],
@@ -78,7 +78,7 @@ export default {
     },
     clear() {
       return {
-        visitData: [],
+        logCount: [],
         visitData2: [],
         ascsCpuCurr: [],
         searchData: [],

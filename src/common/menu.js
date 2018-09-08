@@ -11,18 +11,18 @@ const menuData = [
         name: '综合报表',
         path: 'analysis',
       },
-/*      {
+      {
         name: '性能监控',
-        path: 'monitor',
+        path: 'performance',
       },
-      {
-        name: '任务看板',
-        path: 'task',
-      },
-      {
-        name: '备份巡检',
-        path: 'backup',
-      }, */
+/*      {
+              name: '任务看板',
+              path: 'task',
+            },
+            {
+              name: '备份巡检',
+              path: 'backup',
+            }, */
       /*      {
         name: '工作台',
         path: 'workplace',

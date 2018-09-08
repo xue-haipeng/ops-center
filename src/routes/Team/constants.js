@@ -15,8 +15,8 @@ export const CATEGORY = {
   'L': { name: '培训', color: '#a284dc' },
   'D': { name: '设计', color: '#35d0e6' },
   'P': { name: 'PaaS', color: '#5fb5f0' },
-  'B': { name: '大数据', color: '#f1af43' },
-  'S': { name: '支持', color: '#f68ac8' },
+  'B': { name: '大数据', color: '#f68ac8' },
+  'S': { name: '支持', color: '#f1af43' },
   'O': { name: '其它', color: '#abbba2' },
 };
 

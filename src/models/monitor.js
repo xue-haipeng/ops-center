@@ -1,24 +1,24 @@
-import { queryTags } from '../services/api';
+import { queryCpuUtlzData } from '../services/monitor';
 
 export default {
   namespace: 'monitor',
 
   state: {
-    tags: [],
+    keySysCpuUtlz: [],
   },
 
   effects: {
-    *fetchTags(_, { call, put }) {
-      const response = yield call(queryTags);
+    *fetch(_, { call, put }) {
+      const response = yield call(queryCpuUtlzData);
       yield put({
-        type: 'saveTags',
-        payload: response.list,
+        type: 'save',
+        payload: response,
       });
     },
   },
 
   reducers: {
-    saveTags(state, action) {
+    save(state, action) {
       return {
         ...state,
         tags: action.payload,

@@ -41,7 +41,7 @@ function checkStatus(response) {
 
 const instance = axios.create({
   // baseURL: process.env.BASE_API,
-  baseURL: 'http://11.11.47.72:9999/api/v1/',
+  baseURL: 'http://11.11.47.72:8888/api/v1/',
   timeout: 10000,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',
