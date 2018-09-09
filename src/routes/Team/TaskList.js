@@ -20,7 +20,7 @@ import {
   Badge,
   message,
   Slider,
-  Popconfirm,
+  Popconfirm, Switch, Checkbox,
 } from 'antd';
 import { Radar, TagCloud } from 'components/Charts';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -34,6 +34,8 @@ const FormItem = Form.Item;
 const Option = Select.Option;
 const { TextArea } = Input;
 const RadioGroup = Radio.Group;
+const RadioButton = Radio.Button;
+const { Search } = Input;
 
 const radarOriginData = [
   {
@@ -638,91 +640,35 @@ export default class TaskList extends PureComponent {
       </div>
     );
 
+    const listHeader = (
+      <div>
+        <Checkbox onChange={() => {console.log("Only Me!")}}>只看我参与的</Checkbox>
+        <RadioGroup defaultValue="all" style={{ marginLeft: '20px' }} onChange={(value) => { console.log("RadioGroup", value.target.value)}}>
+          <RadioButton value="all">全部任务</RadioButton>
+          <RadioButton value="mine">我参与的</RadioButton>
+          <RadioButton value="progress">未完成的</RadioButton>
+        </RadioGroup>
+        {/*        <span>
+          我参与的：<Switch defaultChecked onChange={() => { console.log() }} />
+        </span>
+        <span style={{ marginLeft: '20px' }}>
+          未完成的：<Switch defaultChecked onChange={() => { console.log() }} />
+        </span> */}
+        <Search placeholder="搜索标题或描述 ..." style={{ width: '272px', marginLeft: '20px' }} onSearch={(e) => console.log(e)} />
+      </div>
+    );
+
     return (
       <PageHeaderLayout content={pageHeaderContent} extraContent={extraContent}>
-        {/* <Row gutter={24}>
-          <Col xl={16} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              className={styles.projectList}
-              style={{ marginBottom: 24 }}
-              title="进行中的项目"
-              bordered={false}
-              extra={<Link to="/">全部项目</Link>}
-              loading={projectLoading}
-              bodyStyle={{ padding: 0 }}
-            >
-              {notice.map(item => (
-                <Card.Grid className={styles.projectGrid} key={item.id}>
-                  <Card bodyStyle={{ padding: 0 }} bordered={false}>
-                    <Card.Meta
-                      title={
-                        <div className={styles.cardTitle}>
-                          <Avatar size="small" src={item.logo} />
-                          <Link to={item.href}>{item.title}</Link>
-                        </div>
-                      }
-                      description={item.description}
-                    />
-                    <div className={styles.projectItemContent}>
-                      <Link to={item.memberLink}>{item.member || ''}</Link>
-                      {item.updatedAt && (
-                        <span className={styles.datetime} title={item.updatedAt}>
-                          {moment(item.updatedAt).fromNow()}
-                        </span>
-                      )}
-                    </div>
-                  </Card>
-                </Card.Grid>
-              ))}
-            </Card>
-            <Card
-              bodyStyle={{ padding: 0 }}
-              bordered={false}
-              className={styles.activeCard}
-              title="动态"
-            />
-          </Col>
-          <Col xl={8} lg={24} md={24} sm={24} xs={24}>
-            <Card
-              style={{ marginBottom: 24 }}
-              bordered={false}
-              title="工作量分布"
-              loading={radarData.length === 0}
-            >
-              <div className={styles.chart}>
-                <Radar hasLegend height={343} data={radarData} />
-              </div>
-            </Card>
-            <Card
-              style={{ marginBottom: 24 }}
-              title="标签云"
-              bordered={false}
-              bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
-            >
-              <TagCloud data={tags} height={161} />
-            </Card>
-            <Card
-              bodyStyle={{ paddingTop: 12, paddingBottom: 12 }}
-              bordered={false}
-              title="月度MVP"
-            >
-              <div className={styles.members}>
-                <Row gutter={48}>
-                  {members.map(item => (
-                    <Col span={12} key={`members-item-${item.id}`}>
-                      <Link to={item.link}>
-                        <Avatar src={item.logo} size="small" />
-                        <span className={styles.member}>{item.title}</span>
-                      </Link>
-                    </Col>
-                  ))}
-                </Row>
-              </div>
-            </Card>
-          </Col>
-        </Row> */}
         <Row gutter={24} style={{ marginTop: 24, marginLeft: 3, marginRight: 3 }}>
-          <Card style={{ paddingLeft: 0, paddingRight: 0 }}>
+          <Card
+            className={styles.listCard}
+            bordered={false}
+            title="任务列表"
+            style={{ paddingLeft: 0, paddingRight: 0 }}
+            // bodyStyle={{ padding: '0 32px 40px 32px' }}
+            extra={listHeader}
+          >
             <Button type="dashed" onClick={() => this.onOpen('新建任务')} style={{ width: '100%', marginBottom: 8 }} icon="plus">
               添加任务
             </Button>

@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Row, Col, Card, Tooltip, Calendar, Badge } from 'antd';
+import { Row, Col, Card, Tooltip, Calendar, Badge, Radio, Input } from 'antd';
 import numeral from 'numeral';
 import { Pie, WaterWave, Gauge, TagCloud } from 'components/Charts';
 import NumberInfo from 'components/NumberInfo';
@@ -10,6 +10,9 @@ import Authorized from '../../utils/Authorized';
 import styles from './Task.less';
 
 const { Secured } = Authorized;
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group;
+const { Search } = Input;
 
 const targetTime = new Date().getTime() + 3900000;
 
@@ -88,6 +91,17 @@ export default class Monitor extends PureComponent {
   render() {
     const { monitor, loading } = this.props;
     const { tags } = monitor;
+
+    const extraContent = (
+      <div className={styles.extraContent}>
+        <RadioGroup defaultValue="all">
+          <RadioButton value="all">全部</RadioButton>
+          <RadioButton value="progress">进行中</RadioButton>
+          <RadioButton value="waiting">等待中</RadioButton>
+        </RadioGroup>
+        <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} />
+      </div>
+    );
 
     return (
       <Fragment>
