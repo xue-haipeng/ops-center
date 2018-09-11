@@ -11,7 +11,7 @@ import {
   Radio,
   Tooltip,
   Menu,
-  Dropdown,
+  Dropdown, Divider,
 } from 'antd';
 import numeral from 'numeral';
 import {
@@ -26,6 +26,7 @@ import {
 import Trend from 'components/Trend';
 import NumberInfo from 'components/NumberInfo';
 import styles from './Analysis.less';
+import WaterWave from '../../components/Charts/WaterWave';
 
 const { TabPane } = Tabs;
 
@@ -69,16 +70,6 @@ export default class Analysis extends Component {
     });
   };
 
-/*  handleRangePickerChange = rangePickerValue => {
-    this.setState({
-      rangePickerValue,
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchAscsCpuCurr',
-    });
-  }; */
-
   selectHours = hours => {
     this.setState({
       currHours: hours,
@@ -99,21 +90,16 @@ export default class Analysis extends Component {
     const { hostDistrTypeSelected } = this.state;
     const { chart, loading } = this.props;
     const {
-      logCount,
+      logCountChartList,
       visitData2,
       ascsCpuCurr,
       nHoursHostsCpuAvg7,
       searchData,
+      hdfsStatsInfo,
       hostDistrType,
     } = chart;
 
-/*    const logCount = [];
-    for (let i = 0; i < 24; i += 1) {
-      logCount.push({
-        x: moment({hour: i, minute: 0}).format("HH:mm"),
-        y: Math.floor(Math.random() * 100) + 10,
-      })
-    } */
+    console.log('chart: ', chart);
     const menu = (
       <Menu>
         <Menu.Item>操作一</Menu.Item>
@@ -231,6 +217,23 @@ export default class Analysis extends Component {
                 </Tooltip>
               }
               total={numeral(8000000).format('0,0')}
+              footer={<Field label="示例说明" value="60%" />}
+              contentHeight={46}
+            >
+              <MiniArea color="#975FE4" data={logCountChartList} />
+            </ChartCard>
+          </Col>
+          <Col {...topColResponsiveProps}>
+            <ChartCard
+              bordered={false}
+              title="24小时日志生成量"
+              loading={loading}
+              action={
+                <Tooltip title="最近24小时">
+                  <Icon type="info-circle-o" />
+                </Tooltip>
+              }
+              total={logCountChartList.map(c => c.y).reduce((x, y) => x + y, 0)}
               footer={
                 <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                   <Trend flag="up" style={{ marginRight: 16 }}>
@@ -243,24 +246,7 @@ export default class Analysis extends Component {
               }
               contentHeight={46}
             >
-              <MiniArea color="#975FE4" data={logCount} />
-            </ChartCard>
-          </Col>
-          <Col {...topColResponsiveProps}>
-            <ChartCard
-              bordered={false}
-              title="示例指标"
-              loading={loading}
-              action={
-                <Tooltip title="指标说明">
-                  <Icon type="info-circle-o" />
-                </Tooltip>
-              }
-              total={numeral(6560).format('0,0')}
-              footer={<Field label="示例说明" value="60%" />}
-              contentHeight={46}
-            >
-              <MiniBar data={logCount} />
+              <MiniBar data={logCountChartList} />
             </ChartCard>
           </Col>
           <Col {...topColResponsiveProps}>
@@ -429,27 +415,57 @@ export default class Analysis extends Component {
           </Col>
         </Row>
 
-        {/* <Card
+        <Card
           loading={loading}
           className={styles.offlineCard}
           bordered={false}
-          bodyStyle={{ padding: '0 0 32px 0' }}
+          title="日志平台HDFS存储空间使用情况"
+          bodyStyle={{ padding: '20px' }}
           style={{ marginTop: 32 }}
         >
-          <Tabs activeKey={activeKey} onChange={this.handleTabChange}>
-            {offlineData.map(shop => (
-              <TabPane tab={<CustomTab data={shop} currentTabKey={activeKey} />} key={shop.name}>
-                <div style={{ padding: '0 24px' }}>
-                  <TimelineChart
-                    height={400}
-                    data={offlineChartData}
-                    titleMap={{ y1: '客流量', y2: '支付笔数' }}
-                  />
+          <Row gutter={24}>
+            <Col  {...topColResponsiveProps}>
+              <div style={{ textAlign: 'center' }}>
+                <WaterWave
+                  height={128}
+                  title="DFS已用空间"
+                  percent={hdfsStatsInfo.dfsUsedPercent}
+                />
+                <Divider style={{ width: '80%', marginLeft: '10%', marginTop: 10, marginBottom: 0 }} />
+                <div style={{ marginTop: 8 }}>
+                  总计<span className={styles.trendText} style={{ marginRight: '20px' }}>{hdfsStatsInfo.dfsTotal}G</span>
+                  已用<span className={styles.trendText}>{hdfsStatsInfo.dfsUsed}G</span>
                 </div>
-              </TabPane>
+              </div>
+            </Col>
+            {hdfsStatsInfo.dataNodes.map(node => (
+              <Col {...topColResponsiveProps} key={node.hostname}>
+                <ChartCard
+                  bordered={false}
+                  title={node.hostname}
+                  loading={loading}
+                  action={
+                    <Tooltip title="DataNode空间使用情况">
+                      <Icon type="info-circle-o" />
+                    </Tooltip>
+                  }
+                  total={`${node.dfsUsedPercent}%`}
+                  footer={
+                    <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
+                      <div>
+                        总计<span className={styles.trendText} style={{ marginRight: '20px' }}>{node.dfsTotal}G</span>
+                        已用<span className={styles.trendText}>{node.dfsUsed}G</span>
+                      </div>
+                    </div>
+                  }
+                  contentHeight={46}
+                >
+                  <MiniProgress percent={node.dfsUsedPercent} strokeWidth={8} target={80} color="#13C2C2" />
+                </ChartCard>
+              </Col>
             ))}
-          </Tabs>
-        </Card> */}
+          </Row>
+        </Card>
       </Fragment>
     );
   }

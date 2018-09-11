@@ -4,12 +4,14 @@ export default {
   namespace: 'chart',
 
   state: {
-    logCount: [{"id":1,"x":"2018-09-07T10:39:38","y":7851},{"id":2,"x":"2018-09-07T11:09:59","y":7867}],
+    logCountChartList: [],
     visitData2: [],
     ascsCpuCurr: [],
     nHoursHostsCpuAvg7: [{"hostname":"EBSAP8001","rate":99.9},{"hostname":"EBSAP4001","rate":99.8}],
     searchData: [],
-    offlineData: [],
+    hdfsStatsInfo: {
+      "dataNodes": [],
+    },
     offlineChartData: [],
     hostDistrType: [{
       x: 'ERP平台',
@@ -30,9 +32,11 @@ export default {
   effects: {
     *fetch(_, { call, put }) {
       const res = yield call(fetchCharts);
+      console.log('res: ', res);
       const arr = [];
       res.ascsCpuCurr.forEach(e => arr.push({x: e.sid, y: e.cpuusage}));
       const payload = { ...res, ascsCpuCurr: arr, hostDistrType: res.hostDistrTypePlatformData };
+      console.log('payload: ', payload);
       yield put({
         type: 'save',
         payload,
