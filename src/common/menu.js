@@ -1,5 +1,4 @@
 import { isUrl } from '../utils/utils';
-import userGroup from '../assets/ico-user-group-on.svg'
 
 const menuData = [
   {
@@ -11,10 +10,10 @@ const menuData = [
         name: '综合报表',
         path: 'analysis',
       },
-      {
+/*      {
         name: '性能监控',
         path: 'performance',
-      },
+      }, */
 /*      {
               name: '任务看板',
               path: 'task',

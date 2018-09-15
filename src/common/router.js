@@ -80,9 +80,6 @@ export const getRouterData = app => {
     '/dashboard/performance': {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Performance')),
     },
-    '/dashboard/task': {
-      component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Task')),
-    },
     '/dashboard/backup': {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Backup')),
     },

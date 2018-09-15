@@ -37,8 +37,9 @@ const rankingListData = [
   { hostname: 'ZHDP5', rate: 44 },
 ];
 
-@connect(({ chart, loading }) => ({
+@connect(({ chart, user, loading }) => ({
   chart,
+  user,
   loading: loading.effects['chart/fetch'],
 }))
 export default class Analysis extends Component {
@@ -88,7 +89,7 @@ export default class Analysis extends Component {
 
   render() {
     const { hostDistrTypeSelected } = this.state;
-    const { chart, loading } = this.props;
+    const { chart, user: { currentUser }, loading } = this.props;
     const {
       logCountChartList,
       visitData2,
@@ -97,9 +98,31 @@ export default class Analysis extends Component {
       searchData,
       hdfsStatsInfo,
       hostDistrType,
+      wlsLastHourDistr,
     } = chart;
 
-    console.log('chart: ', chart);
+    const formatedWlsLastHourDir = {
+      beaCodeDistr: [],
+      userIdDistr: [],
+      bizLineDistr: [],
+      severityDistr: [],
+      serverDistr: [],
+      subSysDistr: [],
+    };
+    for (const obj in wlsLastHourDistr) {
+      for (const item in wlsLastHourDistr[obj]) {
+        if (item !== 'BEA-050001') {
+          formatedWlsLastHourDir[obj].push({
+            x: item,
+            y: wlsLastHourDistr[obj][item],
+          })
+        }
+      }
+    }
+    console.log('wlsLastHourDistr: ', formatedWlsLastHourDir);
+    const totalLogCount = logCountChartList.map(c => c.y).reduce((x, y) => x + y, 0);
+    const taskProcessingCount = currentUser.taskNotFinishedOfMe;
+    const taskFinishedOfMe = currentUser.taskTotalOfMe - currentUser.taskNotFinishedOfMe;
     const menu = (
       <Menu>
         <Menu.Item>操作一</Menu.Item>
@@ -181,6 +204,61 @@ export default class Analysis extends Component {
       style: { marginBottom: 24 },
     };
 
+    const WlsLastHourDistr = ({ source }) => (
+      <Card
+        // loading={loading}
+        className={styles.offlineCard}
+        bordered={false}
+        title="OSB系统日志挖掘（最近1小时 / 每10分钟更新）"
+        bodyStyle={{ padding: '20px' }}
+        style={{ marginTop: 24 }}
+      >
+        <Row gutter={24}>
+          <Col span={6} {...topColResponsiveProps}>
+            <Pie
+              hasLegend
+              title="BEA Code分布"
+              subTitle="BEA Code分布"
+              total={source.beaCodeDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
+              data={source.beaCodeDistr}
+              // valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
+              height={180}
+            />
+          </Col>
+          <Col span={6} {...topColResponsiveProps}>
+            <Pie
+              hasLegend
+              title="用户ID分布"
+              subTitle="用户ID分布"
+              total={source.userIdDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
+              data={source.userIdDistr}
+              height={180}
+            />
+          </Col>
+          <Col span={6} {...topColResponsiveProps}>
+            <Pie
+              hasLegend
+              title="业务域分布"
+              subTitle="业务域分布"
+              total={source.bizLineDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
+              data={source.bizLineDistr}
+              height={180}
+            />
+          </Col>
+          <Col span={6} {...topColResponsiveProps}>
+            <Pie
+              hasLegend
+              title="Server分布"
+              subTitle="Server分布"
+              total={source.serverDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
+              data={source.serverDistr}
+              height={180}
+            />
+          </Col>
+        </Row>
+      </Card>
+    );
+
     return (
       <Fragment>
         <Row gutter={24}>
@@ -209,7 +287,7 @@ export default class Analysis extends Component {
           <Col {...topColResponsiveProps}>
             <ChartCard
               bordered={false}
-              title="日志生成量"
+              title="示例指标"
               loading={loading}
               action={
                 <Tooltip title="指标说明">
@@ -233,14 +311,14 @@ export default class Analysis extends Component {
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={logCountChartList.map(c => c.y).reduce((x, y) => x + y, 0)}
+              total={numeral(totalLogCount).format('0,0')}
               footer={
                 <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
                   <Trend flag="up" style={{ marginRight: 16 }}>
-                    周同比<span className={styles.trendText}>12%</span>
+                    周同比<span className={styles.trendText}>3%</span>
                   </Trend>
                   <Trend flag="down">
-                    日环比<span className={styles.trendText}>11%</span>
+                    日环比<span className={styles.trendText}>2%</span>
                   </Trend>
                 </div>
               }
@@ -262,12 +340,10 @@ export default class Analysis extends Component {
               total="78%"
               footer={
                 <div style={{ whiteSpace: 'nowrap', overflow: 'hidden' }}>
-                  <Trend flag="up" style={{ marginRight: 16 }}>
-                    月同比<span className={styles.trendText}>12%</span>
-                  </Trend>
-                  <Trend flag="down">
-                    周环比<span className={styles.trendText}>11%</span>
-                  </Trend>
+                  <div>
+                    进行中<b className={styles.trendText} style={{ color: '#40a9ff' }}>{taskProcessingCount}</b>&nbsp;项 &nbsp;&nbsp;
+                    已完成<b className={styles.trendText} style={{ color: '#52c41a' }}>{taskFinishedOfMe}</b>&nbsp;项
+                  </div>
                 </div>
               }
               contentHeight={46}
@@ -421,14 +497,14 @@ export default class Analysis extends Component {
           bordered={false}
           title="日志平台HDFS存储空间使用情况"
           bodyStyle={{ padding: '20px' }}
-          style={{ marginTop: 32 }}
+          style={{ marginTop: 24 }}
         >
           <Row gutter={24}>
             <Col  {...topColResponsiveProps}>
               <div style={{ textAlign: 'center' }}>
                 <WaterWave
                   height={128}
-                  title="DFS已用空间"
+                  title="DFS使用率"
                   percent={hdfsStatsInfo.dfsUsedPercent}
                 />
                 <Divider style={{ width: '80%', marginLeft: '10%', marginTop: 10, marginBottom: 0 }} />
@@ -466,6 +542,8 @@ export default class Analysis extends Component {
             ))}
           </Row>
         </Card>
+
+        <WlsLastHourDistr source={formatedWlsLastHourDir} />
       </Fragment>
     );
   }

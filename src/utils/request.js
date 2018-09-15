@@ -5,6 +5,7 @@ import { routerRedux } from 'dva/router';
 import store from '../index';
 import { getAccessToken } from './authority';
 import { refreshAccessToken } from '../services/user';
+import { API_GATEWAY_URL } from '../common/constants';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -41,7 +42,7 @@ function checkStatus(response) {
 
 const instance = axios.create({
   // baseURL: process.env.BASE_API,
-  baseURL: 'http://11.11.47.72:8888/api/v1/',
+  baseURL: API_GATEWAY_URL,
   timeout: 10000,
   xsrfCookieName: 'XSRF-TOKEN',
   xsrfHeaderName: 'X-XSRF-TOKEN',

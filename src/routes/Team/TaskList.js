@@ -20,7 +20,7 @@ import {
   Badge,
   message,
   Slider,
-  Popconfirm, Switch, Checkbox,
+  Popconfirm, Switch, Checkbox, Upload, Icon,
 } from 'antd';
 import { Radar, TagCloud } from 'components/Charts';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -28,6 +28,7 @@ import Ellipsis from '../../components/Ellipsis';
 
 import { CATEGORY, MEMBERS, STATUS } from './constants';
 import styles from './TaskList.less';
+import { API_GATEWAY_URL } from '../../common/constants';
 
 const FormItem = Form.Item;
 // eslint-disable-next-line prefer-destructuring
@@ -219,6 +220,9 @@ const CreateForm = Form.create({
       remarks: Form.createFormField({
         value: isModify ? selectedItem.remarks && selectedItem.remarks : null,
       }),
+/*      attachments: Form.createFormField({
+        value: isModify ? selectedItem.attachment && selectedItem.defaultFileList : null,
+      }), */
     };
   },
 })(props => {
@@ -230,8 +234,10 @@ const CreateForm = Form.create({
     handleAdd,
     handleUpdate,
     handleCancel,
+    handleFileUpload,
   } = props;
 
+  console.log('selectedItem: ', selectedRow);
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -432,6 +438,22 @@ const CreateForm = Form.create({
             rules: [{ required: true, message: '请填写任务描述' }],
           })(<TextArea rows={3} />)}
         </FormItem>
+        <FormItem
+          {...formItemLayout}
+          label="附件上传"
+        >
+          {form.getFieldDecorator('attachments')(
+            <Upload
+              action={`${API_GATEWAY_URL}team/tasks/attachment`}
+              defaultFileList={selectedRow.defaultFileList}
+              onChange={handleFileUpload}
+            >
+              <Button>
+                <Icon type="upload" /> 选择文件
+              </Button>
+            </Upload>
+          )}
+        </FormItem>
       </Form>
     </Modal>
   );
@@ -453,6 +475,7 @@ export default class TaskList extends PureComponent {
     selectedRow: {},
     pagination: {},
     percent: 0,
+    searchCriteria: {},
   };
 
   componentDidMount() {
@@ -477,21 +500,101 @@ export default class TaskList extends PureComponent {
   }
 
   onOpen = (title, record) => {
-    const selectedRow = record || this.state.selectedRow;
+    const defaultFileList = [];
+    if (record && record.attachment) {
+      record.attachment.forEach(attach => {
+        defaultFileList.push({
+          uid: attach.name,
+          name: attach.name,
+          status: 'done',
+          url: attach.url,
+        })
+      })
+    }
+    const selected = record || this.state.selectedRow;
+    const selectedRow = { ...selected, defaultFileList };
     this.setState({
       visible: true,
       title,
       selectedRow,
-    })
+    });
+    console.log(selectedRow);
+  };
+
+  setSearchCriteria = fields => {
+    if (fields && fields.participant) {
+      const searchCriteria = {
+        ...this.state.searchCriteria,
+        participant:
+          !(this.state.searchCriteria && this.state.searchCriteria.participant)
+          && fields.participant,
+      };
+      this.setState({
+        searchCriteria,
+      });
+      this.props.dispatch({
+        type: 'team/fetch',
+        payload: {
+          page: this.state.pagination.current,
+          size: this.state.pagination.pageSize,
+          ...searchCriteria,
+        },
+      })
+    } else if (fields && fields.type) {
+      const searchCriteria = {
+        ...this.state.searchCriteria,
+        ...fields,
+      };
+      this.setState({
+        searchCriteria,
+      });
+      this.props.dispatch({
+        type: 'team/fetch',
+        payload: {
+          page: this.state.pagination.current,
+          size: this.state.pagination.pageSize,
+          ...searchCriteria,
+        },
+      })
+    } else if (fields && fields.word) {
+      const searchCriteria = {
+        ...this.state.searchCriteria,
+        ...fields,
+        type: 'all',
+      };
+      this.setState({
+        searchCriteria,
+      });
+      this.props.dispatch({
+        type: 'team/fetch',
+        payload: {
+          page: this.state.pagination.current,
+          size: this.state.pagination.pageSize,
+          ...searchCriteria,
+        },
+      })
+    }
   };
 
   handleAdd = fields => {
-    this.props.dispatch({
-      type: 'team/add',
-      payload: {
-        ...fields,
-      },
-    });
+    if (fields && fields.attachments) {
+      const attachments = fields.attachments.fileList.map(file => file.response);
+      console.log('attach: ', attachments);
+      const payload = { ...fields, attachments};
+      this.props.dispatch({
+        type: 'team/add',
+        payload: {
+          ...payload,
+        },
+      });
+    }  else {
+      this.props.dispatch({
+        type: 'team/add',
+        payload: {
+          ...fields,
+        },
+      });
+    }
     this.setState({
       visible: false,
     });
@@ -502,6 +605,7 @@ export default class TaskList extends PureComponent {
           payload: {
             page: this.state.pagination.current,
             size: this.state.pagination.pageSize,
+            ...this.state.searchCriteria,
           },
         }),
       1000
@@ -530,6 +634,7 @@ export default class TaskList extends PureComponent {
           payload: {
             page: this.state.pagination.current,
             size: this.state.pagination.pageSize,
+            ...this.state.searchCriteria,
           },
         }),
       1000
@@ -557,6 +662,7 @@ export default class TaskList extends PureComponent {
           payload: {
             page: this.state.pagination.current,
             size: this.state.pagination.pageSize,
+            ...this.state.searchCriteria,
           },
         }),
       1000
@@ -593,6 +699,13 @@ export default class TaskList extends PureComponent {
     });
   };
 
+  handleFileChange = info => {
+    const { status, response: attach, fileList } = info.file;
+    if (status === 'done') {
+      console.log(status, attach, fileList);
+    }
+  };
+
   render() {
     const {
       team: { data },
@@ -601,10 +714,17 @@ export default class TaskList extends PureComponent {
       loading,
     } = this.props;
 
-    console.log('currentUser: ', currentUser);
+    const { list, pagination } = data;
+    const dataSource = [];
+    list.forEach(item => {
+      const attachment = item.attachment != null ? JSON.parse(item.attachment) : item.attachment;
+      dataSource.push({
+        ...item,
+        attachment,
+      })
+    });
 
-    const allTasksCount = data && data.pagination.total;
-    const { taskNotFinished: taskNotFinishedOfMe, taskTotalOfMe } = currentUser;
+    const { taskNotFinishedOfMe, taskTotalOfMe, taskTotalCount, taskTotalNotFinished } = currentUser;
     const greeting = new Date().getHours() < 12 ? '早上好，' : '下午好，';
     const pageHeaderContent = (
       <div className={styles.pageHeaderContent}>
@@ -625,16 +745,16 @@ export default class TaskList extends PureComponent {
       <div className={styles.extraContent}>
         <div className={styles.statItem}>
           <p>我参与的任务</p>
-          <p>
+          <p style={{ color: '#fd8587' }}>
             {taskNotFinishedOfMe}
-            <span> / {taskTotalOfMe}</span>
+            <span style={{ color: '#7dca58' }}> / {taskTotalOfMe}</span>
           </p>
         </div>
         <div className={styles.statItem}>
-          <p>所有任务</p>
-          <p>
-            {allTasksCount}
-            {/* <span> {allTasksCount}</span> */}
+          <p>小组所有任务</p>
+          <p style={{ color: '#40a9ff' }}>
+            {taskTotalNotFinished}
+            <span> / {taskTotalCount}</span>
           </p>
         </div>
       </div>
@@ -642,19 +762,27 @@ export default class TaskList extends PureComponent {
 
     const listHeader = (
       <div>
-        <Checkbox onChange={() => {console.log("Only Me!")}}>只看我参与的</Checkbox>
-        <RadioGroup defaultValue="all" style={{ marginLeft: '20px' }} onChange={(value) => { console.log("RadioGroup", value.target.value)}}>
+        <Checkbox
+          checked={this.state.searchCriteria && this.state.searchCriteria.participant}
+          onChange={() => this.setSearchCriteria({participant: currentUser.realName})}
+        >
+          只看我参与的
+        </Checkbox>
+        <RadioGroup
+          defaultValue={this.state.searchCriteria && this.state.searchCriteria.type || 'all'}
+          style={{ marginLeft: '20px' }}
+          onChange={(value) => this.setSearchCriteria({type: value.target.value})}
+        >
           <RadioButton value="all">全部任务</RadioButton>
-          <RadioButton value="mine">我参与的</RadioButton>
-          <RadioButton value="progress">未完成的</RadioButton>
+          <RadioButton value="unfinished">未完成的</RadioButton>
+          <RadioButton value="thisweek">本周任务</RadioButton>
         </RadioGroup>
-        {/*        <span>
-          我参与的：<Switch defaultChecked onChange={() => { console.log() }} />
-        </span>
-        <span style={{ marginLeft: '20px' }}>
-          未完成的：<Switch defaultChecked onChange={() => { console.log() }} />
-        </span> */}
-        <Search placeholder="搜索标题或描述 ..." style={{ width: '272px', marginLeft: '20px' }} onSearch={(e) => console.log(e)} />
+        <Search
+          placeholder="搜索标题或描述 ..."
+          style={{ width: '272px', marginLeft: '20px' }}
+          onSearch={(e) => this.setSearchCriteria({word: e})}
+          // value={this.state.searchCriteria && this.state.searchCriteria.word}
+        />
       </div>
     );
 
@@ -702,6 +830,23 @@ export default class TaskList extends PureComponent {
                         <p style={{ margin: 0 }}>任务描述：{record.description}</p>
                       </Col>
                     </Row>
+                    {record.attachment && (
+                      <Row gutter={24} style={{ marginTop: 10 }}>
+                        <Col span={17}>
+                          <p style={{ margin: 0 }}>
+                            附件：{record.attachment.map((attach) => (
+                              <a
+                                href={attach.url}
+                                key={attach.url}
+                                style={{ marginRight: 15 }}
+                              >
+                                {attach.name}
+                              </a>
+                          ))}
+                          </p>
+                        </Col>
+                      </Row>
+                    )}
                   </Col>
                   { record.participant.split(',').indexOf(currentUser.realName) > -1 &&
                     (
@@ -720,8 +865,8 @@ export default class TaskList extends PureComponent {
                   }
                 </Row>
               )}
-              dataSource={data.list}
-              pagination={data.pagination}
+              dataSource={dataSource}
+              pagination={pagination}
               rowKey="id"
               onChange={this.handleStandardTableChange}
             />

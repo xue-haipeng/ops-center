@@ -81,12 +81,14 @@ export default {
       };
     },
     saveCurrentUser(state, action) {
-      const { account, notifyCount, taskNotFinished, taskTotalOfMe } = action.payload;
+      const { account, notifyCount, taskNotFinishedOfMe, taskTotalOfMe, taskTotalCount, taskTotalNotFinished } = action.payload;
       const currentUser = {
         ...account,
         notifyCount,
-        taskNotFinished,
+        taskNotFinishedOfMe,
         taskTotalOfMe,
+        taskTotalCount,
+        taskTotalNotFinished,
       };
       return {
         ...state,

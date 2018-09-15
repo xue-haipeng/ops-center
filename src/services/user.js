@@ -2,11 +2,10 @@ import axios from 'axios';
 import request from '../utils/request';
 import { getCurrentUser, getRefreshToken, setToken } from '../utils/authority';
 import store from '../index';
+import { API_GATEWAY_URL } from '../common/constants';
 
-// const BASE_URL = 'https://app.haipeng.co'; // remote prod
-const BASE_URL = 'http://11.11.47.72:8888/api/v1/'; // local dev
 const gwInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_GATEWAY_URL,
   headers: {
     Authorization: 'Basic dWFhLXNlcnZpY2U6MTIzNDU2',
   },

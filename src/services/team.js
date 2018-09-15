@@ -3,13 +3,14 @@ import request from '../utils/request';
 import { getCurrentUser } from '../utils/authority';
 
 export async function queryTasks(params) {
-  const queryParams = {};
-  if (params && 'currentPage' in params) {
+  const { currentPage: page, pageSize: size, participant, type, word } = params || {};
+  const queryParams = { page, size, participant, type, word };
+/*  if (params && 'currentPage' in params) {
     queryParams.page = params.currentPage;
   }
   if (params && 'pageSize' in params) {
     queryParams.size = params.pageSize;
-  }
+  } */
   return request(`team/tasks?${stringify(queryParams)}`);
 }
 
