@@ -119,35 +119,12 @@ export default {
         y: 3113,
       }],
     wlsLastHourDistr: {
-      "beaCodeDistr": {
-        "BEA-473012": 1,
-        "BEA-381967": 16,
-        "BEA-381328": 36,
-        "BEA-000000": 32,
-        "BEA-050001": 7746,
-      },
-      "userIdDistr": {
-        "xs_esb_read": 7746,
-        "<anonymous>": 85,
-      },
-      "bizLineDistr": {
-        "YQT": 60,
-      },
-      "severityDistr": {
-        "Warning": 7747,
-        "Error": 84,
-      },
-      "serverDistr": {
-        "OSB_Server02": 3826,
-        "OSB_Server01": 4005,
-      },
-      "subSysDistr": {
-        "JCA_FRAMEWORK_AND_ADAPTER": 32,
-        "JNDI": 7746,
-        "ALSB Statistics Manager": 1,
-        "JCATransport": 16,
-        "WliSbTransports": 36,
-      },
+      "beaCodeDistr": {},
+      "userIdDistr": {},
+      "bizLineDistr": {},
+      "severityDistr": {},
+      "serverDistr": {},
+      "subSysDistr": {},
     },
     radarData: [],
     loading: false,

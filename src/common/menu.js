@@ -10,7 +10,7 @@ const menuData = [
         name: '综合报表',
         path: 'analysis',
       },
-/*      {
+/*     {
         name: '性能监控',
         path: 'performance',
       }, */
@@ -38,6 +38,10 @@ const menuData = [
       {
         name: '重点任务跟踪',
         path: 'task',
+      },
+      {
+        name: '请假管理',
+        path: 'vacation',
       },
       {
         name: '用户管理',

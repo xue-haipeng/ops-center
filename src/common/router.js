@@ -133,8 +133,8 @@ export const getRouterData = app => {
     '/team/user': {
       component: dynamicWrapper(app, ['team', 'list', 'rule'], () => import('../routes/Team/UserList')),
     },
-    '/team/task-tracking': {
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
+    '/team/vacation': {
+      component: dynamicWrapper(app, ['team'], () => import('../routes/Team/Vacation')),
     },
     '/list/card-list': {
       component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),

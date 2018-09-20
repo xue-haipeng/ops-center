@@ -206,7 +206,7 @@ export default class Analysis extends Component {
 
     const WlsLastHourDistr = ({ source }) => (
       <Card
-        // loading={loading}
+        loading={loading}
         className={styles.offlineCard}
         bordered={false}
         title="OSB系统日志挖掘（最近1小时 / 每10分钟更新）"
@@ -475,7 +475,7 @@ export default class Analysis extends Component {
                   </div>
                 </div>
               }
-              style={{ marginTop: 24, minHeight: 509 }}
+              style={{ marginTop: 24, minHeight: 482 }}
             >
               {/* <h4 style={{ marginTop: 8, marginBottom: 32 }}>主机分布</h4> */}
               <Pie
@@ -486,6 +486,7 @@ export default class Analysis extends Component {
                 valueFormat={value => `${value}`}
                 height={248}
                 lineWidth={4}
+                style={{ marginTop: 30 }}
               />
             </Card>
           </Col>

@@ -32,9 +32,11 @@ export const STATUS = [
 export const MEMBERS = [
   '白洁',
   '曹超',
+  '陈征',
   '韩心怡',
   '何思洋',
   '胡帅',
+  '吕淑华',
   '姜永锐',
   '林增跃',
   '孙永辉',
@@ -42,6 +44,7 @@ export const MEMBERS = [
   '文都子',
   '王茜',
   '王禹博',
+  '熊晓军',
   '徐冠雄',
   '徐翔',
   '薛海鹏',
@@ -60,4 +63,12 @@ export const USER_STATUS = [
 export const AUTHORITIES = [
   { code: 1, name: '管理员' },
   { code: 2, name: '普通用户' },
+];
+
+export const VACATION_TYPE = [
+  { name: '事假', color: '#e48390' },
+  { name: '病假', color: '#80bba0' },
+  { name: '年假', color: '#9c87bb' },
+  { name: '婚嫁', color: '#4cdd04' },
+  { name: '调休', color: '#dc9145' },
 ];

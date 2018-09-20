@@ -6,14 +6,8 @@ import { Pie, WaterWave, Gauge, TagCloud } from 'components/Charts';
 import NumberInfo from 'components/NumberInfo';
 import CountDown from 'components/CountDown';
 import ActiveChart from 'components/ActiveChart';
-import {
-  Chart,
-  Geom,
-  Axis,
-  Tooltip as ChartTooltip,
-  Legend,
-} from "bizcharts";
-import DataSet from "@antv/data-set";
+import Highcharts from 'highcharts'
+import HighchartsReact from 'highcharts-react-official'
 import Authorized from '../../utils/Authorized';
 import styles from './Performance.less';
 
@@ -25,93 +19,125 @@ const havePermissionAsync = new Promise(resolve => {
   setTimeout(() => resolve(), 1000);
 });
 
-const data = [
-  {
-    month: "Jan",
-    Tokyo: 7.0,
-    London: 3.9,
-    Paris: 4.8,
+const options = {
+  chart: {
+    type: 'spline',
   },
-  {
-    month: "Feb",
-    Tokyo: 6.9,
-    London: 4.2,
-    Paris: 2.9,
+  title: {
+    text: 'BPM生产系统CPU使用率（%）',
+    style: {
+      fontFamily: 'Microsoft Yahei',
+    },
   },
-  {
-    month: "Mar",
-    Tokyo: 9.5,
-    London: 5.7,
-    Paris: 3.4,
+  subtitle: {
+    text: '包含流程引擎与UI表单系统',
+    style: {
+      fontFamily: 'Microsoft Yahei',
+    },
   },
-  {
-    month: "Apr",
-    Tokyo: 14.5,
-    London: 8.5,
-    Paris: 5.9,
+  credits: {
+    enabled: false,
   },
-  {
-    month: "May",
-    Tokyo: 18.4,
-    London: 11.9,
-    Paris:12.4,
+  xAxis: {
+    type: 'datetime',
+    dateTimeLabelFormats: {
+      second: '%H:%M:%S',
+      minute: '%H:%M',
+      hour: '%H:%M',
+    },
+    title: {
+      text: '',
+    },
   },
-  {
-    month: "Jun",
-    Tokyo: 21.5,
-    London: 15.2,
-    Paris: 17.8,
+  yAxis: {
+    title: {
+      text: 'Snow depth (m)',
+    },
+    min: 0,
   },
-  {
-    month: "Jul",
-    Tokyo: 25.2,
-    London: 17.0,
-    Paris: 18.2,
+  tooltip: {
+    headerFormat: '<b>{series.name}</b><br>',
+    pointFormat: '{point.x:%e. %b}: {point.y:.2f} m',
   },
-  {
-    month: "Aug",
-    Tokyo: 26.5,
-    London: 16.6,
-    Paris: 15.2,
+
+  plotOptions: {
+    spline: {
+      marker: {
+        enabled: false,
+      },
+    },
   },
-  {
-    month: "Sep",
-    Tokyo: 23.3,
-    London: 14.2,
-    Paris: 12.5,
-  },
-  {
-    month: "Oct",
-    Tokyo: 18.3,
-    London: 10.3,
-    Paris: 9.8,
-  },
-  {
-    month: "Nov",
-    Tokyo: 13.9,
-    London: 6.6,
-    Paris: 6.5,
-  },
-  {
-    month: "Dec",
-    Tokyo: 9.6,
-    London: 4.8,
-    Paris: 5.5,
-  },
-];
-const ds = new DataSet();
-const dv = ds.createView().source(data);
-dv.transform({
-  type: "fold",
-  fields: ["Tokyo", "London", "Paris"],
-  key: "city",
-  value: "temperature",
-});
-console.log(dv);
-const cols = {
-  time: {
-    range: [0, 1],
-  },
+
+  colors: ['#6CF', '#39F', '#06C', '#036'],
+  series: [{
+    name: "Winter 2014-2015",
+    data: [
+      [Date.UTC(1970, 10, 25), 0],
+      [Date.UTC(1970, 11, 25), 1.64],
+      [Date.UTC(1971, 0, 24), 2.62],
+      [Date.UTC(1971, 1,  4), 2.5],
+      [Date.UTC(1971, 2,  6), 2.74],
+      [Date.UTC(1971, 2, 14), 2.62],
+      [Date.UTC(1971, 2, 24), 2.6],
+      [Date.UTC(1971, 3, 27), 2.77],
+      [Date.UTC(1971, 4,  9), 2.56],
+      [Date.UTC(1971, 5, 19), 1.27],
+      [Date.UTC(1971, 5, 24), 0.99],
+      [Date.UTC(1971, 6,  3), 0.18],
+      [Date.UTC(1971, 6,  4), 0],
+    ],
+  }, {
+    name: "Winter 2015-2016",
+    data: [
+      [Date.UTC(1970, 10,  9), 0],
+      [Date.UTC(1970, 10, 15), 0.23],
+      [Date.UTC(1970, 10, 20), 0.25],
+      [Date.UTC(1970, 10, 25), 0.23],
+      [Date.UTC(1970, 10, 30), 0.39],
+      [Date.UTC(1970, 11,  5), 0.41],
+      [Date.UTC(1970, 11, 10), 0.59],
+      [Date.UTC(1970, 11, 15), 0.73],
+      [Date.UTC(1970, 11, 20), 0.41],
+      [Date.UTC(1970, 11, 25), 1.07],
+      [Date.UTC(1970, 11, 30), 0.88],
+      [Date.UTC(1971, 0,  5), 0.85],
+      [Date.UTC(1971, 0, 11), 0.89],
+      [Date.UTC(1971, 0, 17), 1.04],
+      [Date.UTC(1971, 0, 20), 1.02],
+      [Date.UTC(1971, 0, 25), 1.03],
+      [Date.UTC(1971, 0, 30), 1.39],
+      [Date.UTC(1971, 1,  5), 1.77],
+      [Date.UTC(1971, 1, 26), 2.12],
+      [Date.UTC(1971, 3, 19), 2.1],
+      [Date.UTC(1971, 4,  9), 1.7],
+      [Date.UTC(1971, 4, 29), 0.85],
+      [Date.UTC(1971, 5,  7), 0],
+    ],
+  }, {
+    name: "Winter 2016-2017",
+    data: [
+      [Date.UTC(1970, 9, 15), 0],
+      [Date.UTC(1970, 9, 31), 0.09],
+      [Date.UTC(1970, 10,  7), 0.17],
+      [Date.UTC(1970, 10, 10), 0.1],
+      [Date.UTC(1970, 11, 28), 0.37],
+      [Date.UTC(1971, 0, 16), 0.68],
+      [Date.UTC(1971, 0, 31), 0.43],
+      [Date.UTC(1971, 1,  4), 0.42],
+      [Date.UTC(1971, 2,  4), 0.68],
+      [Date.UTC(1971, 2,  7), 0.65],
+      [Date.UTC(1971, 2, 30), 0.98],
+      [Date.UTC(1971, 3, 27), 1.18],
+      [Date.UTC(1971, 3, 30), 1.12],
+      [Date.UTC(1971, 4,  3), 1.06],
+      [Date.UTC(1971, 4,  6), 0.96],
+      [Date.UTC(1971, 4,  9), 0.87],
+      [Date.UTC(1971, 4, 12), 0.88],
+      [Date.UTC(1971, 4, 15), 0.79],
+      [Date.UTC(1971, 4, 18), 0.54],
+      [Date.UTC(1971, 4, 21), 0.34],
+    ],
+  }],
 };
 
 @Secured(havePermissionAsync)
@@ -159,111 +185,24 @@ export default class Performance extends PureComponent {
               </Row>
               <div className={styles.mapChart}>
                 <Tooltip title="等待后期实现">
-                  <Carousel autoplay className={styles.antCarousel}>
+                  <Carousel autoplay arrows dots className={styles.antCarousel}>
                     <div>
-                      <Chart height={400} data={keySysCpuUtlz} scale={cols} forceFit>
-                        <Legend />
-                        <Axis name="month" />
-                        <Axis
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}°C`,
-                          }}
-                        />
-                        <ChartTooltip
-                          crosshairs={{
-                            type: "y",
-                          }}
-                        />
-                        <Geom
-                          type="line"
-                          position="month*temperature"
-                          size={2}
-                          color="city"
-                          shape="smooth"
-                        />
-                        {/* <Geom
-                          type="point"
-                          position="month*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1,
-                          }}
-                        /> */}
-                      </Chart>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={options}
+                      />
                     </div>
                     <div>
-                      <Chart height={400} data={dv} scale={cols} forceFit>
-                        <Legend />
-                        <Axis name="month" />
-                        <Axis
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}°C`,
-                          }}
-                        />
-                        <ChartTooltip
-                          crosshairs={{
-                            type: "y",
-                          }}
-                        />
-                        <Geom
-                          type="line"
-                          position="month*temperature"
-                          size={2}
-                          color="city"
-                          shape="smooth"
-                        />
-                        {/* <Geom
-                          type="point"
-                          position="month*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1,
-                          }}
-                        /> */}
-                      </Chart>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={options}
+                      />
                     </div>
                     <div>
-                      <Chart height={400} data={dv} scale={cols} forceFit>
-                        <Legend />
-                        <Axis name="month" />
-                        <Axis
-                          name="temperature"
-                          label={{
-                            formatter: val => `${val}°C`,
-                          }}
-                        />
-                        <ChartTooltip
-                          crosshairs={{
-                            type: "y",
-                          }}
-                        />
-                        <Geom
-                          type="line"
-                          position="month*temperature"
-                          size={2}
-                          color="city"
-                          shape="smooth"
-                        />
-                        {/* <Geom
-                          type="point"
-                          position="month*temperature"
-                          size={4}
-                          shape="circle"
-                          color="city"
-                          style={{
-                            stroke: "#fff",
-                            lineWidth: 1,
-                          }}
-                        /> */}
-                      </Chart>
+                      <HighchartsReact
+                        highcharts={Highcharts}
+                        options={options}
+                      />
                     </div>
                   </Carousel>
                 </Tooltip>

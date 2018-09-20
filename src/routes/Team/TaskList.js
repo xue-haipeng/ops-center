@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
 import {
   Row,
   Col,
@@ -20,9 +19,9 @@ import {
   Badge,
   message,
   Slider,
-  Popconfirm, Switch, Checkbox, Upload, Icon,
+  Popconfirm, Checkbox, Upload, Icon,
 } from 'antd';
-import { Radar, TagCloud } from 'components/Charts';
+
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Ellipsis from '../../components/Ellipsis';
 
@@ -237,7 +236,7 @@ const CreateForm = Form.create({
     handleFileUpload,
   } = props;
 
-  console.log('selectedItem: ', selectedRow);
+  console.log('passed: ', selectedRow.defaultFileList);
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -445,7 +444,7 @@ const CreateForm = Form.create({
           {form.getFieldDecorator('attachments')(
             <Upload
               action={`${API_GATEWAY_URL}team/tasks/attachment`}
-              defaultFileList={selectedRow.defaultFileList}
+              fileList={selectedRow.defaultFileList}
               onChange={handleFileUpload}
             >
               <Button>
@@ -518,7 +517,6 @@ export default class TaskList extends PureComponent {
       title,
       selectedRow,
     });
-    console.log(selectedRow);
   };
 
   setSearchCriteria = fields => {

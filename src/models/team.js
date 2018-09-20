@@ -1,14 +1,13 @@
+import { message } from 'antd';
 import {
-  addTask,
+  addTask, addVacation,
   queryCountByMe,
   queryCountNotFinished,
   queryTaskById,
-  queryTasks,
+  queryTasks, queryVacations,
   removeTask,
   updateTask,
 } from '../services/team';
-import { message } from 'antd';
-
 
 export default {
   namespace: 'team',
@@ -20,6 +19,7 @@ export default {
       notFinishedCount: 0,
       taskInfo: {},
     },
+    vacations: [],
   },
 
   effects: {
@@ -74,6 +74,22 @@ export default {
         payload: response,
       });
     },
+    *fetchVacations({ payload }, { call, put }) {
+      const response = yield call(queryVacations, payload);
+      yield put({
+        type: 'saveVacation',
+        payload: response,
+      });
+    },
+    *addVacation({ payload, callback }, { call }) {
+      const res = yield call(addVacation, payload);
+      if (res && res.status === 0) {
+        message.success('添加成功', 4);
+      } else {
+        message.error('添加失败', 4);
+      }
+      if (callback) callback();
+    },
   },
 
   reducers: {
@@ -96,11 +112,17 @@ export default {
       };
     },
     saveCount(state, action) {
-      const data = { ...state.data, notFinishedCount: action.payload }
+      const data = { ...state.data, notFinishedCount: action.payload };
       return {
         ...state,
         data,
       }
+    },
+    saveVacation(state, action) {
+      return {
+        ...state,
+        vacations: action.payload,
+      };
     },
   },
 };

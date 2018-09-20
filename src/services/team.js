@@ -5,6 +5,9 @@ import { getCurrentUser } from '../utils/authority';
 export async function queryTasks(params) {
   const { currentPage: page, pageSize: size, participant, type, word } = params || {};
   const queryParams = { page, size, participant, type, word };
+  if (!participant) {
+    delete queryParams.participant;
+  }
 /*  if (params && 'currentPage' in params) {
     queryParams.page = params.currentPage;
   }
@@ -48,4 +51,17 @@ export async function queryCountByMe(param) {
 
 export async function queryCountNotFinished() {
   return request('team/tasks/count-not-finished');
+}
+
+export async function queryVacations(params) {
+  return request(`team/vacation?${stringify(params)}`);
+}
+
+export async function addVacation(params) {
+  return request('team/vacation', {
+    method: 'POST',
+    data: {
+      ...params,
+    },
+  });
 }
