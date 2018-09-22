@@ -21,82 +21,6 @@ export default {
         "x": "20:00:00",
         "y": 7756,
       },
-      {
-        "x": "21:00:00",
-        "y": 7757,
-      },
-      {
-        "x": "22:00:00",
-        "y": 7800,
-      },
-      {
-        "x": "23:00:00",
-        "y": 7875,
-      },
-      {
-        "x": "00:00:00",
-        "y": 7824,
-      },
-      {
-        "x": "01:00:00",
-        "y": 7776,
-      },
-      {
-        "x": "02:00:00",
-        "y": 7793,
-      },
-      {
-        "x": "03:00:00",
-        "y": 7614,
-      },
-      {
-        "x": "04:00:00",
-        "y": 7767,
-      },
-      {
-        "x": "05:00:00",
-        "y": 7680,
-      },
-      {
-        "x": "06:00:00",
-        "y": 7702,
-      },
-      {
-        "x": "07:00:00",
-        "y": 7721,
-      },
-      {
-        "x": "08:00:00",
-        "y": 7770,
-      },
-      {
-        "x": "10:00:00",
-        "y": 7696,
-      },
-      {
-        "x": "11:00:00",
-        "y": 7792,
-      },
-      {
-        "x": "12:00:00",
-        "y": 7722,
-      },
-      {
-        "x": "13:00:00",
-        "y": 7756,
-      },
-      {
-        "x": "14:00:00",
-        "y": 7766,
-      },
-      {
-        "x": "15:00:00",
-        "y": 7746,
-      },
-      {
-        "x": "16:00:00",
-        "y": 7778,
-      },
     ],
     visitData2: [],
     ascsCpuCurr: [],
@@ -126,6 +50,14 @@ export default {
       "serverDistr": {},
       "subSysDistr": {},
     },
+    backupRecords: [
+      {id: 1, system: 'CPF-生产', beforeystd: 'OK', yesterday: 'OK', today: 'Failed'},
+      {id: 2, system: 'OSB上市-生产', beforeystd: 'OK', yesterday: 'N/A', today: 'Failed'},
+      {id: 3, system: 'BPM流程-测试', beforeystd: 'OK', yesterday: 'Failed', today: 'Failed'},
+      {id: 4, system: 'OBIEE勘探-开发', beforeystd: 'OK', yesterday: 'OK', today: 'OK'},
+      {id: 5, system: '未上市BW-测试', beforeystd: 'N/A', yesterday: 'OK', today: 'Failed'},
+      {id: 6, system: '人力资源自主开发-生产', beforeystd: 'Failed', yesterday: 'OK', today: 'OK'},
+    ],
     radarData: [],
     loading: false,
   },
@@ -136,7 +68,6 @@ export default {
       const arr = [];
       res.ascsCpuCurr.forEach(e => arr.push({x: e.sid, y: e.cpuusage}));
       const payload = { ...res, ascsCpuCurr: arr, hostDistrType: res.hostDistrTypePlatformData };
-      console.log('payload: ', payload);
       yield put({
         type: 'save',
         payload,
@@ -194,6 +125,7 @@ export default {
           "dataNodes": [],
         },
         wlsLastHourDistr: {},
+        backupRecords: [],
         radarData: [],
       };
     },

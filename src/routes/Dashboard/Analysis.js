@@ -95,11 +95,13 @@ export default class Analysis extends Component {
       visitData2,
       ascsCpuCurr,
       nHoursHostsCpuAvg7,
-      searchData,
+      backupRecords,
       hdfsStatsInfo,
       hostDistrType,
       wlsLastHourDistr,
     } = chart;
+
+    console.log('backupRecords: ', backupRecords);
 
     const formatedWlsLastHourDir = {
       beaCodeDistr: [],
@@ -165,33 +167,48 @@ export default class Analysis extends Component {
     const columns = [
       {
         title: '系统名称',
-        dataIndex: 'keyword',
-        key: 'keyword',
-        render: text => <a href="/">{text}</a>,
+        dataIndex: 'system',
+        key: 'system',
+        render: text => <a href={`/app/hosts?systemName=${encodeURI(text)}`}>{text}</a>,
       },
       {
         title: '前日',
-        dataIndex: 'count',
-        key: 'count',
-        sorter: (a, b) => a.count - b.count,
+        dataIndex: 'beforeystd',
+        key: 'beforeystd',
+        // sorter: (a, b) => a.count - b.count,
+        render: text => text === 'OK'
+          ? <span style={{ color: 'cadetblue' }}>{text}</span>
+          : text === 'Failed'
+            ? <span style={{ color: '#f97676' }}>{text}</span>
+            : <span style={{ color: '#e8baaa' }}>{text}</span>,
         className: styles.alignRight,
       },
       {
         title: '昨日',
-        dataIndex: 'index',
-        key: 'index',
+        dataIndex: 'yesterday',
+        key: 'yesterday',
+        render: text => text === 'OK'
+          ? <span style={{ color: 'cadetblue' }}>{text}</span>
+          : text === 'Failed'
+            ? <span style={{ color: '#f97676' }}>{text}</span>
+            : <span style={{ color: '#e8baaa' }}>{text}</span>,
       },
       {
         title: '今日',
-        dataIndex: 'range',
-        key: 'range',
-        sorter: (a, b) => a.range - b.range,
-        render: (text, record) => (
+        dataIndex: 'today',
+        key: 'today',
+        // sorter: (a, b) => a.range - b.range,
+        render: text => text === 'OK'
+          ? <span style={{ color: 'cadetblue' }}>{text}</span>
+          : text === 'Failed'
+            ? <span style={{ color: '#f97676' }}>{text}</span>
+            : <span style={{ color: '#e8baaa' }}>{text}</span>,
+/*        render: (text, record) => (
           <Trend flag={record.status === 1 ? 'down' : 'up'}>
             <span style={{ marginRight: 4 }}>{text}%</span>
           </Trend>
         ),
-        align: 'right',
+        align: 'right', */
       },
     ];
 
@@ -409,7 +426,7 @@ export default class Analysis extends Component {
         <Row gutter={24}>
           <Col xl={12} lg={24} md={24} sm={24} xs={24}>
             <Card
-              loading={loading}
+              // loading={loading}
               bordered={false}
               title="昨日系统备份情况"
               extra={iconGroup}
@@ -421,34 +438,41 @@ export default class Analysis extends Component {
                     subTitle={
                       <span>
                         备份成功数
-                        <Tooltip title="近3天备份情况">
+                        <Tooltip title="昨日备份成功数">
                           <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
                         </Tooltip>
                       </span>
                     }
                     gap={8}
-                    total={numeral(10321).format('0,0')}
+                    total={numeral(103).format('0,0')}
                     // status="up"
                     subTotal={<Icon type="check-circle" style={{ fontSize: 16, color: '#24cc78' }} />}
                   />
-                  <MiniArea line height={45} data={visitData2} />
+                  <MiniArea line height={23} data={visitData2} />
                 </Col>
                 <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
                   <NumberInfo
-                    subTitle="备份失败数"
+                    subTitle={
+                      <span>
+                        备份失败数
+                        <Tooltip title="昨日备份失败数">
+                          <Icon style={{ marginLeft: 8 }} type="info-circle-o" />
+                        </Tooltip>
+                      </span>
+                    }
                     total={4}
                     // status="down"
                     subTotal={<Icon type="close-circle" style={{ fontSize: 16, color: '#e48390' }} />}
                     gap={8}
                   />
-                  <MiniArea line height={45} data={visitData2} />
+                  <MiniArea line height={23} data={visitData2} />
                 </Col>
               </Row>
               <Table
-                rowKey={record => record.index}
+                rowKey={record => record.id}
                 size="small"
                 columns={columns}
-                dataSource={searchData}
+                dataSource={backupRecords}
                 pagination={{
                   style: { marginBottom: 0 },
                   pageSize: 5,
