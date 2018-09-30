@@ -1,9 +1,13 @@
-import { stringify } from 'qs';
 import request from '../utils/request';
-import { getCurrentUser } from '../utils/authority';
 
-export async function queryCpuUtlzData() {
-  return request('http://localhost:8004/tivoli/cpu/keySys');
+export async function monitoringCharts() {
+  return request('tivoli/cpu/monitoring-charts')
+}
+
+export async function queryCpuUtlzData(params) {
+  return params && params.prefix
+    ? request(`tivoli/cpu/keySys/${params.prefix}`)
+    : request('tivoli/cpu/keySys');
 }
 
 export async function removeRule(params) {

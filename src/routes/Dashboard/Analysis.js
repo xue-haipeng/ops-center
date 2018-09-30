@@ -111,6 +111,7 @@ export default class Analysis extends Component {
       serverDistr: [],
       subSysDistr: [],
     };
+// eslint-disable-next-line guard-for-in
     for (const obj in wlsLastHourDistr) {
       for (const item in wlsLastHourDistr[obj]) {
         if (item !== 'BEA-050001') {
@@ -234,17 +235,15 @@ export default class Analysis extends Component {
           <Col span={6} {...topColResponsiveProps}>
             <Pie
               hasLegend
-              title="BEA Code分布"
               subTitle="BEA Code分布"
               total={source.beaCodeDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
               data={source.beaCodeDistr}
-              // valueFormat={val => <span dangerouslySetInnerHTML={{ __html: yuan(val) }} />}
               height={180}
             />
           </Col>
           <Col span={6} {...topColResponsiveProps}>
             <Pie
-              hasLegend
+              // hasLegend
               title="用户ID分布"
               subTitle="用户ID分布"
               total={source.userIdDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
@@ -254,7 +253,7 @@ export default class Analysis extends Component {
           </Col>
           <Col span={6} {...topColResponsiveProps}>
             <Pie
-              hasLegend
+              // hasLegend
               title="业务域分布"
               subTitle="业务域分布"
               total={source.bizLineDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
@@ -264,7 +263,7 @@ export default class Analysis extends Component {
           </Col>
           <Col span={6} {...topColResponsiveProps}>
             <Pie
-              hasLegend
+              // hasLegend
               title="Server分布"
               subTitle="Server分布"
               total={source.serverDistr.map(item => item.y).reduce((prev, curr) => prev + curr, 0)}
@@ -311,7 +310,7 @@ export default class Analysis extends Component {
                   <Icon type="info-circle-o" />
                 </Tooltip>
               }
-              total={numeral(8000000).format('0,0')}
+              total={numeral(8436972).format('0,0')}
               footer={<Field label="示例说明" value="60%" />}
               contentHeight={46}
             >
@@ -433,7 +432,7 @@ export default class Analysis extends Component {
               style={{ marginTop: 24 }}
             >
               <Row gutter={68}>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <Col sm={12} xs={24} style={{ marginBottom: 22 }}>
                   <NumberInfo
                     subTitle={
                       <span>
@@ -448,9 +447,9 @@ export default class Analysis extends Component {
                     // status="up"
                     subTotal={<Icon type="check-circle" style={{ fontSize: 16, color: '#24cc78' }} />}
                   />
-                  <MiniArea line height={23} data={visitData2} />
+                  <MiniArea line height={12} data={visitData2} />
                 </Col>
-                <Col sm={12} xs={24} style={{ marginBottom: 24 }}>
+                <Col sm={12} xs={24} style={{ marginBottom: 22 }}>
                   <NumberInfo
                     subTitle={
                       <span>
@@ -465,7 +464,7 @@ export default class Analysis extends Component {
                     subTotal={<Icon type="close-circle" style={{ fontSize: 16, color: '#e48390' }} />}
                     gap={8}
                   />
-                  <MiniArea line height={23} data={visitData2} />
+                  <MiniArea line height={12} data={visitData2} />
                 </Col>
               </Row>
               <Table
@@ -499,7 +498,7 @@ export default class Analysis extends Component {
                   </div>
                 </div>
               }
-              style={{ marginTop: 24, minHeight: 482 }}
+              style={{ marginTop: 24, minHeight: 470 }}
             >
               {/* <h4 style={{ marginTop: 8, marginBottom: 32 }}>主机分布</h4> */}
               <Pie
@@ -568,7 +567,7 @@ export default class Analysis extends Component {
           </Row>
         </Card>
 
-        <WlsLastHourDistr source={formatedWlsLastHourDir} />
+        {/* <WlsLastHourDistr source={formatedWlsLastHourDir} /> */}
       </Fragment>
     );
   }

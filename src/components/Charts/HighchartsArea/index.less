@@ -1,0 +1,35 @@
+@import '~antd/lib/style/themes/default.less';
+@import '../../../utils/utils.less';
+
+.mapChart {
+  height: 350px;
+  text-align: center;
+  img {
+    display: inline-block;
+    max-width: 100%;
+    max-height: 320px;
+  }
+}
+
+.pieCard :global(.pie-stat) {
+  font-size: 24px !important;
+}
+
+.antCarousel {
+  .slickSlide {
+    text-align: center;
+    height: 457px;
+    line-height: 457px;
+    background: #364d79;
+    overflow: hidden;
+    h3 {
+      color: #fff;
+    }
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .mapChart {
+    height: auto;
+  }
+}

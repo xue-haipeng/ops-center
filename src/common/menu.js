@@ -2,18 +2,18 @@ import { isUrl } from '../utils/utils';
 
 const menuData = [
   {
-    name: 'Dashboard',
-    icon: 'dashboard',
+    name: '报表管理',
+    icon: 'area-chart',
     path: 'dashboard',
     children: [
       {
         name: '综合报表',
         path: 'analysis',
       },
-/*     {
-        name: '性能监控',
+     {
+        name: '监控报表',
         path: 'performance',
-      }, */
+      },
 /*      {
               name: '任务看板',
               path: 'task',
@@ -32,7 +32,7 @@ const menuData = [
   },
   {
     name: '团队管理',
-    icon: 'user',
+    icon: 'team',
     path: 'team',
     children: [
       {
@@ -96,134 +96,29 @@ const menuData = [
           path: 'advanced-form',
         },
       ],
-    },
-    {
-      name: '列表页',
-      icon: 'table',
-      path: 'list',
-      children: [
-        {
-          name: '查询表格',
-          path: 'table-list',
-        },
-        {
-          name: '标准列表',
-          path: 'basic-list',
-        },
-        {
-          name: '卡片列表',
-          path: 'card-list',
-        },
-        {
-          name: '搜索列表',
-          path: 'search',
-          children: [
-            {
-              name: '搜索列表（文章）',
-              path: 'articles',
-            },
-            {
-              name: '搜索列表（项目）',
-              path: 'projects',
-            },
-            {
-              name: '搜索列表（应用）',
-              path: 'applications',
-            },
-          ],
-        },
-      ],
-    },
-    {
-      name: '详情页',
-      icon: 'profile',
-      path: 'profile',
-      children: [
-        {
-          name: '基础详情页',
-          path: 'basic',
-        },
-        {
-          name: '高级详情页',
-          path: 'advanced',
-          authority: ['ROLE_ADMIN', 'ROLE_USER'],
-        },
-        {
-          name: '个人定制',
-          path: 'custom',
-        },
-      ],
     }, */
   {
     name: '应用管理',
-    icon: 'api',
+    icon: 'cluster',
     path: 'app',
     children: [
       {
-        name: '主机管理',
+        name: '主机信息管理',
         path: 'hosts',
       },
     ],
   },
-  /*  {
-    name: '结果页',
-    icon: 'check-circle-o',
-    path: 'result',
+  {
+    name: '日志管理',
+    icon: 'file-text',
+    path: 'logging',
     children: [
       {
-        name: '成功',
-        path: 'success',
-      },
-      {
-        name: '失败',
-        path: 'fail',
+        name: '日志统计报表',
+        path: 'statistics',
       },
     ],
   },
-  {
-    name: '异常页',
-    icon: 'warning',
-    path: 'exception',
-    children: [
-      {
-        name: '403',
-        path: '403',
-      },
-      {
-        name: '404',
-        path: '404',
-      },
-      {
-        name: '500',
-        path: '500',
-      },
-      {
-        name: '触发异常',
-        path: 'trigger',
-        hideInMenu: true,
-      },
-    ],
-  },
-  {
-    name: '账户',
-    icon: 'user',
-    path: 'user',
-    authority: ['ROLE_USER'],
-    children: [
-      {
-        name: '登录',
-        path: 'login',
-      },
-      {
-        name: '注册',
-        path: 'register',
-      },
-      {
-        name: '注册结果',
-        path: 'register-result',
-      },
-    ],
-  }, */
 ];
 
 function formatter(data, parentPath = '/', parentAuthority) {

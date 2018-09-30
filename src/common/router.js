@@ -171,6 +171,9 @@ export const getRouterData = app => {
     '/app/hosts': {
       component: dynamicWrapper(app, ['app'], () => import('../routes/Application/HostList')),
     },
+    '/logging/statistics': {
+      component: dynamicWrapper(app, ['chart'], () => import('../routes/Logging/Statistics')),
+    },
     '/result/success': {
       component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
     },
