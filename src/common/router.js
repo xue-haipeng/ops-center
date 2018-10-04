@@ -103,26 +103,30 @@ export const getRouterData = app => {
     '/monitor/cpu': {
       component: dynamicWrapper(app, ['db'], () => import('../routes/Monitor/CpuUtilization')),
     }, */
-    '/form/basic-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
+    '/tools/basic-form': {
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Tools/BasicForm')),
     },
-    '/form/step-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
+    '/tools/passwd-mgt': {
+      component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt')),
     },
-    '/form/step-form/info': {
-      name: '分步表单（填写转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
+    '/tools/passwd-mgt/step1': {
+      name: '选择Linux主机',
+      component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step1')),
     },
-    '/form/step-form/confirm': {
-      name: '分步表单（确认转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
+    '/tools/passwd-mgt/step2': {
+      name: '验证当前密码',
+      component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step2')),
     },
-    '/form/step-form/result': {
-      name: '分步表单（完成）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
+    '/tools/passwd-mgt/step3': {
+      name: '批量更改密码',
+      component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step3')),
     },
-    '/form/advanced-form': {
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
+    '/tools/passwd-mgt/verify': {
+      name: '验证新密码',
+      component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step4')),
+    },
+    '/tools/advanced-form': {
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Tools/AdvancedForm')),
     },
     '/list/table-list': {
       component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),

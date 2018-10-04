@@ -5,7 +5,7 @@ import { routerRedux } from 'dva/router';
 import { digitUppercase } from '../../../utils/utils';
 import styles from './style.less';
 
-const formItemLayout = {
+const toolsItemLayout = {
   labelCol: {
     span: 5,
   },
@@ -20,14 +20,14 @@ class Step2 extends React.PureComponent {
     const { form, data, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
-      dispatch(routerRedux.push('/form/step-form'));
+      dispatch(routerRedux.push('/tools/step2'));
     };
     const onValidateForm = e => {
       e.preventDefault();
       validateFields((err, values) => {
         if (!err) {
           dispatch({
-            type: 'form/submitStepForm',
+            type: 'tools/submitStepForm',
             payload: {
               ...data,
               ...values,
@@ -41,24 +41,24 @@ class Step2 extends React.PureComponent {
         <Alert
           closable
           showIcon
-          message="确认转账后，资金将直接打入对方账户，无法退回。"
+          message="请在执行修改密码操作之前记下新的密码！"
           style={{ marginBottom: 24 }}
         />
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="付款账户">
+        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="付款账户">
           {data.payAccount}
         </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="收款账户">
+        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="收款账户">
           {data.receiverAccount}
         </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="收款人姓名">
+        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="收款人姓名">
           {data.receiverName}
         </Form.Item>
-        <Form.Item {...formItemLayout} className={styles.stepFormText} label="转账金额">
+        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="转账金额">
           <span className={styles.money}>{data.amount}</span>
           <span className={styles.uppercase}>（{digitUppercase(data.amount)}）</span>
         </Form.Item>
         <Divider style={{ margin: '24px 0' }} />
-        <Form.Item {...formItemLayout} label="支付密码" required={false}>
+        <Form.Item {...toolsItemLayout} label="支付密码" required={false}>
           {getFieldDecorator('password', {
             initialValue: '123456',
             rules: [
@@ -73,7 +73,7 @@ class Step2 extends React.PureComponent {
           style={{ marginBottom: 8 }}
           wrapperCol={{
             xs: { span: 24, offset: 0 },
-            sm: { span: formItemLayout.wrapperCol.span, offset: formItemLayout.labelCol.span },
+            sm: { span: toolsItemLayout.wrapperCol.span, offset: toolsItemLayout.labelCol.span },
           }}
           label=""
         >
@@ -89,7 +89,7 @@ class Step2 extends React.PureComponent {
   }
 }
 
-export default connect(({ form, loading }) => ({
-  submitting: loading.effects['form/submitStepForm'],
-  data: form.step,
+export default connect(({ tools, loading }) => ({
+  submitting: loading.effects['tools/submitStepForm'],
+  data: tools.step,
 }))(Step2);

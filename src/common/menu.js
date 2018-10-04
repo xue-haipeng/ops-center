@@ -76,26 +76,6 @@ const menuData = [
           path: 'disk',
         },
       ],
-    },
-    {
-      name: '表单页',
-      icon: 'form',
-      path: 'form',
-      children: [
-        {
-          name: '基础表单',
-          path: 'basic-form',
-        },
-        {
-          name: '分步表单',
-          path: 'step-form',
-        },
-        {
-          name: '高级表单',
-          authority: ['ROLE_ADMIN', 'ROLE_USER'],
-          path: 'advanced-form',
-        },
-      ],
     }, */
   {
     name: '应用管理',
@@ -117,6 +97,26 @@ const menuData = [
         name: '日志统计报表',
         path: 'statistics',
       },
+    ],
+  },
+  {
+    name: '自动化工具',
+    icon: 'tool',
+    path: 'tools',
+    children: [
+      /* {
+        name: '基础表单',
+        path: 'basic-form',
+      }, */
+      {
+        name: 'Linux密码修改工具',
+        path: 'passwd-mgt',
+      },
+      /* {
+        name: '高级表单',
+        authority: ['ROLE_ADMIN', 'ROLE_USER'],
+        path: 'advanced-form',
+      }, */
     ],
   },
 ];

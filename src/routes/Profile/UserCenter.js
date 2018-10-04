@@ -15,7 +15,7 @@ import {
   message,
 } from 'antd';
 import DescriptionList from 'components/DescriptionList';
-import CustForm from '../Forms/CustForm';
+import CustForm from '../Tools/CustForm';
 import { getCurrentUser, setCurrentUser } from '../../utils/authority';
 
 const { Description } = DescriptionList;

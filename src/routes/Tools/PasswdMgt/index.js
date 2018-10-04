@@ -14,12 +14,14 @@ export default class StepForm extends PureComponent {
     const { pathname } = location;
     const pathList = pathname.split("/");
     switch (pathList[pathList.length - 1]) {
-      case "info":
+      case "step1":
         return 0;
-      case "confirm":
+      case "step2":
         return 1;
-      case "result":
+      case "step3":
         return 2;
+      case "verify":
+        return 3;
       default:
         return 0;
     }
@@ -28,16 +30,17 @@ export default class StepForm extends PureComponent {
     const { match, routerData, location } = this.props;
     return (
       <PageHeaderLayout
-        title="分步表单"
+        title="Linux主机密码修改工具"
         tabActiveKey={location.pathname}
-        content="将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。"
+        content="只需4步，轻松完成几十上百台Linux主机的密码修改工作。"
       >
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="填写转账信息" />
-              <Step title="确认转账信息" />
-              <Step title="完成" />
+              <Step title="选择主机" />
+              <Step title="验证当前密码" />
+              <Step title="批量修改密码" />
+              <Step title="验证新密码" />
             </Steps>
             <Switch>
               {getRoutes(match.path, routerData).map(item => (
@@ -50,8 +53,8 @@ export default class StepForm extends PureComponent {
               ))}
               <Redirect
                 exact
-                from="/form/step-form"
-                to="/form/step-form/info"
+                from="/tools/passwd-mgt"
+                to="/tools/passwd-mgt/step1"
               />
               <Route render={NotFound} />
             </Switch>
