@@ -1,16 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Input, Button, Alert, Divider } from 'antd';
+import { Form, Input, Button, Divider, Icon, Col, Row } from 'antd';
 import { routerRedux } from 'dva/router';
-import { digitUppercase } from '../../../utils/utils';
 import styles from './style.less';
 
 const toolsItemLayout = {
   labelCol: {
-    span: 5,
+    span: 6,
   },
   wrapperCol: {
-    span: 19,
+    span: 12,
   },
 };
 
@@ -38,37 +37,70 @@ class Step2 extends React.PureComponent {
     };
     return (
       <Form layout="horizontal" className={styles.stepForm}>
-        <Alert
-          closable
-          showIcon
-          message="确认转账后，资金将直接打入对方账户，无法退回。"
-          style={{ marginBottom: 24 }}
-        />
-        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="付款账户">
-          {data.payAccount}
-        </Form.Item>
-        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="收款账户">
-          {data.receiverAccount}
-        </Form.Item>
-        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="收款人姓名">
-          {data.receiverName}
-        </Form.Item>
-        <Form.Item {...toolsItemLayout} className={styles.stepFormText} label="转账金额">
-          <span className={styles.money}>{data.amount}</span>
-          <span className={styles.uppercase}>（{digitUppercase(data.amount)}）</span>
-        </Form.Item>
+        <Row gutter={16} style={{ margin: '0 16px'}}>
+          <Col lg={18} md={18} sm={18} xs={24}>
+            <Form.Item {...toolsItemLayout} style={{ maxWidth: 450, marginLeft: 30 }} label="当前密码" required>
+              {getFieldDecorator('password', {
+                initialValue: '123456',
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入当前密码',
+                  },
+                ],
+              })(<Input type="text" autoComplete="off" />)}
+            </Form.Item>
+          </Col>
+          <Col lg={6} md={6} sm={6} xs={24}>
+            <Form.Item
+              wrapperCol={{
+                xs: { span: 4, offset: 0 },
+                sm: { span: 4, offset: 0 },
+              }}
+              style={{ maxWidth: 200 }}
+              label=""
+            >
+              <Button type="primary" onClick={onValidateForm} loading={submitting}>
+                开始检查
+              </Button>
+            </Form.Item>
+          </Col>
+        </Row>
+
         <Divider style={{ margin: '24px 0' }} />
-        <Form.Item {...toolsItemLayout} label="支付密码" required={false}>
-          {getFieldDecorator('password', {
-            initialValue: '123456',
-            rules: [
-              {
-                required: true,
-                message: '需要支付密码才能进行支付',
-              },
-            ],
-          })(<Input type="password" autoComplete="off" style={{ width: '80%' }} />)}
-        </Form.Item>
+        <ul style={{ listStyle: 'none' }}>
+          <li className={styles.recordLi}>
+            <span className={styles.recordSpan}>EXOAPS001</span>
+            <span className={styles.recordSpan}>10.30.41.140</span>
+            <span className={styles.recordSpan}>wladm</span>
+            <span style={{ color: 'green' }}>OK</span>
+          </li>
+          <li className={styles.recordLi}>
+            <span className={styles.recordSpan}>EXOAPS001</span>
+            <span className={styles.recordSpan}>10.30.41.140</span>
+            <span className={styles.recordSpan}>wladm</span>
+            <span style={{ color: 'green' }}>OK</span>
+          </li>
+          <li className={styles.recordLi}>
+            <span className={styles.recordSpan}>EXOAPS001</span>
+            <span className={styles.recordSpan}>10.30.41.140</span>
+            <span className={styles.recordSpan}>wladm</span>
+            <span style={{ color: 'green' }}>OK</span>
+          </li>
+          <li className={styles.recordLi}>
+            <span className={styles.recordSpan}>EXOAPS001</span>
+            <span className={styles.recordSpan}>10.30.41.140</span>
+            <span className={styles.recordSpan}>wladm</span>
+            <span style={{ color: 'green' }}>OK</span>
+          </li>
+          <li className={styles.recordLi}>
+            <span className={styles.recordSpan}>EXOAPS001</span>
+            <span className={styles.recordSpan}>10.30.41.140</span>
+            <span className={styles.recordSpan}>wladm</span>
+            <span style={{ color: 'green' }}>OK</span>
+          </li>
+        </ul>
+        <Divider style={{ margin: '24px 0' }} />
         <Form.Item
           style={{ marginBottom: 8 }}
           wrapperCol={{
@@ -77,11 +109,11 @@ class Step2 extends React.PureComponent {
           }}
           label=""
         >
-          <Button type="primary" onClick={onValidateForm} loading={submitting}>
-            提交
+          <Button onClick={onPrev}>
+            <Icon type="left" />上一步
           </Button>
-          <Button onClick={onPrev} style={{ marginLeft: 8 }}>
-            上一步
+          <Button type="primary" onClick={onValidateForm} style={{ marginLeft: 36 }}>
+            下一步<Icon type="right" />
           </Button>
         </Form.Item>
       </Form>

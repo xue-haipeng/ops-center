@@ -109,7 +109,7 @@ const menuData = [
         path: 'basic-form',
       }, */
       {
-        name: 'Linux密码修改工具',
+        name: '主机密码批量修改',
         path: 'passwd-mgt',
       },
       /* {

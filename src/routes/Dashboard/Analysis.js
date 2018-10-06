@@ -122,7 +122,6 @@ export default class Analysis extends Component {
         }
       }
     }
-    console.log('wlsLastHourDistr: ', formatedWlsLastHourDir);
     const totalLogCount = logCountChartList.map(c => c.y).reduce((x, y) => x + y, 0);
     const taskProcessingCount = currentUser.taskNotFinishedOfMe;
     const taskFinishedOfMe = currentUser.taskTotalOfMe - currentUser.taskNotFinishedOfMe;

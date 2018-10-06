@@ -78,6 +78,7 @@ class Step1 extends React.PureComponent {
                 listStyle={{
                   width: 300,
                   height: 420,
+                  textAlign: 'left',
                 }}
                 filterOption={this.filterOption}
                 targetKeys={this.state.targetKeys}
@@ -86,12 +87,17 @@ class Step1 extends React.PureComponent {
               />
             )}
           </Form.Item>
+          <Divider style={{ margin: '24px 0' }} />
           <Form.Item
             wrapperCol={{
               xs: { span: 24, offset: 0 },
-              sm: { span: toolsItemLayout.wrapperCol.span, offset: toolsItemLayout.labelCol.span },
+              sm: {
+                span: toolsItemLayout.wrapperCol.span,
+                offset: toolsItemLayout.labelCol.span,
+              },
             }}
             label=""
+            style={{ textAlign: 'left' }}
           >
             <Button type="primary" onClick={onValidateForm}>
               下一步<Icon type="right" />
@@ -100,14 +106,12 @@ class Step1 extends React.PureComponent {
         </Form>
         <Divider style={{ margin: '40px 0 24px' }} />
         <div className={styles.desc}>
-          <h3>说明</h3>
-          <h4>转账到支付宝账户</h4>
+          <h3>特别说明</h3>
           <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+            出于安全考虑，每个用户只能修改自己名下主机的密码，如列表中没有您要修改密码的主机，请先前往<a href="/app/hosts">主机信息管理</a>页面，找出并认领您的主机。
           </p>
-          <h4>转账到银行卡</h4>
           <p>
-            如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。如果需要，这里可以放一些关于产品的常见问题说明。
+            暂时只支持Linux平台主机密码修改，后续会陆续推出Windows、Oracle等系统的密码修改工具，敬请期待！
           </p>
         </div>
       </Fragment>

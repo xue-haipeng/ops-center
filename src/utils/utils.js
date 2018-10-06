@@ -1,5 +1,6 @@
 import moment from 'moment';
 import { parse, stringify } from 'qs';
+import { DECIMAL_DIGITS, LOWERCASE_LETTERS, SPECIAL_CHARTS, UPPERCASE_LETTERS } from '../common/constants';
 
 export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
@@ -199,4 +200,44 @@ export function passwordStrengthTest(pass) {
     level += 1;
   }
   return level;
+}
+
+export function generatePassword(length, uppercase, lowercase, digit, special) {
+  let password = '';
+  const arr = [];
+  let LEGAL_CHARACTERS = '';
+  if (uppercase) {
+    const index = Math.floor(Math.random() * (UPPERCASE_LETTERS.length - 1));
+    arr.push(UPPERCASE_LETTERS.charAt(index));
+    LEGAL_CHARACTERS += UPPERCASE_LETTERS;
+  }
+  if (lowercase) {
+    const index = Math.floor(Math.random() * (LOWERCASE_LETTERS.length - 1));
+    arr.push(LOWERCASE_LETTERS.charAt(index));
+    LEGAL_CHARACTERS += LOWERCASE_LETTERS;
+  }
+  if (digit) {
+    const index = Math.floor(Math.random() * (DECIMAL_DIGITS.length - 1));
+    arr.push(DECIMAL_DIGITS.charAt(index));
+    LEGAL_CHARACTERS += DECIMAL_DIGITS;
+  }
+  if (special) {
+    const index = Math.floor(Math.random() * (SPECIAL_CHARTS.length - 1));
+    arr.push(SPECIAL_CHARTS.charAt(index));
+    LEGAL_CHARACTERS += SPECIAL_CHARTS;
+  }
+  const paddingLength = length - arr.length;
+  for (let i = 0; i < paddingLength; i += 1) {
+    const index = Math.floor(Math.random() * (LEGAL_CHARACTERS.length - 1));
+    arr.push(LEGAL_CHARACTERS.charAt(index));
+  }
+  for (let j = 0; j < length; j += 1) {
+    let index = Math.floor(Math.random() * (arr.length - 1));
+    while (j === 0 && SPECIAL_CHARTS.includes(arr[index])) {
+      index = Math.floor(Math.random() * (arr.length - 1));
+    }
+    password += arr[index];
+    arr.splice(index, 1);
+  }
+  return password;
 }
