@@ -85,9 +85,9 @@ export default class Performance extends PureComponent {
       },
       {
         title: '空闲空间',
-        dataIndex: 'rs.used_mb',
-        key: 'rs.used_mb',
-        render: txt => `${numeral(txt / 1024).format('0,0')}GB`,
+        dataIndex: 'rs.free_mb',
+        key: 'rs.free_mb',
+        render: txt => `${numeral(txt / 1024.0).format('0.0')} GB`,
       },
       {
         title: '使用率',

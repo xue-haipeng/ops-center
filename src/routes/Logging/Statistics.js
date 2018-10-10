@@ -80,7 +80,6 @@ export default class Statistics extends Component {
       subSysDistr,
     } = formatedWlsLastHourDir;
 
-    console.log('formatedWlsLastHourDir: ', formatedWlsLastHourDir);
     const areaChartData = logCountChartList.map(item => {
       const date = item.x.split("T")[0];
       const time = item.x.split("T")[1];

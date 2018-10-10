@@ -20,7 +20,7 @@ export default class StepForm extends PureComponent {
         return 1;
       case "step3":
         return 2;
-      case "verify":
+      case "step4":
         return 3;
       default:
         return 0;
@@ -30,7 +30,7 @@ export default class StepForm extends PureComponent {
     const { match, routerData, location } = this.props;
     return (
       <PageHeaderLayout
-        title="主机密码批量修改神器"
+        title="主机密码批量修改神器（预览版）"
         tabActiveKey={location.pathname}
         content="只需4步，轻松完成几十上百台Linux主机的密码修改工作。"
       >

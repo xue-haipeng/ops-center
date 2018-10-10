@@ -101,8 +101,6 @@ export default class Analysis extends Component {
       wlsLastHourDistr,
     } = chart;
 
-    console.log('backupRecords: ', backupRecords);
-
     const formatedWlsLastHourDir = {
       beaCodeDistr: [],
       userIdDistr: [],

@@ -27,7 +27,7 @@ export default class UserCenter extends Component {
         <Card title="用户信息" style={{ marginBottom: 24 }} bordered={false}>
           <div>
             <SockJsClient
-              url="http://localhost:8899/demo/ws"
+              url="http://localhost:8002/tools/passwd"
               // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
               // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
               topics={['/topic/process']}

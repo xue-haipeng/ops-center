@@ -121,7 +121,7 @@ export const getRouterData = app => {
       name: '批量更改密码',
       component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step3')),
     },
-    '/tools/passwd-mgt/verify': {
+    '/tools/passwd-mgt/step4': {
       name: '验证新密码',
       component: dynamicWrapper(app, ['tools'], () => import('../routes/Tools/PasswdMgt/Step4')),
     },
