@@ -4,6 +4,7 @@ import { Form, Input, Button, Divider, Icon, Col, Row } from 'antd';
 import { routerRedux } from 'dva/router';
 import SockJsClient from 'react-stomp';
 import styles from './style.less';
+import { getCurrentUser } from '../../../utils/authority';
 
 const toolsItemLayout = {
   labelCol: {
@@ -37,7 +38,7 @@ class Step4 extends React.PureComponent {
   };
 
   render() {
-    const { form, tools: { selectedHosts }, dispatch, submitting } = this.props;
+    const { form, tools: { selectedHosts, username }, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
       dispatch(routerRedux.push('/tools/passwd-mgt/step3'));
@@ -61,9 +62,7 @@ class Step4 extends React.PureComponent {
         }
       });
     };
-    const onNext = () => {
-      dispatch(routerRedux.push('/tools/passwd-mgt/step3'));
-    };
+
     return (
       <Form layout="horizontal" className={styles.stepForm}>
         <Row gutter={16} style={{ margin: '0 16px'}}>
@@ -76,7 +75,7 @@ class Step4 extends React.PureComponent {
                     message: '请输入用户名称',
                   },
                 ],
-              })(<Input type="text" autoComplete="off" />)}
+              })(<Input type="text" defaultValue={username} autoComplete="off" />)}
             </Form.Item>
           </Col>
           <Col lg={9} md={9} sm={9} xs={24}>
@@ -138,7 +137,7 @@ class Step4 extends React.PureComponent {
           url="http://localhost:8002/tools/passwd"
           // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
           // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
-          topics={['/topic/process']}
+          topics={[`/topic/verify_password_${getCurrentUser()}`]}
           onMessage={this.updateResults}
           ref={client => {
             this.clientRef = client;
