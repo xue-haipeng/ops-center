@@ -38,7 +38,7 @@ class Step3 extends React.PureComponent {
   };
 
   render() {
-    const { form, tools: { selectedHosts, username, password }, dispatch, submitting } = this.props;
+    const { form, tools: { selectedHosts, username, password }, user: { currentUser }, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
       dispatch(routerRedux.push('/tools/passwd-mgt/step2'));
@@ -51,11 +51,11 @@ class Step3 extends React.PureComponent {
           for (let i = 0; i < selectedHosts.length; i += 1) {
             hosts.push({ id: selectedHosts[i].split('#')[0], hostname: selectedHosts[i].split('#')[1], ipAddress: selectedHosts[i].split('#')[2]});
           }
-          console.log('values: ', values, ', hosts: ', hosts);
           dispatch({
             type: 'tools/changePassword',
             payload: {
               ...values,
+              currUser: currentUser.username,
               hosts,
               username,
               password,
@@ -129,7 +129,7 @@ class Step3 extends React.PureComponent {
           </Button>
         </Form.Item>
         <SockJsClient
-          url="http://localhost:8002/tools/passwd"
+          url="http://11.11.47.72:8002/tools/passwd"
           // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
           // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
           topics={[`/topic/update_password_${getCurrentUser()}`]}
@@ -143,7 +143,8 @@ class Step3 extends React.PureComponent {
   }
 }
 
-export default connect(({ tools, loading }) => ({
+export default connect(({ tools, user, loading }) => ({
   submitting: loading.effects['tools/submitStepForm'],
   tools,
+  user,
 }))(Step3);

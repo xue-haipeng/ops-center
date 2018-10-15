@@ -63,7 +63,7 @@ export async function updateHost(params) {
 }
 
 export async function claimHosts(params) {
-  return request('http://localhost:8002/hosts/claim', {
+  return request('app/hosts/claim', {
     method: 'POST',
     data: {
       ...params,

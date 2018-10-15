@@ -40,9 +40,12 @@ export default {
       });
       // yield put(routerRedux.push('/tools/passwd-mgt/step2'));
     },
-    *changePassword({ payload }, { call }) {
-      console.log('payload: ', payload);
+    *changePassword({ payload }, { call, put }) {
       yield call(updateHostPasswd, payload);
+      yield put({
+        type: 'saveCredential',
+        payload,
+      })
     },
     *submitAdvancedForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);

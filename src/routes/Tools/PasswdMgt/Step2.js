@@ -4,7 +4,6 @@ import { Form, Input, Button, Divider, Icon, Col, Row } from 'antd';
 import { routerRedux } from 'dva/router';
 import SockJsClient from 'react-stomp';
 import styles from './style.less';
-import { getCurrentUser } from '../../../utils/authority';
 
 const toolsItemLayout = {
   labelCol: {
@@ -25,7 +24,6 @@ class Step2 extends React.PureComponent {
   }
 
   updateResults = msg => {
-    console.log('msg: ', msg, ', results: ', this.state.results);
     const results = this.state.results.concat(msg);
     this.setState({
       results,
@@ -39,7 +37,7 @@ class Step2 extends React.PureComponent {
   };
 
   render() {
-    const { form, tools: { selectedHosts }, dispatch, submitting } = this.props;
+    const { form, tools: { selectedHosts }, user: { currentUser }, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
       dispatch(routerRedux.push('/tools/passwd-mgt/step1'));
@@ -47,7 +45,6 @@ class Step2 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
       validateFields((err, values) => {
-        console.log('values: ', values);
         if (!err) {
           const hosts = [];
           for (let i = 0; i < selectedHosts.length; i += 1) {
@@ -59,6 +56,7 @@ class Step2 extends React.PureComponent {
             payload: {
               ...values,
               hosts,
+              currUser: currentUser.username,
             },
           });
         }
@@ -141,10 +139,10 @@ class Step2 extends React.PureComponent {
           </Button>
         </Form.Item>
         <SockJsClient
-          url="http://localhost:8002/tools/passwd"
+          url="http://11.11.47.72:8002/tools/passwd"
           // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
           // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
-          topics={[`/topic/verify_password_${getCurrentUser()}`]}
+          topics={[`/topic/verify_password_${currentUser.username}`]}
           onMessage={this.updateResults}
           ref={client => {
             this.clientRef = client;
@@ -155,7 +153,8 @@ class Step2 extends React.PureComponent {
   }
 }
 
-export default connect(({ tools, loading }) => ({
+export default connect(({ tools, user, loading }) => ({
   submitting: loading.effects['tools/submitStepForm'],
   tools,
+  user,
 }))(Step2);

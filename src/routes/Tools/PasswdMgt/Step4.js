@@ -15,7 +15,18 @@ const toolsItemLayout = {
   },
 };
 
-@Form.create()
+@Form.create({
+  mapPropsToFields(props) {
+    return {
+      username: Form.createFormField({
+        value: props.tools.username,
+      }),
+      password: Form.createFormField({
+        value: props.tools.newPassword,
+      }),
+    }
+  },
+})
 class Step4 extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -29,6 +40,7 @@ class Step4 extends React.PureComponent {
     this.setState({
       results,
     });
+    console.log('results: ', results);
   };
 
   resetResults = () => {
@@ -38,7 +50,7 @@ class Step4 extends React.PureComponent {
   };
 
   render() {
-    const { form, tools: { selectedHosts, username }, dispatch, submitting } = this.props;
+    const { form, tools: { selectedHosts, username }, user: { currentUser }, dispatch, submitting } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onPrev = () => {
       dispatch(routerRedux.push('/tools/passwd-mgt/step3'));
@@ -56,6 +68,7 @@ class Step4 extends React.PureComponent {
             type: 'tools/verifyPassword',
             payload: {
               ...values,
+              currUser: currentUser.username,
               hosts,
             },
           });
@@ -75,7 +88,7 @@ class Step4 extends React.PureComponent {
                     message: '请输入用户名称',
                   },
                 ],
-              })(<Input type="text" defaultValue={username} autoComplete="off" />)}
+              })(<Input type="text" autoComplete="off" />)}
             </Form.Item>
           </Col>
           <Col lg={9} md={9} sm={9} xs={24}>
@@ -134,10 +147,10 @@ class Step4 extends React.PureComponent {
           </Button>
         </Form.Item>
         <SockJsClient
-          url="http://localhost:8002/tools/passwd"
+          url="http://11.11.47.72:8002/tools/passwd"
           // headers={{ Authorization: `Bearer ${getAccessToken()}` }}
           // subscribeHeaders={{ Authorization: `Bearer ${getAccessToken()}` }}
-          topics={[`/topic/verify_password_${getCurrentUser()}`]}
+          topics={[`/topic/verify_password_${currentUser.username}`]}
           onMessage={this.updateResults}
           ref={client => {
             this.clientRef = client;
@@ -148,7 +161,8 @@ class Step4 extends React.PureComponent {
   }
 }
 
-export default connect(({ tools, loading }) => ({
+export default connect(({ tools, user, loading }) => ({
   submitting: loading.effects['tools/submitStepForm'],
   tools,
+  user,
 }))(Step4);

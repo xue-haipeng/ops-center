@@ -6,7 +6,7 @@ export async function hostsByMaintainer(params) {
 }
 
 export async function verifyHostPasswd(params) {
-  return request('http://localhost:8002/hosts/verifyHostPasswd', {
+  return request('app/hosts/verifyHostPasswd', {
     method: 'POST',
     data: {
       ...params,
@@ -16,7 +16,7 @@ export async function verifyHostPasswd(params) {
 }
 
 export async function updateHostPasswd(params) {
-  return request('http://localhost:8002/hosts/updateHostPasswd', {
+  return request('app/hosts/updateHostPasswd', {
     method: 'POST',
     data: {
       ...params,
