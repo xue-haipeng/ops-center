@@ -157,6 +157,8 @@ const columns = [
 const CreateForm = Form.create({
   mapPropsToFields(props) {
     const selectedItem = props.selectedRow;
+    const fileList = props.fileList;
+    console.log('fileList: ', fileList);
 // eslint-disable-next-line prefer-destructuring
     const currentUser = props.currentUser;
     const isModify = selectedItem && props.modalTitle === '修改任务';
@@ -229,14 +231,15 @@ const CreateForm = Form.create({
     modalVisible,
     modalTitle,
     selectedRow,
+    fileList,
     form,
     handleAdd,
     handleUpdate,
     handleCancel,
-    handleFileUpload,
+    handleFileChange,
   } = props;
 
-  console.log('passed: ', selectedRow.defaultFileList);
+  console.log('selectedRow: ', selectedRow, ', fileList: ', fileList);
   const formItemLayout = {
     labelCol: {
       xs: { span: 24 },
@@ -444,8 +447,8 @@ const CreateForm = Form.create({
           {form.getFieldDecorator('attachments')(
             <Upload
               action={`${API_GATEWAY_URL}team/tasks/attachment`}
-              fileList={selectedRow.defaultFileList}
-              onChange={handleFileUpload}
+              fileList={fileList}
+              onChange={handleFileChange}
             >
               <Button>
                 <Icon type="upload" /> 选择文件
@@ -475,6 +478,7 @@ export default class TaskList extends PureComponent {
     pagination: {},
     percent: 0,
     searchCriteria: {},
+    fileList:[],
   };
 
   componentDidMount() {
@@ -575,6 +579,7 @@ export default class TaskList extends PureComponent {
   };
 
   handleAdd = fields => {
+    console.log('fields: ', fields);
     if (fields && fields.attachments) {
       const attachments = fields.attachments.fileList.map(file => file.response);
       console.log('attach: ', attachments);
@@ -616,12 +621,25 @@ export default class TaskList extends PureComponent {
     )
   };
   handleUpdate = fields => {
-    this.props.dispatch({
-      type: 'team/update',
-      payload: {
-        ...fields,
-      },
-    });
+    console.log('update fields: ', fields);
+    if (fields && fields.attachments) {
+      const attachments = fields.attachments.fileList.map(file => file.response);
+      console.log('attach: ', attachments);
+      const payload = { ...fields, attachments};
+      this.props.dispatch({
+        type: 'team/update',
+        payload: {
+          ...payload,
+        },
+      });
+    }  else {
+      this.props.dispatch({
+        type: 'team/update',
+        payload: {
+          ...fields,
+        },
+      });
+    }
     this.setState({
       visible: false,
     });
@@ -697,11 +715,15 @@ export default class TaskList extends PureComponent {
     });
   };
 
-  handleFileChange = info => {
-    const { status, response: attach, fileList } = info.file;
-    if (status === 'done') {
-      console.log(status, attach, fileList);
+  handleFileChange = ({ file, fileList }) => {
+
+    console.log('file: ', file, ', fileList: ', fileList);
+/*    const { status, response: attach, fileList } = info.file;
+    console.log('status: ', status, ', attach: ', attach, ', fileList: ', fileList); */
+    if (file.status !== 'uploading') {
+      console.log('status: ', file.status, file, fileList);
     }
+    this.setState({ fileList: file.status ? [...fileList] : this.state.fileList });
   };
 
   render() {
@@ -875,9 +897,11 @@ export default class TaskList extends PureComponent {
           modalVisible={this.state.visible}
           modalTitle={this.state.title}
           selectedRow={this.state.selectedRow}
+          fileList={this.state.fileList}
           handleAdd={this.handleAdd}
           handleUpdate={this.handleUpdate}
           handleCancel={this.handleCancel}
+          handleFileChange={this.handleFileChange}
           percent={this.state.percent}
           currentUser={currentUser}
         />
