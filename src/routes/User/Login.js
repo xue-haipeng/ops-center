@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Link } from 'dva/router';
 import { Checkbox, Alert, Tooltip } from 'antd';
 import Login from 'components/Login';
 import styles from './Login.less';
