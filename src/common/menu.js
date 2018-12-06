@@ -100,6 +100,17 @@ const menuData = [
     ],
   },
   {
+    name: 'PaaS管理',
+    icon: 'cloud',
+    path: 'paas',
+    children: [
+      {
+        name: 'OpenShift POC平台管理',
+        path: 'ocp',
+      },
+    ],
+  },
+  {
     name: '自动化工具',
     icon: 'tool',
     path: 'tools',

@@ -2,13 +2,14 @@ import React, { PureComponent } from 'react';
 import moment from 'moment';
 import { connect } from 'dva';
 import { Link } from 'dva/router';
-import { Row, Col, Card, List, Avatar } from 'antd';
+import { Avatar, Card, Col, List, Row } from 'antd';
 
 import { Radar } from 'components/Charts';
 import EditableLinkGroup from 'components/EditableLinkGroup';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-import styles from './Workplace.less';
+import styles from './OpenShift.less';
+import { getNotice } from '../../../mock/api';
 
 const links = [
   {
@@ -77,7 +78,7 @@ const members = [
   projectLoading: loading.effects['project/fetchNotice'],
   activitiesLoading: loading.effects['activities/fetchList'],
 }))
-export default class Workplace extends PureComponent {
+export default class OpenShift extends PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -124,11 +125,11 @@ export default class Workplace extends PureComponent {
                 <span className={styles.event}>{events}</span>
               </span>
             }
-            description={
+/*            description={
               <span className={styles.datetime} title={item.updatedAt}>
                 {moment(item.updatedAt).fromNow()}
               </span>
-            }
+            } */
           />
         </List.Item>
       );
@@ -137,60 +138,26 @@ export default class Workplace extends PureComponent {
 
   render() {
     const {
-      project: { notice },
+      // project: { notice },
       projectLoading,
       activitiesLoading,
       chart: { radarData },
     } = this.props;
 
-    const pageHeaderContent = (
-      <div className={styles.pageHeaderContent}>
-        <div className={styles.avatar}>
-          <Avatar
-            size="large"
-            src="https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png"
-          />
-        </div>
-        <div className={styles.content}>
-          <div className={styles.contentTitle}>早安，曲丽丽，祝你开心每一天！</div>
-          <div>当前有3套数据库备份失败，2台主机CPU使用率过高。</div>
-        </div>
-      </div>
-    );
-
-    const extraContent = (
-      <div className={styles.extraContent}>
-        <div className={styles.statItem}>
-          <p>我本周的任务</p>
-          <p>
-            3<span> / 5</span>
-          </p>
-        </div>
-        <div className={styles.statItem}>
-          <p>我管理的系统</p>
-          <p>7</p>
-        </div>
-        <div className={styles.statItem}>
-          <p>我管理的主机</p>
-          <p>89</p>
-        </div>
-      </div>
-    );
-
     return (
-      <PageHeaderLayout content={pageHeaderContent} extraContent={extraContent}>
+      <PageHeaderLayout>
         <Row gutter={24}>
           <Col xl={16} lg={24} md={24} sm={24} xs={24}>
             <Card
               className={styles.projectList}
               style={{ marginBottom: 24 }}
-              title="各大平台"
+              title="OpenShift主要资源"
               bordered={false}
-              extra={<Link to="/">全部平台</Link>}
+              extra={<Link to="/">全部资源</Link>}
               loading={projectLoading}
               bodyStyle={{ padding: 0 }}
             >
-              {notice.map(item => (
+              {getNotice.map(item => (
                 <Card.Grid className={styles.projectGrid} key={item.id}>
                   <Card bodyStyle={{ padding: 0 }} bordered={false}>
                     <Card.Meta
@@ -200,15 +167,15 @@ export default class Workplace extends PureComponent {
                           <Link to={item.href}>{item.title}</Link>
                         </div>
                       }
-                      description={item.description}
+                      // description={item.description}
                     />
                     <div className={styles.projectItemContent}>
                       <Link to={item.memberLink}>{item.member || ''}</Link>
-                      {item.updatedAt && (
+{/*                      {item.updatedAt && (
                         <span className={styles.datetime} title={item.updatedAt}>
                           {moment(item.updatedAt).fromNow()}
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </Card>
                 </Card.Grid>

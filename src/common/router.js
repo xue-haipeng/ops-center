@@ -83,14 +83,6 @@ export const getRouterData = app => {
     '/dashboard/backup': {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Backup')),
     },
-    '/dashboard/workplace': {
-      component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
-        import('../routes/Dashboard/Workplace')
-      ),
-      // hideInBreadcrumb: true,
-      // name: '工作台',
-      // authority: 'admin',
-    },
     '/monitor/app-status': {
       component: dynamicWrapper(app, ['app'], () => import('../routes/Monitor/AppStatusCheck')),
     },
@@ -103,6 +95,14 @@ export const getRouterData = app => {
     '/monitor/cpu': {
       component: dynamicWrapper(app, ['db'], () => import('../routes/Monitor/CpuUtilization')),
     }, */
+    '/paas/ocp': {
+      component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
+        import('../routes/Paas/OpenShift')
+      ),
+      // hideInBreadcrumb: true,
+      // name: '工作台',
+      // authority: 'admin',
+    },
     '/tools/basic-form': {
       component: dynamicWrapper(app, ['form'], () => import('../routes/Tools/BasicForm')),
     },

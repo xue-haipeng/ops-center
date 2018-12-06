@@ -1,18 +1,23 @@
 import { parse } from 'url';
 
 const titles = [
-  'ERP平台',
-  '用户平台',
-  '决策支持平台',
-  '集成平台',
-  '非结构化平台',
-  '权限平台',
-  '自开发平台',
-  '联合监督及审计项目',
-  '其它平台',
+  'Nodes',
+  'Users',
+  'Projects',
+  'Pods',
+  'Deployments',
+  'Services',
+  'Routes',
+  'PVC',
+  'PV',
+  'Builds',
+  'ImageStreams',
+  'ConfigMap',
+  'Secrets',
+  'ServiceAccounts',
 ];
 const avatars = [
-  'http://p8htzoe0s.bkt.clouddn.com/image/avatar/sap.png', // Alipay
+  'https://gw.alipayobjects.com/zos/rmsportal/UrQsqscbKEpNuJcvBZBu.png', // Alipay
   'https://gw.alipayobjects.com/zos/rmsportal/zOsKZmFRdUtvpqCImOVY.png', // Angular
   'https://gw.alipayobjects.com/zos/rmsportal/dURIMkkrRFpPgTuzkwnB.png', // Ant Design
   'https://gw.alipayobjects.com/zos/rmsportal/sfjbOqnsXXJgNCjCzDBL.png', // Ant Design Pro
@@ -20,6 +25,8 @@ const avatars = [
   'https://gw.alipayobjects.com/zos/rmsportal/kZzEzemZyKLKFsojXItE.png', // React
   'https://gw.alipayobjects.com/zos/rmsportal/ComBAopevLwENQdKWiIn.png', // Vue
   'https://gw.alipayobjects.com/zos/rmsportal/nxkuOJlFJuAUhzlMTCEe.png', // Webpack
+  'https://gw.alipayobjects.com/zos/rmsportal/psOgztMplJMGpVEqfcgF.png',
+  'https://gw.alipayobjects.com/zos/rmsportal/ZpBqSxLxVEXfcUNoPKrz.png',
 ];
 
 const avatars2 = [
@@ -133,7 +140,7 @@ export const getNotice = [
     logo: avatars[0],
     description: 'EP1、EP2、EP9、CPF、HP1、ABC',
     updatedAt: new Date(),
-    member: '当前系统运行平稳',
+    member: '8 / 8',
     href: '',
     memberLink: '',
   },
@@ -143,7 +150,7 @@ export const getNotice = [
     logo: avatars[1],
     description: '希望是一个好东西，也许是最好的，好东西是不会消亡的',
     updatedAt: new Date('2017-07-24'),
-    member: '全组都是吴彦祖',
+    member: '3 / 3',
     href: '',
     memberLink: '',
   },
@@ -153,7 +160,7 @@ export const getNotice = [
     logo: avatars[2],
     description: '城镇中有那么多的酒馆，她却偏偏走进了我的酒馆',
     updatedAt: new Date(),
-    member: '中二少女团',
+    member: '8 / 8',
     href: '',
     memberLink: '',
   },
@@ -163,7 +170,7 @@ export const getNotice = [
     logo: avatars[3],
     description: '那时候我只会想自己想要什么，从不想自己拥有什么',
     updatedAt: new Date('2017-07-23'),
-    member: '程序员日常',
+    member: '8 / 8',
     href: '',
     memberLink: '',
   },
@@ -173,7 +180,7 @@ export const getNotice = [
     logo: avatars[4],
     description: '凛冬将至',
     updatedAt: new Date('2017-07-23'),
-    member: '高逼格设计天团',
+    member: '8 / 8',
     href: '',
     memberLink: '',
   },
@@ -183,7 +190,47 @@ export const getNotice = [
     logo: avatars[5],
     description: '生命就像一盒巧克力，结果往往出人意料',
     updatedAt: new Date('2017-07-23'),
-    member: '骗你来学计算机',
+    member: '8 / 8',
+    href: '',
+    memberLink: '',
+  },
+  {
+    id: 'xxx7',
+    title: titles[6],
+    logo: avatars[6],
+    description: '生命就像一盒巧克力，结果往往出人意料',
+    updatedAt: new Date('2017-07-23'),
+    member: '8 / 8',
+    href: '',
+    memberLink: '',
+  },
+  {
+    id: 'xxx8',
+    title: titles[7],
+    logo: avatars[7],
+    description: '生命就像一盒巧克力，结果往往出人意料',
+    updatedAt: new Date('2017-07-23'),
+    member: '8 / 8',
+    href: '',
+    memberLink: '',
+  },
+  {
+    id: 'xxx9',
+    title: titles[8],
+    logo: avatars[8],
+    description: '生命就像一盒巧克力，结果往往出人意料',
+    updatedAt: new Date('2017-07-23'),
+    member: '8 / 8',
+    href: '',
+    memberLink: '',
+  },
+  {
+    id: 'xxx10',
+    title: titles[9],
+    logo: avatars[9],
+    description: '生命就像一盒巧克力，结果往往出人意料',
+    updatedAt: new Date('2017-07-23'),
+    member: '8 / 8',
     href: '',
     memberLink: '',
   },
