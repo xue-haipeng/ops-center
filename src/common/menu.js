@@ -10,11 +10,11 @@ const menuData = [
         name: '综合报表',
         path: 'analysis',
       },
-     {
+      {
         name: '监控报表',
         path: 'performance',
       },
-/*      {
+      /*      {
               name: '任务看板',
               path: 'task',
             },
@@ -31,52 +31,32 @@ const menuData = [
     ],
   },
   {
-    name: '团队管理',
-    icon: 'team',
-    path: 'team',
+    name: '日常监控',
+    icon: 'eye',
+    path: 'monitoring',
     children: [
-      {
-        name: '重点任务跟踪',
-        path: 'task',
-      },
-      {
-        name: '请假管理',
-        path: 'vacation',
-      },
-      {
-        name: '用户管理',
-        authority: ['ROLE_ADMIN'],
-        path: 'user',
-      },
-    ],
-  },
-  /*    {
-      name: '日常监控',
-      icon: 'form',
-      path: 'monitor',
-      children: [
-        {
+      /*        {
           name: '应用状态监控',
           path: 'app-status',
         },
         {
           name: '数据库监控',
           path: 'database',
-        },
-        {
-          name: '系统备份监控',
-          path: 'backup',
-        },
-        {
+        }, */
+      {
+        name: 'Oracle备份监控',
+        path: 'backup',
+      },
+      /*        {
           name: 'CPU使用率监控',
           path: 'cpu',
         },
         {
           name: '磁盘空间监控',
           path: 'disk',
-        },
-      ],
-    }, */
+        }, */
+    ],
+  },
   {
     name: '应用管理',
     icon: 'cluster',
@@ -107,6 +87,26 @@ const menuData = [
       {
         name: 'OpenShift POC平台管理',
         path: 'ocp',
+      },
+    ],
+  },
+  {
+    name: '团队管理',
+    icon: 'team',
+    path: 'team',
+    children: [
+      {
+        name: '重点任务跟踪',
+        path: 'task',
+      },
+      {
+        name: '请假管理',
+        path: 'vacation',
+      },
+      {
+        name: '用户管理',
+        authority: ['ROLE_ADMIN'],
+        path: 'user',
       },
     ],
   },

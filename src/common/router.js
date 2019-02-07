@@ -83,13 +83,13 @@ export const getRouterData = app => {
     '/dashboard/backup': {
       component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Backup')),
     },
-    '/monitor/app-status': {
+    '/monitoring/app-status': {
       component: dynamicWrapper(app, ['app'], () => import('../routes/Monitor/AppStatusCheck')),
     },
-    '/monitor/backup': {
-      component: dynamicWrapper(app, ['app'], () => import('../routes/Monitor/BackupCheck')),
+    '/monitoring/backup': {
+      component: dynamicWrapper(app, ['monitor'], () => import('../routes/Monitor/BackupCheck')),
     },
-/*    '/monitor/database': {
+    /*    '/monitor/database': {
       component: dynamicWrapper(app, ['db'], () => import('../routes/Monitor/Database')),
     },
     '/monitor/cpu': {
@@ -135,7 +135,9 @@ export const getRouterData = app => {
       component: dynamicWrapper(app, ['team'], () => import('../routes/Team/TaskList')),
     },
     '/team/user': {
-      component: dynamicWrapper(app, ['team', 'list', 'rule'], () => import('../routes/Team/UserList')),
+      component: dynamicWrapper(app, ['team', 'list', 'rule'], () =>
+        import('../routes/Team/UserList')
+      ),
     },
     '/team/vacation': {
       component: dynamicWrapper(app, ['team'], () => import('../routes/Team/Vacation')),
